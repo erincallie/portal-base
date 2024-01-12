@@ -1,0 +1,21 @@
+body {
+  background: #f7f7f7;
+}
+
+main.body-container-wrapper {
+  min-height: calc(100vh - 110px);
+}
+
+.isotope-pager {
+  margin-top: 20px;
+}
+
+.isotope-pager a {
+  padding: 1rem;
+  display: inline-block;
+}
+
+.isotope-pager a:hover,
+.isotope-pager a.active {
+  text-decoration: underline;
+}

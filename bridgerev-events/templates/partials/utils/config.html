@@ -1,0 +1,45 @@
+<!--
+    templateType: page
+    isAvailableForNewContent: false
+-->
+<!-- Begin partial -->
+
+{% macro events_config() %}
+
+{% set series_props_to_get = "series_name,hs_object_id,date,category,image_url,link,summary,speaker_name" %}
+{% set all_series = crm_objects("series", "limit=100", series_props_to_get).results %}
+{% set event_association_data = data_query.data.CRM.p_events_collection.items %}
+{% set all_calendars = data_query.data.CRM.p_calendars_collection.items %}
+{% set event_props_to_get = "event_name,hs_object_id,start_date,start_time,end_date,end_time,type,repeat,recurrence,header_image_url,description,location,associated_series,start_date_unix,number_of_registered_contacts" %}
+{% set all_events = [] %}
+{% set offset = {"value": 0} %}
+{% for i in range(0, 4) %}
+  {% set all_events_objects = crm_objects("events", "limit=200&offset="+offset, event_props_to_get).results %}
+  {% for object in all_events_objects %}
+
+    {% set event_start_time = object.start_date|strtodate('M/d/yy')|unixtimestamp %}
+    {% do object.update({"start_date_unix": event_start_time|int}) %}
+
+    {% do all_events.append(object) %}
+  {% endfor %}
+  {% set new_offset = offset.value + 200 %}
+  {% do offset.update({"value": new_offset}) %}
+{% endfor %}
+
+{% set all_membership_events = data_query.data.CRM.p_events_collection.items %}
+{% set membership_lists = request.contact.list_memberships %}
+{% set member_query = ["limit=200"] %}
+{% for list in membership_lists %}
+  {% set this_query = "list_access__icontains=" + list %}
+  {% do member_query.append(this_query) %}
+{% endfor %}
+{% set final_query = member_query|join("&") %}
+{% set all_list_events = crm_objects("events", final_query) if membership_lists != [] %}
+
+{% set combined_events = all_public_events|union(all_membership_events)|union(all_list_events) %}
+
+{{ caller() }}
+
+{% endmacro %}
+
+<!-- End partial -->

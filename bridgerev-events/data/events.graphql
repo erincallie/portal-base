@@ -1,0 +1,17 @@
+# $contact_id: "{{ request.contact.vid || "2759251" }}"
+
+query MyQuery($contact_id: String!) {
+  CRM {
+    p_events_collection(limit: 400, orderBy: start_date__asc) {
+      items {
+        hs_object_id
+        associated_series
+      }
+    }
+    contact(uniqueIdentifier: "hs_object_id", uniqueIdentifierValue: $contact_id) {
+      muted_events
+      saved_events
+      hs_object_id
+    }
+  }
+}

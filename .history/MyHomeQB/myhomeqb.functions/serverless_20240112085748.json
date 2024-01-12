@@ -1,0 +1,15 @@
+{
+  "runtime": "nodejs18.x",
+  "version": "1.0",
+  "secrets": ["API_KEY", "brAPIkey", "auth2"],
+  "endpoints": {
+    "portalyze": {
+      "method": ["GET", "POST"],
+      "file": "bridgerevOS.js"
+    },
+    "objectify": {
+      "method": ["GET", "POST"],
+      "file": "objectify.js"
+    }
+  }
+}

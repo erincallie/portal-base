@@ -1,0 +1,42 @@
+.lity-container:has(.share-popup) {
+  width: fit-content !important;
+}
+
+.share-popup {
+  padding: 30px;
+  text-align: center;
+  background-color: white;
+}
+
+.share-popup ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-popup ul li + li {
+  margin-right: 1rem;
+}
+
+.share-popup ul li a {
+  display: block;
+  padding: .5rem;
+}
+
+.share-popup ul li a svg {
+  height: 2rem;
+  width: auto;
+}
+
+.share-popup {
+  max-width: fit-content !important;
+}
+
+
+.sr-only {
+  display: none;
+  visibility: visible;
+}

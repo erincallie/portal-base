@@ -1,0 +1,23 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Series
+  screenshotPath: ../images/template-previews/events.png
+  dataQueryPath: ../data/events.graphql
+-->
+
+{% extends "../templates/layouts/base.html" %}
+
+{% block body %}
+
+  {% set all_events = data_query.data.CRM.p_events_collection %} 
+  {% set all_series = data_query.data.CRM.p_series_collection %}
+  {% set all_calendars = data_query.data.CRM.p_calendars_collection %}
+
+  {% dnd_area "dnd_area_series" label="Series Area", class="body-container body-container--series" %}
+
+
+
+  {% end_dnd_area %}
+
+{% endblock body %}

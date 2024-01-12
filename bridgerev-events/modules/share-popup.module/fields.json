@@ -1,0 +1,20 @@
+[ {
+  "id" : "d30a403f-16cd-3d2c-3341-592f5d1f5a7a",
+  "name" : "platform",
+  "display_width" : null,
+  "label" : "Socials",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : null,
+    "default" : null
+  },
+  "display" : "select",
+  "choices" : [ [ "Facebook", "Facebook" ], [ "Twitter", "Twitter" ], [ "Linkedin", "LinkedIn" ], [ "WhatsApp", "WhatsApp" ], [ "Mail", "Mail" ] ],
+  "multiple" : false,
+  "reordering_enabled" : true,
+  "preset" : null,
+  "type" : "choice"
+} ]

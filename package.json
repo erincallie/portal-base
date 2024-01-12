@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@hubspot/cli": "^5.1.1"
+  }
+}

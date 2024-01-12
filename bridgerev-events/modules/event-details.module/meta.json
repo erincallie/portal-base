@@ -1,0 +1,8 @@
+{
+  "global" : false,
+  "icon" : "fontawesome-5.14.0:Calendar%20with%20Day%20Focus:SOLID",
+  "host_template_types" : [ "PAGE", "BLOG_POST", "BLOG_LISTING" ],
+  "module_id" : 148454007599,
+  "label" : "Event Details",
+  "is_available_for_new_content" : true
+}

@@ -1,0 +1,145 @@
+a {
+  cursor: pointer;
+}
+
+.calendar fieldset {
+  border: none;
+  appearance: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+}
+
+.calendar__container:not(.active) {
+  display: none;
+  visibility: hidden;
+}
+
+.calendar h3 {
+  font-size: 24px;
+}
+
+.calendar__pagination ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+
+.calendar__pagination ul li {
+  position: absolute;
+  top: calc(50% + 7px);
+}
+
+.calendar__pagination ul li:first-child {
+  left: 0;
+}
+
+.calendar__pagination ul li:last-child {
+  right: 0;
+}
+
+.calendar__actions,
+.toggle-views {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-views {
+  justify-content: flex-end;
+}
+
+.toggle-views * + * {
+  margin-left: .5rem;
+}
+
+.calendar__actions a[data-jump-to='today'] {
+  text-decoration: none;
+  padding: .25rem;
+  border: 1px solid;
+}
+
+[data-today="true"] .day__number {
+  background-color: #b17727;
+  color: white;
+}
+
+body:not(.list-active) .view--list {
+  display: none !important; 
+}
+
+body:not(.list-active) .view--list + * {
+  width: 100%;
+}
+
+.event-item {
+  position: relative;
+  z-index: 0;
+}
+
+.event-item__dot {
+  width: 5px;
+  height: 5px;
+  background-color: black;
+  margin: 5px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.event-item .event-item__name {
+  position: absolute;
+  top: 100%;
+  left: 10px;
+  padding: 2.5px;
+  background-color: white;
+  width: 100px;
+  height: auto;
+  z-index: 999;
+  box-shadow: 0px 4.5288px 9.10289px 0px rgba(0, 0, 0, 0.06), 0px 12.52155px 25.16832px 0px rgba(0, 0, 0, 0.08), 0px 30.14707px 60.59562px 0px rgba(0, 0, 0, 0.1), 0px 100px 201px 0px rgba(0, 0, 0, 0.12);
+}
+
+.event-item:not(:hover) .event-item__name {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.event-item__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: justify-content;
+}
+
+.toggle-views a {
+  padding: 5px;
+  border-radius: 5px;
+  display: flex;
+}
+
+body.list-active .toggle-views a:first-child {
+  background-color: #B17727;
+}
+
+body:not(.list-active) .toggle-views a:last-child {
+  background-color: #B17727;
+}
+
+body.list-active .toggle-views a:first-child svg path {
+  fill: #262626;
+  opacity: .7;
+}
+
+body:not(.list-active) .toggle-views a:last-child svg path {
+  fill: #262626;
+  opacity: .6;
+}
+
+.calendar__actions {
+  margin-bottom: 1rem;
+}
+
+.calendar {
+  margin-top: 30px;
+}

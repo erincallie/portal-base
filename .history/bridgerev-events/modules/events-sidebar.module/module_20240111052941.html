@@ -1,0 +1,55 @@
+{% set module_name = "events-sidebar" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_filter_group,
+  render_filter,
+  render_calendar, 
+  render_calendar_view,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set all_categories = crm_property_definition("series", "category").options %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__inner">
+    <div class="{{ module_name }}__calendar calendar--list">
+      <div class="listing__filter-groups">
+        {#% call render_filter_group("Calendars") %}
+          {% for calendar in all_calendars %}
+            {% set slug = slugify(calendar.calendar_name)|trim %}
+            {{ render_filter(slug, calendar.calendar_name, true, "true") }}
+          {% endfor %}
+        {% endcall %#}
+        {% call render_filter_group("Category") %}
+          {% for category in all_categories %}
+            {% set slug = slugify(category.label)|trim %}
+            {{ render_filter(slug, category.label, true, "true") }}
+          {% endfor %}
+        {% endcall %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+   
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+  
+</script>
+{% end_require_js %}

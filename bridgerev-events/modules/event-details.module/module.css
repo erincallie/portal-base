@@ -1,0 +1,301 @@
+body.noscroll {
+  overflow: hidden;
+}
+
+.details {
+  background-color: white;
+}
+
+.event-details {
+  position: relative;
+  z-index: 999;
+  padding: 30px;
+  background-color: #fafafa;
+  height: 100vh;
+}
+
+.event-details__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 60px;
+}
+
+.event-details__header-row > * {
+  width: 100%;
+}
+
+.event-details {
+  text-align: left;
+}
+
+.event-details__actions {
+  padding: 30px 60px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.event-details__actions a {
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border: 1px solid #484848;
+  color: #484848;
+}
+
+.event-details__actions a:hover {
+  background-color: #484848;
+  color: #ffffff;
+}
+
+.event-details__actions a.active {
+  background-color: #B17727;
+  color: #ffffff;
+}
+
+.event-details__actions a + * {
+  margin-left: 1rem;
+}
+
+.event-details__image {
+  position: relative;
+  max-width: 400px;
+  margin-right: 30px;
+}
+
+.noscroll .details-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #262626;
+  opacity: .8;
+  z-index: 9999;
+}
+
+.details__wrap > * {
+  display: none;
+  opacity: 0;
+  transform: translateX(100%);
+  visibility: hidden;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 80%;
+  max-width: 1000px;
+  z-index: 999999;
+  height: 100vh;
+  background-color: white;
+}
+
+.details__wrap > .active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0%);
+  visibility: visible;
+}
+
+.event-details {
+  overflow-y: scroll;
+}
+
+.icon-adjust,
+.icon-adjust * {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.icon-adjust:not(.subtext) * + * {
+  margin-left: .5rem;
+}
+
+.event-details__link a {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.event-details__content .icon-adjust svg {
+  width: 24px;
+  margin-right: .5rem;
+  text-align: center;
+}
+
+.event-details__link a .icon {
+  height: 24px;
+  width: 24px;
+  transform: scale(.7);
+  transform-origin: left;
+  margin: 0 .75rem 0 0.25rem;
+  text-align: center;
+}
+
+.event-details__link a {
+  text-decoration: none;
+}
+
+.event-details__link a *:last-child {
+  text-decoration: none;
+  display: block;
+}
+
+.event-details__title h2 {
+  font-size: 40px;
+  margin: 40px -1px -4px;
+}
+
+.event-details__speaker {
+  color: #B17727;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.event-details__details > * + * {
+  margin-top: 1rem;
+}
+
+.event-details__details .main-text {
+  font-size: 24px;
+  color: #262626;
+  font-weight: 500;
+}
+
+.event-details__details .subtext {
+  font-size: 18px;
+  color: #818181;
+}
+
+.event-details__date-repeats {
+  margin-left: calc(24px + 1rem);
+  transform: scale(.9);
+  transform-origin: left;
+}
+
+.event-details__date-repeats svg path {
+  fill: #818181;
+}
+
+.event-details__calendar {
+  transform: scale(.8);
+  transform-origin: left;
+  text-transform: uppercase;
+}
+
+.event-details__calendar * + * {
+  margin: 0 !important;
+}
+
+.event-details__other {
+  margin-top: 30px;
+}
+
+.event-details__other,
+.event-details__host .event-details__type,
+.event-details__host > span:first-child {
+  font-size: 14px;
+}
+
+.event-details__other a,
+.event-details__host .event-details__type {
+  color: #A8A8A8;
+}
+
+.event-details__other a {
+  text-decoration: none;
+}
+
+.event-details__other a + a {
+  margin-left: 1rem;
+  padding-left: 1rem;
+  border-left: 1px solid #A8A8A8;
+}
+
+.event-details__other a:hover {
+  text-decoration: underline; 
+}
+
+.event-details__host-name {
+  font-size: 18px;
+  margin: 3px 0;
+}
+
+.event-details__attendees-wrap {
+  color: #A8A8A8;
+}
+
+a.event-details__link.link--zoom {
+  display: flex;
+  flex-direction: column;
+  padding-left: 2.5rem;
+  text-decoration: none;
+  position: relative;
+}
+
+a.event-details__link.link--zoom:before {
+  position: absolute;
+  content: '';
+  top: 7px;
+  left: 3px;
+  width:1.2rem;
+  height: 1.2rem;
+  background-size: contain;
+  background-image: url('https://metal.men/hubfs/vecteezy_zoom-logo-in-blue-colors-meetings-app-logotype-illustration_12871376.png');
+}
+
+.details-close {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  z-index: 99;
+  width: 2rem;
+}
+
+.details-close button {
+  padding: 0 !important;
+}
+
+.details-close svg {
+  max-width: 2rem;
+}
+
+.details-close button {
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  width: 1rem;
+}
+
+.details {
+  position: relative;
+}
+
+.event-details__content {
+  width: 100%;
+}
+
+.event-details__actions a {
+  display: inline-block;
+}
+
+.event-details__actions {
+  margin-bottom: 60px;
+}
+
+.lity {
+  z-index: 999999;
+}
+
+.event-details .event-card__options-wrap {
+  padding: 1rem;
+  right: 1rem;
+  top: 90px;
+}
+
+.event-details .event-card__options {
+  right: 100%;
+  left: unset;
+}

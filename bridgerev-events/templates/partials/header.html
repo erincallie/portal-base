@@ -1,0 +1,69 @@
+<!--
+    templateType: global_partial
+    isAvailableForNewContent: false
+-->
+<!-- Begin partial -->
+
+<header class="header">
+
+  {# The link below is used for a navigation skipper which allows users navigating the site with their keyboard to skip over the site navigation. More information on the navigation skipper can be found here: https://github.com/HubSpot/cms-theme-boilerplate/wiki/Accessibility #}
+
+  <a href="#main-content" class="header__skip">Skip to content</a>
+
+  {# Main header #}
+
+  <div class="header_container">
+
+    {% dnd_area "header"
+      label="Header",
+      class="header-area"
+    %}
+
+    {% dnd_section
+      padding={
+        "default" : {
+          "bottom" : "20px",
+          "left" : "30px",
+          "right" : "30px",
+          "top" : "20px"
+        }
+      }
+    %}
+    {% dnd_column
+        offset=0,
+        width=1
+      %}
+    {% dnd_row %}
+    {% dnd_module
+            path="@hubspot/logo",
+            offset=0,
+            width=12,
+            horizontal_alignment="CENTER"
+          %}
+    {% end_dnd_module %}
+    {% end_dnd_row %}
+    {% end_dnd_column %}
+    {% dnd_column
+        offset=1,
+        width=11
+      %}
+    {% dnd_row %}
+    {% dnd_module
+            path="../../modules/custom-menu",
+            offset=0,
+            width=12,
+            flyouts=false,
+            menu=145530008596
+          %}
+    {% end_dnd_module %}
+    {% end_dnd_row %}
+    {% end_dnd_column %}
+    {% end_dnd_section %}
+    
+    {% end_dnd_area %}
+    
+  </div>
+
+</header>
+
+<!-- End partial -->

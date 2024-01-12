@@ -1,0 +1,75 @@
+{% set module_name = "events-filters" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_filter_group,
+  render_filter,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set all_filters = ["Upcoming", "Yours", "All"] %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__title">
+      <h1>Events</h1>
+    </div>
+    <div class="{{ module_name }}__filters listing__row">
+      <div class="listing__mobile-wrap">
+        <h4>Filters</h4>
+        <div class="listing__mobile-inner">
+          <div class="listing__filters-wrap">
+            <ul class="listing__filters-items">
+              {% call render_filter_group("group") %}
+                {% for this_filter in all_filters %}
+                  {% set slug = slugify(this_filter) %}
+                  {{ render_filter(slug, this_filter, loop.first) }}
+                {% endfor %}
+              {% endcall %}
+            </ul>
+          </div>
+          <div class="listing__search">
+            {% set placeholder = module.search_options.placeholder %}
+            {% set button_text = module.search_options.button_text %}
+            {% set search_id = name + "__search" %}
+            {{ render_search(module.placeholder, module.button_text, search_id) }}
+          </div>
+        </div>
+      </div>
+      <div class="listing__action">
+        <a class="button" href="#lity--edit__events__selector" data-action="create">Create Event</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+  $(function() {
+    let trigger = $(".listing__mobile-wrap h4");
+    trigger.on("click", function() {
+      if (trigger.parent().is(".active")) {
+        trigger.parent().removeClass("active");
+      } else {
+        trigger.parent().addClass("active");
+      }
+    });
+  });
+</script>
+{% end_require_js %}

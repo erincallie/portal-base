@@ -1,0 +1,13 @@
+# $contact_id: "{{ request.contact.vid }}"
+
+query MyQuery($contact_id: String!) {
+  CRM {
+    contact(uniqueIdentifier: "hs_object_id", uniqueIdentifierValue: $contact_id) {
+      muted_events
+      saved_events
+      events_registered
+      registered_event_ids
+      membership_lists
+    }
+  }
+}

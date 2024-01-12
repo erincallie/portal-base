@@ -1,0 +1,61 @@
+<!--
+    templateType: page
+    isAvailableForNewContent: false
+-->
+<!-- Begin partial -->
+
+{% macro global_config(this_data, object, all_items, all_object_data) %}
+  
+  {% set filter_props = [] %}
+  {% set these_object_filters = [] %}
+  {% set unique_search_props = [] %}
+  {% set search_props = [] %}
+  {% for this_object in this_data.crm_objects %}
+    {% set this_object_name = this_object.object_id %}
+    {% set these_filter_properties = this_data.crm_objects|selectattr("object_id", "string_containing", this_object_name)|first|attr("functions")|selectattr("action", "==", "filter")|first|attr("properties") %}
+    {% set these_search_properties = this_data.crm_objects|selectattr("object_id", "string_containing", this_object_name)|first|attr("functions")|selectattr("action", "==", "search")|first|attr("properties") %}
+    {% for property in these_filter_properties %}
+      {% set value = property.name %}
+      {% set label = property.property_definition.label %}
+      {% set prop_options = property.property_definition.options %}
+      {% if prop_options|length < 1 %}
+        {% set these_options = [] %}
+        {% for item in all_items %}
+          {% set this_value = item[value] %}
+          {% set value_array = this_value|split(",") %}
+          {% if value_array|length > 1 %}
+            {% for val in value_array %}
+              {% do these_options.append(val) %}
+            {% endfor %}
+          {% else %}
+            {% set this_value = item[value] %}
+            {% do these_options.append(this_value) if this_value %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      {% set unique_options = these_options|unique %}
+      {% set this_object = { "object": this_object, "label": label, "property": value, "options": unique_options } %}
+      {% do these_object_filters.append(this_object) %}
+    {% endfor %}
+    {% for property in these_search_properties %}
+      {% unless property in unique_search_props %}
+        {% do unique_search_props.append(property) %}
+        {% do search_props.append(property) %}
+      {% endunless %}
+    {% endfor %}
+  {% endfor %}
+  {% for this_filter in these_object_filters %}
+    {% set filter_properties = this_filter|selectattr("object", "==", this_object)|first|attr("filter_properties") %}
+    {% for prop in filter_properties %}
+      {% set prop_name = prop.name %}
+      {% do filter_props.append(prop_name) %}
+    {% endfor %}
+  {% endfor %}
+
+
+
+  {{ caller() }}
+
+{% endmacro %}
+
+<!-- End partial -->

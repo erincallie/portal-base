@@ -1,0 +1,15 @@
+{
+  "runtime": "nodejs18.x",
+  "version": "1.0",
+  "environment": {},
+  "secrets": ["API_KEY", "brAPIkey"],
+  "endpoints": {
+    "actions": {
+      "method": [
+        "GET",
+        "POST"
+      ],
+      "file": "handleActions.js"
+    }   
+  }
+}

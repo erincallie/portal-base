@@ -1,0 +1,24 @@
+{
+  "runtime": "nodejs18.x",
+  "version": "1.0",
+  "environment": {},
+  "secrets": ["brAPIkey"],
+  "endpoints": {
+    "objectify": {
+      "method": ["POST", "GET", "PUT"],
+      "file": "objectify.js"
+    },
+    "handleActions": {
+      "method": ["POST", "GET"],
+      "file": "handleActions.js"
+    },
+    "handleWebhooks": {
+      "method": ["POST"],
+      "file": "handleWebhooks.js"
+    },
+    "handleEdits": {
+      "method": ["POST"],
+      "file": "handleEdits.js"
+    }
+  }
+}

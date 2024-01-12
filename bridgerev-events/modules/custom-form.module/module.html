@@ -1,0 +1,746 @@
+{#% set module_name = "events" %}
+{% from '../../templates/partials/utils/config.html' import events_config %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event, 
+  render_search,
+  render_filter_group,
+  render_filter,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+
+
+{% call events_config() %}
+
+{% set object = module.object_to_update %}
+{% set object_id = Query.cid if Query.cid else dynamic_page_crm_object.hs_object_id %}
+{% set properties_string = "properties_" + object %}
+{% set this_table = [] %}
+{% set all_properties = [] %}
+{% set get_associated_objects = [] %}
+{% for step in module.steps %}
+  {% set these_props = [] %}
+  {% for row in step.form_rows %}
+    {% for input in row.inputs %}
+      {% set these_properties = input[properties_string] %}
+      {% set custom_prop = input.custom_property %}
+      {% set display_prop = step.action.select_by_property %}
+      {% if step.action.action == "update_object" %}
+        {% do these_props.append(custom_prop) if custom_prop %}
+        {% do these_props.append(display_prop) if display_prop %}
+      {% endif %}
+      {% set this_table = input.question.hs_table_id if input.question.hs_table_id not in this_table %}
+      {% for property in these_properties %}
+        {% do all_properties.append(property) %}
+      {% endfor %}
+    {% endfor %}
+  {% endfor %}
+  {% set final_props = these_props|join(",") %}
+  {% do get_associated_objects.append({"object":step.action.object_id, "assoc":step.action.association_id, "get_props":final_props}) %}
+{% endfor %}
+{% set table_id = this_table|first %}
+{% set table_rows = hubdb_table_rows(table_id) if module.configuration.question_source == "hubdb" and table_id %}
+{% set all_prop_names = [] %}
+{% for property in all_properties %}
+  {% set property_name = property.property_definition.name %}
+  {% do all_prop_names.append(property_name) %}
+{% endfor %}
+{% set get_these_properties = all_prop_names|join(", ") %}
+{% set query = "hs_object_id=" + object_id %}
+{% set this_object = crm_objects(object, query, get_these_properties, false).results|first if object_id %}
+{% set associated_objects = [] %}
+{% for an_object in get_associated_objects %}
+  {% set get_these_props = an_object.get_props|join(",") %}
+  {% set these_associated_objects = crm_associations(object_id, "USER_DEFINED", an_object.assoc, "limit=100", get_these_props, false).results if an_object.assoc %}
+  {% for this_object in these_associated_objects %}
+    {% do associated_objects.append({ "objectType":an_object.object, "item":this_object, "props": an_object.get_props }) %}
+  {% endfor %}
+{% endfor %}
+
+{% macro slugify(string) %}
+  {{ string|regex_replace("/[^a-zA-Z0-9]/g", "-") }}
+{% endmacro %} 
+
+{% macro icon(name) %}
+  {% if name == "plus" %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zM200 344V280H136c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V168c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H248v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></svg>
+  {% elif name == "minus" %}
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm88 200H296c13.3 0 24 10.7 24 24s-10.7 24-24 24H152c-13.3 0-24-10.7-24-24s10.7-24 24-24z"/></svg>
+  {% endif %}
+{% endmacro %}
+
+{% macro form_row() %}
+  {% set columns = row.inputs|length %}
+  <div class="multistep-row__wrap {{ "add-more" if add_more == "true" }}" data-count="1">
+    {% if add_more == "true" %}
+    <div class="multistep-row__more">
+      <span class="add--trigger">{{ icon("plus") }}</span>
+      <span class="remove--trigger hide">{{ icon("minus") }}</span>
+    </div>
+    {% endif %}
+    <div class="multistep-form__row multistep-row col--{{ columns|trim }}">
+      {{ caller() }}
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro step(section, index) %}
+  {% if section.content.title is string_containing "Event" %}
+    {% set event_title = section.content.title %}
+    {% set series_title = section.content.title|replace("Event", "Series") %}
+    {% set section_title = "<span class='event-title'>" + event_title + "</span><span class='series-title'>" + series_title + "</span>" %}
+  {% else %}
+    {% set section_title = section.content.title %}
+  {% endif %}
+  {% set section_content = section.content.content %}
+  {% set section_next_text = section.next_button_text %}
+  {% set next_index = index + 1 %}
+  {% set custom_action = section.custom_action %}
+  {% set add_more = section.action.allow_additional %}
+  {% set action = section.action.action %}
+  {% set custom_object_id = section.action.object_id %}
+  {% set association_id = section.action.association_id %}
+  {% set html_attributes = { 'data-action': action, 'data-object': custom_object_id, 'data-association': association_id, 'data-object-id': '' } %}
+  <div data-step="{{ loop.index }}" id="step__{{ loop.index }}" class="multistep-form__step step__{{ loop.index }} multistep-step{{ " active" if index == "1" }}{{ " custom-action" if custom_action == "true" }}" {{ html_attributes|xmlattr }}>
+    <div class="multistep-step__inner">
+      <div class="multistep-step__content multistep-content">
+        {% if section_title %}<div class="multistep-content__title">{{ section_title }}</div>{% endif %}
+        {% if section_content %}<div class="multistep-content__content">{{ section_content }}</div>{% endif %}
+      </div>
+      {% if action == "update_object" %}
+      <div class="multistep-input enumeration select object-selector">
+        <label class="multistep-input__label">
+          <span data-object-id="" data-label="Select One">Select One</span>
+          <input class="multistep-input__input" value="" type="enumeration" />
+          <ul class="multistep-input__selector multistep-select select">
+            <li>
+              <ul class="multistep-select__options">
+                {% set dropdown_options = associated_objects|selectattr("objectType","==",custom_object_id) %}
+                {% for option in dropdown_options %}
+                <li>
+                  <span></span><input class="{{ "checked" if is_selected }}" name="{{ option.objectType }}" type="checkbox" data-id="{{ option.item.id }}" value="{{ option.item[section.action.select_by_property] }}" /><span>{{ option.item[section.action.select_by_property] }}</span>
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+          </ul>
+        </label>
+      </div>
+      {% endif %}
+      <div class="multistep-step__form">
+        {{ caller() }}
+      </div>
+      <div class="multistep-step__button">
+        <a data-target=".step__{{ next_index }}" class="multistep-trigger button button--primary {{ "submit" if loop.last }}">{{ section_next_text or "Next Step" }}</a>
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro render_input(input) %}
+{% set property = input[properties_string] %}
+{% set property_name = property.property_definition.name or input.custom_property %}
+{% set existing_value = this_object[property_name]|join(", ") if this_object[property_name] is iterable else this_object[property_name] %}
+{% set property_label = input.question.columns.question if input.question else property.property_definition.label %}
+{% set property_placeholder = property.property_definition.placeholder or existing_value %}
+{% set property_type = "file" if property_name is string_containing "cover_art" or property_name is string_containing "image" else property.property_definition.type %}
+{% set property_field_type = property.property_definition.fieldType %}
+{% set html_attributes = { 'type': property_type, 'name': property_name, 'placeholder': property_placeholder } %}
+{% if property_type == "number" %}
+  {% do html_attributes.update({ 'min': '', 'max': '', 'step': '' }) %}
+{% endif %}
+{% set tooltip = input.question.columns.tooltip %}
+{% set helptext = input.question.columns.helptext %}
+{% set associated_to_this = associated_objects|selectattr("objectType","==",custom_object_id) %}
+<div class="multistep-form__input multistep-input {{ property_type if property_name != "repeat" }}{{ " recurrence" if property_name == "recurrence" }}{{ " repeat" if property_name == "repeat" }} {{ property_field_type if property_name != "repeat" }}{{ " enumeration" if property_name == "host_name" }}" data-test="{{ associated_to_this }}">
+  <label class="multistep-input__label">
+    {% if tooltip %}
+      <span class="multistep-input__tooltip">{{ tooltip }}</span>
+    {% endif %}
+    <span data-label="{{ property_label }}">
+      {% if property_type != "file" %}
+        {{ property_label if property_type != "enumeration" else existing_value|replace(";", ", ") or property_label }}
+      {% else %}
+        <span>{{ icons("upload") }}</span><span>Upload {{ property_label|replace(" URL", "")|capitalize }}</span>
+      {% endif %}
+    </span>
+    {% if helptext %}
+      <div class="multistep-input__helptext">{{ helptext }}</div>
+    {% endif %}
+    <input class="multistep-input__input" value="" {{ html_attributes|xmlattr }} />
+    {% if property_type == "enumeration" %}
+      {% set options = property.property_definition.options if property_name != "host_name" else all_hosts %}
+      <ul class="multistep-input__selector multistep-select {{ property_type if property_type != "enumeration" }}">
+        <li>
+          <ul class="multistep-select__options">
+            {% for option in options %}
+            {% set value = option.value %}
+            {% set this_label = option.label %}
+            {% set is_selected = true if value == existing_value or option.label == existing_value or value in existing_value %}
+            <li class="{{ "active" if is_selected }}">
+              <span></span><input class="{{ "checked" if is_selected }}" name="{{ property_name }}" type="checkbox" value="{{ value }}" /><span>{{ this_label }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+      </ul>
+    {% endif %}
+  </label>
+</div>
+{% endmacro %} 
+
+{% macro render_nav(steps) %}
+<div class="multistep-form__navigation multistep-nav">
+  <ul class="multistep-nav__list">
+    {% for step in module.steps %}
+    {% if step.content.title is string_containing "Events" %}
+      {% set event_title = step.content.title %}
+      {% set series_title = step.content.title|replace("Events", "Series") %}
+      {% set title = "<span class='event-title'>" + event_title + "</span><span class='series-title'>" + series_title + "</span>" %}
+    {% else %}
+      {% set title = step.content.title %}
+    {% endif %}
+    <li class="step__{{ loop.index }} {{ "active" if loop.index == "1" }}">
+      <a class="multistep-trigger trigger--self" data-target="#step__{{ loop.index }}">
+        <span class="multistep-nav__icon">
+          <img src="{{ step.content.icon.src }}" alt="{{ step.content.icon.alt }}" width="{{ step.content.icon.width }}" height="{{ step.content.icon.height }}" />
+        </span>
+        <span>{{ title }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endmacro %}
+
+<div id="{{ module.custom_id or name }}" class="multistep-form {{ "popup lity-hide" if module.show_as_popup == "true" }}" data-object="{{ object }}" data-object-id="{{ object_id }}">
+  <div class="multistep-form_container">
+    {{ render_nav(steps) }}
+    <div class="multistep-form__inner">
+      <form class="multistep-form__form">
+        {% for step in module.steps %}
+          {% call step(step, loop.index) %}
+            {% for row in step.form_rows %}
+              {% call form_row(row) %}
+                {% for input in row.inputs %}
+                  {{ render_input(input) }}
+                {% endfor %}
+              {% endcall %}
+            {% endfor %}
+          {% endcall %}
+        {% endfor %}
+      </form>
+    </div>
+  </div>
+</div>
+<div id="file"></div>
+<div id="{{ module.custom_id or name }}__selector" data-action="create" class="type-selector lity-hide">
+  <div class="type-selector__wrap">
+    <div class="type-selector__inner">
+      <h4>Select the desired type:</h4>
+      <ul>
+        <li><a data-object-id="series" class="button" href="#lity--edit__events"><span class="action-create active">Create</span><span class="action-edit">Edit</span> Series</a></li>
+        <li><a data-object-id="events" class="button" href="#lity--edit__events"><span class="action-create active">Create</span><span class="action-edit">Edit</span> Event</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+{% require_js position="footer" %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+
+  $(document).ready(function() {
+    
+    function getTimezoneOffsetName(offset) {
+      var hours = Math.floor(Math.abs(offset) / 60);
+      var minutes = Math.abs(offset) % 60;
+      var sign = offset < 0 ? '+' : '-';
+      var timezoneName = new Date().toLocaleTimeString('en-us', { timeZoneName: 'long' });
+      return "(GMT " + sign + hours.toString() + ":" + minutes.toString().padStart(2, '0') + ") ";
+    }
+    const user_timezone = getTimezoneOffsetName(new Date().getTimezoneOffset());
+    
+    let getBase64 = function(file, callback) {
+      let reader = new FileReader();
+      reader.onload = function(e) {
+        callback(e.target.result);
+      };
+      return reader.readAsDataURL(file);
+    },
+        getBase64Promise = function (file) {
+          return new Promise((resolve, reject) => {
+            getBase64(file, (success,err) => {
+              if(err) reject(err)
+              else resolve(success);
+            });
+          });
+        },
+        form = $(`#{{ module.custom_id or name }}.multistep-form form`),
+        object = form.attr("data-object"),
+        submit = form.find("a.submit"),
+        build_payload = function() {
+          var steps = form.find(".multistep-step");
+          var payload = {
+            objectType: `{{ object }}`,
+            objectId: `{{ object_id if object_id else "none" }}`,
+            properties: {},
+            custom: []
+          };
+          steps.each(function() {
+            var subrow = $(this).find(".multistep-row");
+            var is_custom = $(this).is(".custom-action");
+            var has_multiple = (subrow.length > 1) ? true : false;
+            var objects = [];
+            if (is_custom) {
+              var custom_action = $(this).attr("data-action");
+              var object_type = $(this).attr("data-object");
+              var object_id = $(this).find("label > span:first-child").attr("data-object-id");
+              var association_id = $(this).attr("data-association");
+              var combinedObjects;
+              subrow.each(function() {
+                var inputs = $(this).find("input");
+                inputs.each(function() {
+                  var input = $(this);
+                  var input_type = input.attr("type");
+                  var prop_name = input.attr("name");
+                  var prop_value = input.val();
+                  var object_index = $(this).closest(".multistep-row").index() - 1;
+                  var this_object = {
+                    index: object_index
+                  };
+                  if (prop_name && prop_value) {
+                    this_object[prop_name] = prop_value;
+                  }
+                  objects.push(this_object);
+                });
+                combinedObjects = objects.reduce((acc, cur) => {
+                  const index = cur.index;
+                  if (!acc[index]) {
+                    acc[index] = { index };
+                  }
+                  Object.assign(acc[index], cur);
+                  return acc;
+                }, {});
+              });
+              const finalArray = Object.values(combinedObjects).map(({ index, ...rest }) => rest);
+              payload.custom.push({
+                action: custom_action,
+                objectType: object_type,
+                objectId: object_id,
+                association: association_id,
+                objects: finalArray
+              });
+            } else {
+              var inputs = $(this).find("input");
+              inputs.each(function() {
+                var input = $(this);
+                var prop_name = input.attr("name");
+                var prop_value = input.val();
+                if (prop_name && prop_value) {
+                  if (!payload["properties"][prop_name]) {
+                    if (prop_name == "cover_art_url") {
+                      payload["properties"][prop_name] = $("#file").text();
+                    } else {
+                      payload["properties"][prop_name] = prop_value;
+                    }
+                  } else {
+                    if ($(this).closest("li").is(".active")) {
+                      payload["properties"][prop_name] += ";" + prop_value;
+                    }
+                  }
+                }
+              });
+            }
+          });
+          return payload;
+        },
+        submit_to_serverless = function(object) {
+          var submit_this = JSON.stringify(object);
+          var response = fetch(`{{ module.serverless_endpoint }}`, {
+            method: 'PUT',
+            body: submit_this,
+            headers: {
+              "Content-Type": "application/json"
+            }
+          });
+          console.log(submit_this);
+          return response;
+        },
+        handle_add_more = function() {
+          var more_trigger = $(".add--trigger"),
+              less_trigger = $(".remove--trigger");
+          more_trigger.on("click", function() {
+            var wrap = $(this).closest(".multistep-row__more").parent(),
+                target = wrap.children(":last-child"),
+                total = wrap.attr("data-count");
+            target.clone().appendTo(wrap);
+            target.find("input").val("");
+            total++;
+            wrap.attr("data-count", total);
+            if (target.is(".multistep-row")) {
+              less_trigger.removeClass("hide")
+            } else {
+              less_trigger.addClass("hide")
+            }
+          });
+          less_trigger.on("click", function() {
+            var wrap = $(this).closest(".multistep-row__more").parent(),
+                target = wrap.children(":last-child"),
+                total = wrap.attr("data-count");
+            if (target.is(".multistep-row:nth-child(3)")) {
+              less_trigger.addClass("hide");
+            } 
+            if (!target.is(".multistep-row:first-child")) {
+              target.remove();
+              total--;
+              wrap.attr("data-count", total);
+            }
+          });
+        };
+    
+    handle_add_more();
+    
+    submit.click(function(e) { 
+      e.preventDefault();
+      $(this).text("Updating...");
+      var payload = build_payload();
+      var response = submit_to_serverless(payload);
+      console.log(response);
+      $(this).text("Updated!");
+      setTimeout(function() {
+        submit.text(`{{ module.submit_text }}`);
+      }, 2000);
+    });
+    
+    {% if Query.hsDebug %}
+    $(document).on("keydown", "input", function() {
+      console.log(build_payload());
+    });
+    {% endif %}
+    
+    $(".multistep-input").on("click", function(e) {
+      if ($(e.target).is(".file")) { 
+        e.preventDefault();
+        $(this).find("input").trigger("click");
+      } else {
+        //$(this).find("input").trigger("click");
+      }
+      if ($(this).is(".enumeration")) {
+        if (!$(this).is(".checkbox")) {
+          ($(this).is(".active")) ? $(this).removeClass("active") : $(this).addClass("active");
+        } else {
+          $(this).addClass('active');
+        }
+      }
+    });
+    
+    $(".multistep-input input[type='file']").on("change", async function(e) {
+      let file = $(this).prop('files')[0];
+      let image_data = await getBase64Promise(file);
+      $("#file").text(image_data);
+    });
+    
+    $(".multistep-trigger").on("click", function(e) {
+      e.preventDefault();
+      let target = $(this).attr("data-target"),
+          is_active = ($(target).is(".active")) ? true : false,
+          target_self = ($(this).is(".trigger--self")) ? true : false,
+          target_step = $(target).attr("data-step");
+      $(target).addClass('active').siblings().removeClass('active'); 
+      target_step && $(`.step__${target_step}`).addClass('active').siblings().removeClass('active');
+      if (target_self) { 
+        $(this).parent().addClass('active').siblings().removeClass('active'); 
+      }
+    });
+    
+    $(".enumeration ul > li > ul > li").on("click", function(e) {
+      e.preventDefault();
+      var option = $(this),
+          value = option.find("input").val(),
+          this_id = option.find("input").attr("data-id");
+      console.log(this_id);
+      if ($(this).is(".active")) {
+        $(this).removeClass("active").find("input").removeClass("checked");
+      } else {
+        $(this).addClass("active").find("input").addClass("checked");
+      }
+      if ($(this).closest(".multistep-input").is(".select")) { $(this).siblings().removeClass("active"); }
+      $(this).closest(".enumeration .multistep-select__options").each(function() {
+        var active_options = $(this).find("li.active"),
+            update_this = $(this).closest(".multistep-input__label").children(":first-child"),
+            replace_with_this = update_this.attr("data-label"),
+            final_string = "";
+        if (active_options.length > 0) {
+          active_options.each(function() {
+            var value = $(this).find("input").val();
+            final_string = final_string + ", " + value;
+          });
+          update_this.text(final_string.replace(/^,|,$/g, ""));
+        } else {
+          update_this.text(replace_with_this);
+        }
+        update_this.attr("data-object-id", this_id);
+      });
+    });
+    
+    $(".repeat ul > li > ul > li").on("click", function(e) {
+      var option = $(this),
+          value = option.find("input").val(),
+          this_id = option.find("input").attr("data-id");
+      if ($(this).is(".active")) {
+        $(this).removeClass("active").find("input").removeClass("checked").attr("checked", false);
+      } else {
+        $(this).addClass("active").find("input").addClass("checked").attr("checked", "checked");
+        $(this).siblings().removeClass('active').find("input").removeClass("checked").attr("checked", false);
+        if (value != "false") {
+          $(this).closest(".multistep-form").addClass("repeating");
+        } else {
+          $(this).closest(".multistep-form").removeClass("repeating");
+        }
+      }
+    });
+        
+    $(document).on("click", function(event) {
+      var element = $(".enumeration");
+      if (!element.is(event.target) && element.has(event.target).length === 0) {
+        element.removeClass("active");
+      }
+    });
+    
+    let dates = $(".multistep-input.date");
+    duDatepicker("input[type='date']", { minDate: 'today', format: 'yyyy-mm-dd', theme: "dark" });
+    mdtimepicker("input[name*='time']", { format: 'hh:mm', theme: "dark" });
+    
+    function buildInput(data) {
+      let name_array = data.map(function(item) {
+        return item["member_name"];
+      });
+      var source = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        local: name_array
+      });
+      $("[name='host_name']").typeahead({
+        minLength: 3
+      },{
+        name: 'hosts',
+        source: source
+      });
+    }
+    
+    buildInput({{ all_hosts|tojson }});
+    
+    let richTextOptions = { 
+      save: true,
+      saveOnBlur: 1000
+    };
+    
+    $("input[name='description']").richText(richTextOptions);
+    $("input[name='bio']").richText(richTextOptions);
+
+    function getDataById(array, id, hs_object_id) {
+      for (let i = 0; i < array.length; i++) {
+        if (array[i].hs_object_id === hs_object_id) {
+          return array[i];
+        }
+      }
+      return null;
+    }
+
+    let all_data = {{ all_events|tojson or "''" }};
+    $("[href*='edit__']").on("click", function(e) {
+      e.preventDefault();
+      let this_object_type = $(this).attr("href").replace("#lity--edit__", "");
+      let this_object_id = $(this).attr("data-id");
+      let this_data = getDataById(all_data, this_object_type, this_object_id);
+      $.each(this_data, function(key, value) {
+        let input = $(`input[name='${key}']`);
+        if (input.length) { input.val(value); }
+      });
+    });
+    
+    function convertToBrowserTimezone(dateString) {
+      const parts = dateString.match(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
+      const isoFormattedString = `${parts[1]}-${parts[2]}-${parts[3]}T${parts[4]}:${parts[5]}:${parts[6]}`;
+      const date = new Date(isoFormattedString);
+      const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+      const adjustedDate = new Date(date.getTime() - userTimezoneOffset);
+      return adjustedDate.toLocaleString();
+    }
+
+    $(".event-card__date").each(function() {
+      let convertedDate = convertToBrowserTimezone($(this).attr("data-date")).split(", ")[0];
+      let convertedTime = convertToBrowserTimezone($(this).attr("data-date")).split(", ")[1],
+          final_time_ampm = convertedTime.split(" ")[1],
+          final_time_no_seconds = convertedTime.split(":")[0] + ":" + convertedTime.split(":")[1] + " " + final_time_ampm;
+      $(this).find("span:first-child").text(convertedDate);
+      $(this).find("span:last-child").text(final_time_no_seconds);
+    });
+    
+    function escapeHtml(html) {
+      return String(html)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+
+    $(document).on('change', '.richText-editor', function() { 
+      let value = escapeHtml($(this).html());
+      $(this).next().attr("value", value);
+      let require_text = $(this).closest(".required-field").find(".required-text");
+      if (require_text.length ) { require_text.remove(); }
+    });
+    
+    $(document).on('change', '.required-field .multistep-input__input', function() { 
+      if ($(this).val()) {
+        let require_text = $(this).closest(".required-field").find(".required-text");
+        require_text.remove()
+      }
+    });
+    
+    let timezone_dropdown_options = $("input[name='timezone']").next("ul").find("input");
+    timezone_dropdown_options.each(function() {
+      let this_value = $(this).val().split(")")[0] + ")";
+      console.log(this_value + "//" + this_value);
+      if (this_value.trim().toLowerCase() === user_timezone.trim().toLowerCase()) {
+        let final_value = $(this).val();
+        $(this).attr("checked", "checked").parent().addClass("active").closest(".dropdown").find(".multistep-input__input").val(final_value).prev().text(final_value);
+      }
+    });
+   
+    
+  });
+  
+</script>
+{% end_require_js %}
+
+{% require_css %}
+<style>	
+  
+  {% for i in range(1, 6) %}
+    {% set columns = i %}
+    {% set object = ".col--" + i %}
+    {{ flex_grid(object, 767, columns, 0, 20) }}
+  {% endfor %}
+  
+  .multistep-form__input:not(.col--1) > * {
+    margin: 0;
+  }
+  
+  #custom_form.multistep-form form .multistep-step {
+    position: relative;
+    text-align: center;
+  }
+  
+  #custom_form.multistep-form .enumeration > label > ul > li > ul {
+    {{ transition("transform 1.2s ease-in-out, opacity .75s ease-in-out") }}
+  }
+  
+  .multistep-step {
+    visibility: hidden;
+    opacity: 0;
+    width: auto;
+    height: 0;
+    max-width: 0;
+    position: absolute;
+    {{ transform("translateX(-20%)") }}
+    {{ transition("transform 1.2s ease-in-out, opacity .75s ease-in-out") }}
+  }
+  
+  .multistep-step:not(.active) {
+    {{ transform("translateX(20%)") }}
+  }
+  
+  .multistep-form__navigation ul li {
+    transform-origin: center center;
+    {{ transition("all .5s ease-in-out") }}
+  }
+  
+  .multistep-form__navigation ul li:not(.active) {
+    opacity: .75;
+    {{ transform("scale(.75)") }}
+  }
+  
+  .multistep-form__navigation ul li.active,
+  .multistep-form__navigation ul li:hover {
+    opacity: 1;
+    {{ transform("scale(1)") }}
+  }
+  
+  .multistep-step.active {
+    visibility: visible;
+    position: relative;
+    opacity: 1;
+    max-width: 100%;
+    height: 100%;
+    {{ transform("translateX(0)") }}
+  }
+  
+  .multistep-row__more.add-more--trigger {
+    {{ transform("translateY(-50%)") }}
+  }
+  
+  #custom_form.multistep-form {
+    background-color: {{ module.style.form.background_color.css }};
+    border-radius: {{ module.style.form.border_radius }}px;
+    {{ module.style.form.border.css }}
+    {{ module.style.form.spacing.css }}
+  }
+  
+  #custom_form.multistep-form .multistep-content,
+  #custom_form.multistep-form .multistep-content * {
+    {{ module.style.form.heading_font.css }}
+  }
+  
+  #{{ name }}.multistep-content__title {
+    {{ module.style.form.heading_font.css }}
+  }
+  
+  #custom_form.multistep-form form input[type='text'],
+  #custom_form.multistep-form form input[type='email'],
+  #custom_form.multistep-form form input[type='password'],
+  #custom_form.multistep-form form input[type='tel'],
+  #custom_form.multistep-form form input[type='number'],
+  #custom_form.multistep-form form input[type='file'],
+  #custom_form.multistep-form form input[type='search'],
+  #custom_form.multistep-form form input[type='date'],
+  #custom_form.multistep-form form input[type='time'],
+  #custom_form.multistep-form form input,
+  #custom_form.multistep-form form select,
+  #custom_form.multistep-form form textarea {
+    appearance: none;
+    border: none;
+    background-color: {{ module.style.inputs.background_color.css }};
+    border-radius: {{ module.style.inputs.border_radius }}px;
+    {{ module.style.inputs.border.css }}
+    {{ module.style.inputs.spacing.css }}
+    {{ module.style.inputs.font.css }}
+  }
+  
+  #custom_form.multistep-form .button,
+  #custom_form.multistep-form input[type='submit'] {
+    background-color: {{ module.style.submit.background_color.css }};
+    border-radius: {{ module.style.submit.border_radius }}px;
+    {{ module.style.submit.border.css }}
+    {{ module.style.submit.spacing.css }}
+    {{ module.style.submit.font.css }}
+  }
+  
+</style>
+{% end_require_css %}
+
+{% endcall %#}

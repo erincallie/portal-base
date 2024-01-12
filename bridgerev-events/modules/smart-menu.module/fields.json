@@ -1,0 +1,41 @@
+[ {
+  "id" : "c780ab5c-3845-62aa-dd01-ecc389db2621",
+  "name" : "membership",
+  "display_width" : null,
+  "label" : "Membership",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "57babf27-19e2-9d9f-d182-10fc05ede9d8",
+    "name" : "menu",
+    "display_width" : null,
+    "label" : "Menu",
+    "required" : false,
+    "locked" : false,
+    "type" : "menu"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : { }
+}, {
+  "id" : "632a30cb-737c-b21c-cdd6-d4c1212a5b3f",
+  "name" : "public",
+  "display_width" : null,
+  "label" : "Public",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "416f5cf4-8319-b72b-e18e-06dba0c4e345",
+    "name" : "menu",
+    "display_width" : null,
+    "label" : "Menu",
+    "required" : false,
+    "locked" : false,
+    "type" : "menu"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : { }
+} ]

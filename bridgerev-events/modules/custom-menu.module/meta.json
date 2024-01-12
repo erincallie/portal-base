@@ -1,0 +1,20 @@
+{
+  "content_tags" : [ {
+    "name" : "NONPROFIT",
+    "source" : "MARKETPLACE"
+  }, {
+    "name" : "COMPATIBLE_BLOG",
+    "source" : "MARKETPLACE"
+  }, {
+    "name" : "COMPATIBLE_PAGE",
+    "source" : "MARKETPLACE"
+  } ],
+  "extra_classes" : "widget-type-menu",
+  "global" : false,
+  "master_language" : "en",
+  "icon" : "fontawesome-5.14.0:Compass",
+  "host_template_types" : [ "PAGE", "BLOG_POST", "BLOG_LISTING" ],
+  "module_id" : 148455017890,
+  "label" : "Custom Menu",
+  "is_available_for_new_content" : true
+}

@@ -1,0 +1,241 @@
+.multistep-nav {
+  display: none;
+}
+
+.multistep-form.popup {
+  background-color: white;
+  max-height: calc(100vh - 120px) !important;
+  overflow: scroll;
+}
+
+/*.multistep-form:not(.active) {
+  display: none !important;
+}*/
+
+.multistep-form.popup form {
+  background-color: transparent;
+  max-width: 1000px;
+}
+
+.multistep-form__inner {
+  padding: 40px; 
+}
+
+.col--1 > * {
+  width: 100% !important;
+}
+
+.multistep-form form label {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.multistep-form form label > * {
+  width: 100%;
+}
+
+.multistep-form form > div + div {
+  margin: 0;
+}
+
+.multistep-form form label input {
+  width: 100%;
+  appearance: none;
+  outline: none;
+  padding: .5rem;
+  margin-bottom: 0;
+}
+
+.multistep-form .multistep-input {
+  position: relative;
+}
+
+.multistep-form input[type='enumeration'] {
+  display: none;
+}
+
+.multistep-form .multistep-input:not(.enumeration) label > span:first-child {
+  margin-bottom: .25rem;
+}
+
+.multistep-form .enumeration ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.multistep-form .enumeration > label > ul > li {
+  margin: 0;
+  display: block;
+}
+
+.multistep-form .enumeration > label > ul > li > ul {
+  max-height: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 99999;
+  height: auto;
+  overflow: hidden;
+  list-style: none;
+  margin:0;
+  padding: 0;
+}
+
+.multistep-form .enumeration.active label > ul > li > ul {
+  max-height: fit-content;
+  position: relative;
+  opacity: 1;
+}
+
+.multistep-form .enumeration > label > ul > li > ul > li span:first-child,
+.multistep-form .enumeration > label > ul > li > ul > li input {
+  width: 0;
+  display: none;
+  height: 1rem;
+}
+
+.multistep-form .enumeration > label > ul > li > ul > li input {
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+.multistep-form .enumeration > label > ul > li > ul > li {
+  padding: .25rem;
+}
+
+
+.multistep-form .enumeration label > span {
+  padding: .25rem;
+  margin: 0;
+}
+
+.multistep-step__button a {
+  margin-top: 60px;
+}
+
+.multistep-form__input {
+  text-align: left;
+}
+
+.multistep-form__row.col--1 * + .multistep-form__input {
+  margin-top: 20px;
+}
+
+.hide {
+  display: none; 
+}
+
+.multistep-step__button {
+  margin-top: 40px; 
+}
+
+.multistep-form__navigation ul {
+  margin: 40px 0 0 0; 
+  list-style: none;
+  padding: 0;
+}
+
+.multistep-form__navigation ul li a {
+  display: inline-block;
+  padding: 1rem;
+}
+
+.multistep-content__title {
+  font-size: 1.2rem;
+}
+
+.multistep-step__content {
+  margin-bottom: 40px;
+}
+
+.multistep-input__tooltip {
+  display: none; 
+}
+
+.multistep-input__helptext {
+  margin: .25rem 0 .75rem 0;
+}
+
+.multistep-form__row + .multistep-form__row {
+  margin-top: 20px; 
+}
+
+.multistep-form__navigation img {
+  max-width: 60px;
+  height: auto;
+}
+
+.multistep-form__navigation ul > li > a {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.multistep-form__row {
+  position: relative;
+}
+
+.multistep-row__more {
+  position: absolute;
+  left: -1rem;
+  top: 50%;
+  width: 1rem;
+  height: auto;
+  cursor: pointer;
+}
+
+.multistep-row__wrap.add-more > * {
+  margin-left: 2rem;
+}
+
+.multistep-row__more svg {
+  opacity: .75;
+}
+
+.multistep-row__more svg path {
+  fill: #bf5700;
+}
+
+.multistep-row__more .add--trigger:hover svg,
+.multistep-row__more .remmove--trigger:hover svg {
+  opacity: 1;
+}
+
+.lity-container {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.multistep-row__wrap.add-more {
+  padding: 1rem; 
+  margin-left: 1rem;
+}
+
+.multistep-row__wrap + .multistep-row__wrap {
+  margin-top: 30px;
+}
+
+.multistep-row__wrap {
+  position: relative;
+}
+
+.object-selector {
+  margin-bottom: 20px; 
+}
+
+@media screen and (min-width:768px) {
+  .multistep-form__navigation ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .multistep-form__navigation ul > li + li {
+    margin-right: .5rem;
+  }
+}

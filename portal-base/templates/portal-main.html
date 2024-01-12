@@ -1,0 +1,118 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Portal Main
+  screenshotPath: ../images/template-previews/home.png
+  dataQueryPath: ../data/contactAssociations.graphql
+-->
+{% extends "./layouts/portal-base.html" %}
+
+{% block body %}
+<main class="body-container-wrapper">
+  
+  {% module "global_data" path="/MyHomeQB/modules/bridgeRev/data", label="Global Data" export_to_template_context=True %}
+  {% set all_crm_objects = widget_data.global_data.crm_objects %}
+  {% set all_hubdb_tables = widget_data.global_data.hubdb_data %} 
+  {% set all_data = [] %}
+    
+  {% set object_count = [] %}
+  {% for object in all_crm_objects %}
+  
+    {% set all_associations = data_query.data.CRM.contact.associations %}
+    {% set associated_objects = [] %}
+    {% for key, value in all_associations.items() %}
+      {% if key is string_containing object.object_id %}
+        {% do associated_objects.append({ "object": object.object_id, "items": value.items }) %}
+      {% endif %}
+    {% endfor %}
+    {% set all_association_props = data_query.data.CRM.contact %}
+    {% set associated_object_ids = [] %}
+    {% for key, value in all_association_props.items() %}
+      {% if key is string_containing object.object_id or (object.object_id == "contact" and key is string_containing "associated_users")%}
+        {% set item_array = value|split(",") if value is string_containing "," else [value] %}
+        {% for item in item_array %}
+          {% do associated_object_ids.append(item) %}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    {% for this_object in associated_objects %}
+      {% for item in this_object.items %}
+        {% do associated_object_ids.append(item.hs_object_id) %}
+      {% endfor %}
+    {% endfor %}
+    {% set unique_ids = associated_object_ids|unique %}
+  
+    {% if object_count|sum < 11 %}
+  
+      {% set crm_object_id = object.object_id if object != [] %}
+      {% set crm_object_props = [] %}
+      {% set crm_object_properties = object.functions|selectattr("action", "==", "data")|first|attr("properties") %}
+      {% for prop in crm_object_properties %}
+        {% do crm_object_props.append(prop) %}
+      {% endfor %}
+      {% set props_to_get = crm_object_props|join(",") %}
+      {% set all_crm_objects = [] %}
+      {% set needed_ids = associated_object_ids|selectattr("object_id", "==", crm_object_id)|first|attr("items") %}
+      {% set has_more = { "value": "true" } %}
+      {% set offset = { "value": 0 } %}
+      {% set all_crm_objects = [] %}
+      {% for i in range(0, 4) %}
+        {% if has_more.value == "true" %}
+          {% set query = "limit=50&offset=" +  offset.value + "&hs_object_id__in=" + unique_ids|join(",") %}
+          {% set these_crm_objects = crm_objects(crm_object_id, query, props_to_get) %}
+          {% set crm_objects_results = these_crm_objects.results %}
+          {% do all_crm_objects.append(crm_objects_results) %}
+          {% set next_offset = offset.value + 50 %}
+          {% do offset.update({ "value": next_offset }) %}
+          {% do has_more.update({ "value": "false" }) if these_crm_objects.has_more != "true" %}
+        {% endif %}
+      {% endfor %}
+      {% set append_this = { "id": crm_object_id, "data": all_crm_objects|flatten } %}
+      {% do all_data.append(append_this) %}
+      {% do object_count.append(1) %}
+    {% else %}
+      <script>
+        console.log("Too many CRM objects");
+      </script>
+    {% endif %}
+  {% endfor %}
+  {% set table_count = [] %}
+  {% for table in all_hubdb_tables %}
+    {% if table_count|sum < 11 %}
+      {% set table_id = table.table_id %}
+      {% set table_rows = hubdb_table_rows(table_id) %}
+      {% set append_this = { "id": table, "data": table_rows } %}
+      {% do all_data.append(append_this) if table_rows|length > 0 %}
+      {% do table_count.append(1) if table_rows|length > 0 %}
+    {% else %}
+      <script>
+        console.log("Too many HubDB tables");
+      </script>
+    {% endif %}
+  {% endfor %}
+  
+  {% if Query.debug %}
+    <script>
+      console.log({{ all_data|tojson }});
+    </script>
+  {% endif %}
+  
+  
+  {% dnd_area 'dnd_area' class='body-container', label='Main section' %}
+
+
+  {% end_dnd_area %}
+  
+</main>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+  {{ require_css(get_asset_url("/MyHomeQB/css/vendor/lity.css")) }}
+  {{ require_css(get_asset_url("/MyHomeQB/css/vendor/owl-carousel.css")) }}
+  {{ require_css(get_asset_url('/MyHomeQB/css/templates/portal.css')) }}
+  {{ require_js(get_asset_url("/MyHomeQB/js/vendor/isotope.js"), {defer: "true", async: "true"}) }}
+  {{ require_js(get_asset_url("/MyHomeQB/js/vendor/lity.js"), {defer: "true", async: "true"}) }}
+  {{ require_js(get_asset_url("/MyHomeQB/js/vendor/owl-carousel.js"), {defer: "true", async: "true"}) }}
+  {{ require_js(get_asset_url("../child.js"), {defer: "true", async: "true"}) }}
+
+{% endblock body %}

@@ -1,0 +1,28 @@
+[data-action='remove'] svg {
+  transform: rotate(45deg);
+  transform-origin: center;
+}
+
+.account-overview__property-label {
+  display: none;
+}
+
+.section--basic .account-overview__property:first-child .account-overview__property-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.account-overview__property:nth-child(n + 1) .account-overview__property-value {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.section.section--address {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.section.section--address * + * {
+  margin-left: .25rem;
+}

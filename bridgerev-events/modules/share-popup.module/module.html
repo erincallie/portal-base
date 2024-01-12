@@ -1,0 +1,28 @@
+{% set module_name = "share-popup" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="share_popup" class="{{ module_name }} lity-hide">
+  <div class="{{ module_name }}__wrapper">
+    <p class="{{ module_name }}__title">Share this content:</p>
+    <ul class="{{ module_name }}__list">
+      {% for item in module.platform %}
+        {% set slug = slugify(item)|trim %}
+        <li class="{{ module_name }}__item">
+          <a class="share__link share__link--{{ slug }}" data-platform="{{ slug }}">
+            {{ icons(slug) }}
+            <span class="sr-only">Share via {{ item }}</span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

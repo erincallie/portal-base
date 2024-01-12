@@ -1,0 +1,13 @@
+{
+  "label" : "BridgeRev Events",
+  "preview_path" : "./templates/mjtw-kitchen-sink.html",
+  "screenshot_path" : null,
+  "enable_domain_stylesheets" : false,
+  "is_available_for_new_content" : true,
+  "extends" : "mjtw",
+  "author" : {
+    "name" : "",
+    "email" : ""
+  },
+  "hide_all_default_modules" : false
+}

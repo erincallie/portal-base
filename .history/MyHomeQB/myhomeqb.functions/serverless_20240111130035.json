@@ -1,0 +1,35 @@
+{
+  "runtime": "nodejs18.x",
+  "version": "1.0",
+  "secrets": ["API_KEY", "brAPIkey", "auth2"],
+  "endpoints": {
+    "portalyze": {
+      "method": ["GET", "POST"],
+      "file": "bridgerevOS.js"
+    },
+    "objectify": {
+      "method": ["GET", "POST"],
+      "file": "objectify.js"
+    },
+    "myhomeqbrating": {
+      "method": ["GET","POST"],
+      "file": "myhomevendors/myhomeqbrating.js"
+    },
+    "ticketcreation2": {
+      "method": ["GET","POST"],
+      "file": "tickets/ticketcreation2.js"
+    },    
+    "bidprocessing2": {
+      "method": ["GET","POST"],
+      "file": "myhomebids/bidprocessing2.js"
+    },
+    "emailcleanup": {
+      "method": ["GET","POST"],
+      "file": "email/emailcleanup.js"
+    },
+    "customercreation": {
+      "method": ["GET","POST"],
+      "file": "contacts/customercreation.js"
+    }
+  }
+}

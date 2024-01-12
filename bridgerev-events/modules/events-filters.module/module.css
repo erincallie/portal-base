@@ -1,0 +1,31 @@
+h1 {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.events-filters input[type='checkbox'] {
+  display: none;
+}
+
+.events-filters .listing-search button {
+  display: none;
+}
+
+.events-filters .listing__search:has(.listing__search) {
+  width: 100%;
+  margin: 0 20px;
+}
+
+.events-filters .listing__search input {
+  padding: 18px 22px;
+}
+
+.listing__action a {
+  white-space: nowrap; 
+}
+
+@media screen and (max-width: 1099px) {
+  .events-filters .listing__search:has(.listing__search) {
+    margin: 0 0 10px 0;
+  }
+}

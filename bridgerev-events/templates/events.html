@@ -1,0 +1,231 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Events
+  screenshotPath: ../images/template-previews/events.png
+  dataQueryPath: ../data/events.graphql
+-->
+
+{% extends "../templates/layouts/base.html" %}
+
+{% block body %}
+
+  {% set all_events = data_query.data.CRM.p_events_collection %} 
+  {% set all_series = data_query.data.CRM.p_series_collection %}
+  {% set all_calendars = data_query.data.CRM.p_calendars_collection %}
+
+  {% set all_cookies = request.cookies %}
+  {% set is_guest = [] %}
+  {% for name, value in all_cookies.items() %}
+    {% do is_guest.append("true") if name == "is_guest" and value == "true" %}
+  {% endfor %}
+
+  {% if is_in_page_editor %}
+  
+    {% dnd_area "dnd_area_events_sign_in" label="Events Sign-in Area", class="body-container body-container--events" %}
+
+      {% dnd_section
+          full_width=false,
+          max_width=1000,
+          padding={
+            "default" : {
+              "top" : "100px"
+            }
+          }
+        %}
+          {% dnd_column
+            offset=0,
+            width=12
+          %}
+            {% dnd_row %}
+              {% dnd_module
+                path="@hubspot/rich_text",
+                offset=0,
+                width=12
+              %}
+                {% module_attribute "html" %}
+                  <h2>To view our events</h2>
+                  <p>Sign into your account or if you're not a member yet, <br>feel free to continue as a guest.</p>
+                {% end_module_attribute %}
+              {% end_dnd_module %}
+            {% end_dnd_row %}
+          {% end_dnd_column %}
+        {% end_dnd_section %}
+
+      {% dnd_section
+        padding={
+          "default" : {
+            "bottom" : "180px",
+            "top" : "40px"
+          }
+        }
+      %}
+        {% dnd_column
+          offset=0,
+          width=6
+        %}
+          {% dnd_row %}
+            {% dnd_module
+              path="@hubspot/button",
+              offset=0,
+              width=12,
+              horizontal_alignment="CENTER",
+              button_text="Login to Your Account",
+              link={
+                "no_follow" : false,
+                "open_in_new_tab" : true,
+                "url" : {
+                  "href" : "https://metal.men/_hcms/mem/login",
+                  "type" : "EXTERNAL"
+                }
+              },
+              style={
+                "button_color" : {
+                  "color" : "#b17628",
+                  "opacity" : 100
+                },
+                "button_font" : {
+                  "color" : "#FFFFFF",
+                  "font_set" : "DEFAULT",
+                  "size" : 18,
+                  "size_unit" : "px",
+                  "styles" : {
+                    "font-style" : "normal",
+                    "font-weight" : "normal",
+                    "text-decoration" : "none"
+                  }
+                },
+                "button_hover_color" : {
+                  "color" : "#000000",
+                  "opacity" : 100
+                },
+                "horizontal_padding" : 20,
+                "override_default_style" : true,
+                "text_hover_color" : {
+                  "color" : "#FFFFFF",
+                  "opacity" : 100
+                },
+                "vertical_padding" : 16
+              }
+            %}
+            {% end_dnd_module %}
+          {% end_dnd_row %}
+        {% end_dnd_column %}
+        {% dnd_column
+          offset=6,
+          width=6
+        %}
+          {% dnd_row %}
+            {% dnd_module
+              path="@hubspot/button",
+              offset=0,
+              width=12,
+              horizontal_alignment="CENTER",
+              button_text="Continue As Guest",
+              link={
+                "no_follow" : false,
+                "open_in_new_tab" : true,
+                "url" : {
+                  "href" : "#guest",
+                  "type" : "EXTERNAL"
+                }
+              },
+              style={
+                "button_font" : {
+                  "color" : "#FFFFFF",
+                  "font_set" : "DEFAULT",
+                  "size" : 18,
+                  "size_unit" : "px",
+                  "styles" : {
+                    "font-style" : "normal",
+                    "font-weight" : "normal",
+                    "text-decoration" : "none"
+                  }
+                },
+                "horizontal_padding" : 20,
+                "override_default_style" : true,
+                "vertical_padding" : 16
+              }
+            %}
+            {% end_dnd_module %}
+          {% end_dnd_row %}
+        {% end_dnd_column %}
+      {% end_dnd_section %}
+
+    {% end_dnd_area %}
+
+  {% else %}
+
+    {% dnd_area "dnd_area_events" label="Events Area", class="body-container body-container--events" %}
+
+        {# Filters SECTION #}
+          {% dnd_section full_width=true, padding={ 'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+            {% dnd_column padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+              {% dnd_row padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+                {% dnd_module path='../modules/events-filters.module', width=12 %}
+                {% end_dnd_module %}
+              {% end_dnd_row %}
+            {% end_dnd_column %}
+          {% end_dnd_section %}
+        {# End Filters SECTION #}
+
+        {# Listing SECTION #}
+          {% dnd_section full_width=true, padding={ 'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+            {% dnd_column padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+              {% dnd_row padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+                {% dnd_module path='../modules/events-listing.module', width=12 %}
+                {% end_dnd_module %}
+              {% end_dnd_row %}
+            {% end_dnd_column %}
+          {% end_dnd_section %}
+        {# End Listing SECTION #}
+
+        {# Sidebar SECTION #}
+          {% dnd_section full_width=true, padding={ 'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+            {% dnd_column padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+              {% dnd_row padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+                {% dnd_module path='../modules/events-sidebar.module', width=12 %}
+                {% end_dnd_module %}
+              {% end_dnd_row %}
+            {% end_dnd_column %}
+          {% end_dnd_section %}
+        {# End Sidebar SECTION #}
+
+        {# Details SECTION #}
+          {% dnd_section full_width=true, padding={ 'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+            {% dnd_column padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+              {% dnd_row padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+                {% dnd_module path='../modules/event-details.module', width=12 %}
+                {% end_dnd_module %}
+              {% end_dnd_row %}
+            {% end_dnd_column %}
+          {% end_dnd_section %}
+        {# End Details SECTION #}
+
+        {# Custom Form SECTION #}
+          {% dnd_section full_width=true, padding={ 'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+            {% dnd_column padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+              {% dnd_row padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+                {% dnd_module path='../modules/custom-form.module', width=12 %}
+                {% end_dnd_module %}
+              {% end_dnd_row %}
+            {% end_dnd_column %}
+          {% end_dnd_section %}
+        {# End Custom Form SECTION #}
+
+        {# Custom Form SECTION #}
+          {% dnd_section full_width=true, padding={ 'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+            {% dnd_column padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+              {% dnd_row padding={'default': { 'top': 0, 'right': 0, 'bottom': 0, 'left': 0 }} %}
+                {% dnd_module path='../modules/share-popup.module', width=12 %}
+                {% end_dnd_module %}
+              {% end_dnd_row %}
+            {% end_dnd_column %}
+          {% end_dnd_section %}
+        {# End Custom Form SECTION #}
+
+      {% end_dnd_area %}
+
+  {% endif %}
+
+{% endblock body %}

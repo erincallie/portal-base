@@ -1,0 +1,524 @@
+{#% set module_name = "events" %}
+{% from '../../templates/partials/utils/config.html' import events_config %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event, 
+  render_search,
+  render_filter_group,
+  render_filter,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% call events_config() %}
+
+{% set this_contact = data_query.data.CRM.contact %}
+{% set registered_events = crm_objects("contact", this_contact.hs_object_id, "registered_event_ids").results|first|attr("registered_event_ids") %}
+{% set muted_events = this_contact.muted_events %}
+{% set muted_events_array = muted_events|split(",") %}
+{% set saved_events = this_contact.saved_events %}
+{% set saved_events_array = this_contact.saved_events|split(",") %}
+{% set registered_events_array = registered_events|split(",") if registered_events is string_containing "," else [registered_events] %}
+
+{% set request_membership_lists = request_contact.contact.contact_without_defaults.membership_lists|split(",") if request_contact.contact.contact_without_defaults.membership_lists is string_containing "," else [request_contact.contact.contact_without_defaults.membership_lists] %}
+{% set membership_lists = request_contact.list_memberships or request_membership_lists %}
+{% set access_lists = hubdb_table_rows("access_list_ids", "limit=200") %}
+{% set admin_lists = access_lists|selectattr("name", "string_containing", "dmin")|first|attr("access_lists") %}
+{% set admin_list_array = admin_lists|split(",") if admin_lists is string_containing "," else [admin_lists] %}
+{% set is_owner_array = [] %}
+{% for list in admin_list_array %}
+  {% do is_owner_array.append("true") if list in membership_lists %}
+{% endfor %}
+{% set owned_events_string = request_contact.contact.contact_without_defaults.owned_events %}
+{% set owned_events_array = owned_events_string|split(",") if owned_events_string is string_containing "," else [owned_events_string] %}
+
+<div id="{{ name }}" class="{{ module_name }}" data-lists="{{ membership_lists }}" data-registered="{{ request_contact.contact.contact_without_defaults.registered_event_ids }}" data-muted="{{ muted_events }}" data-saved="{{ saved_events }}" data-contact="{{ this_contact.hs_object_id }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__wrap isotope-container" data-page="1">
+      {% set counted_events = [] %}
+      {% for event in all_events|sort(False, False, "start_date_unix") %}
+        {% set event_id = event.hs_object_id|string %}
+        {% if event_id not in counted_events %}
+          {% do counted_events.append(event_id) %}
+          {% do is_owner_array.append("true") if event_id in owned_events_array %}
+          {% set associated_series_id = event.associated_series %}
+          {% set calendar = associated_series.associations.p_calendars_collection__calendar_series.items|first %}
+          {% set series = all_series|selectattr("hs_object_id", "==", associated_series_id)|first %}
+          {% set is_saved = true if event.hs_object_id in saved_events_array else false %}
+          {% set is_registered = true if event.hs_object_id in registered_events_array else false %}
+          {% set has_access_array = [] %}
+          {% for item in event.access_granted %}
+            {% set event_access_list_string = access_lists|selectattr("name", "==", item.label)|first|attr("access_lists") %}
+            {% set event_access_list_array = event_access_list_string|split(",") if event_access_list_row is string_containing "," else [event_access_list_string] %}
+            {% for list_id in event_access_list_array %}
+            {% set append_this = "true" if list_id in membership_lists %}
+              {% do has_access_array.append(append_this) %}
+            {% endfor %}
+          {% endfor %}
+          {% set is_owner = "true" if "true" in is_owner_array else "false" %}
+          {% set has_access = "true" if "true" in has_access_array or is_owner else "false" %}
+          {% unless event.hs_object_id in muted_events_array %}
+            {{ render_event(event, series, calendar, is_saved, is_registered, has_access, is_owner) }}
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div id="no_results">No matching events found.</div>
+  </div>
+</div>
+
+{% endcall %}
+
+{% require_css %}
+<style>
+
+  
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+  $(function() {
+        
+let handle_event_clicks = function() {
+      const toggle_trigger = [".event-card__actions-wrap", ".event-card__options-wrap"];
+      for (let i=0; i < toggle_trigger.length; i++) {
+        $(toggle_trigger[i]).on("click", function() {
+          $(this).toggleClass("active");
+        });
+      }
+    },
+          handle_option_clicks = function() {
+            // Function to create a config object from a button's data attributes
+            function createConfigFromEvent(event) {
+              return {
+                name: event.getAttribute('data-name'),
+                description: event.getAttribute('data-description'),
+                startDate: event.getAttribute('data-start-date'),
+                startTime: event.getAttribute('data-start-time'),
+                endTime: event.getAttribute('data-end-time'),
+                options: ['Apple','Google','iCal','Outlook.com'],
+                timeZone: 'currentBrowser'
+              };
+            }
+            // Attach event listeners to all buttons with the class 'add-to-calendar-button'
+            const buttons = document.querySelectorAll('.add-to-calendar');
+            buttons.forEach(button => {
+              button.addEventListener('click', () => {
+                const config = createConfigFromEvent(button.closest(".event-data"));
+                console.log(config);
+                atcb_action(config, button);
+              });
+            });
+          };
+    
+    handle_event_clicks();
+    handle_option_clicks();
+
+    var responsiveIsotope = [ [480, 4] , [720, 6] ];
+    var itemsPerPageDefault = 10;
+
+    var filters = {},
+        container = $('.isotope-container'),
+        no_results = $(".no-results"),
+        qsRegex = "",
+        filterDisplay = $('#filter-display'),
+        qsRegex,
+        allFilters;
+
+    no_results.hide();
+
+    var itemsPerPage = defineItemsPerPage();
+    var currentNumberPages = 1;
+    var currentPages = ['1'];
+    var currentFilter = '*';
+    var filterAttribute = 'data-filter';
+    var filterValue = "";
+    var filterItem = ".isotope-item";
+    var pageAttribute = 'data-page';
+    var pagerClass = 'isotope-pager';
+    var qsRegex;
+    var allFilters;
+    var wordPage;
+
+    var CreatePagers = function() {
+      var $isotopePager = ( $('.'+pagerClass).length == 0 ) ? $('<div class="'+pagerClass+'"></div>') : $('.'+pagerClass);
+      $isotopePager.html('');
+      if(currentNumberPages > 1) {
+        for( var i = 0; i < currentNumberPages; i++ ) {
+          var this_value_string = (i+1).toString();
+          var extra_class = (currentPages.includes(this_value_string)) ? "active" : "";
+          var $pager = $(`<a class="pager ${extra_class}" ${pageAttribute}="${(i+1)}"></a>`);
+          $pager.html(i+1);
+          $pager.appendTo($isotopePager);
+        }
+      }
+      container.after($isotopePager);
+    };
+
+    function defineItemsPerPage() {
+      var pages = itemsPerPageDefault;
+      for( var i = 0; i < responsiveIsotope.length; i++ ) {
+        if( $(window).width() <= responsiveIsotope[i][0] ) {
+          pages = responsiveIsotope[i][1];
+          break;
+        }
+      }
+      return pages;
+    }
+
+    function setPagination() {
+      var SettingsPagesOnItems = function(){
+        var itemsLength = container.children(filterItem).length;
+        var pages = Math.ceil(itemsLength / itemsPerPage);
+        var item = 1;
+        var page = 1;
+        var selector = filterItem;
+        container.children(allFilters).each(function(){
+          if( item > itemsPerPage ) {
+            page++;
+            item = 1;
+          }
+          wordPage = page.toString();
+          var this_page = $(this).attr('data-page');
+          if(this_page) {
+            $(this).addClass(this_page);
+          } else {
+            $(this).addClass(wordPage); 
+          }
+          item++;
+        });
+        currentNumberPages = page;
+      }();
+      CreatePagers();
+    }
+
+    function init_grid() {
+      console.log(allFilters);
+      if (!container.is(".no-page")) {
+        setPagination();
+      }
+      container.isotope({
+        itemSelector: filterItem,
+        layoutMode: 'vertical',
+        transitionDuration: 600,
+        stagger: 30,
+        fitRows: {
+          gutter: 0
+        },
+        getSortData: {
+          date: function (el) {
+            let date = new Date($(el).attr("data-start-date"));
+            //console.log("date type", typeof date)
+            return date
+          }
+        },
+        sortBy: 'date',
+        filter: function() {
+          var $this = $(this);
+          var pageResult = function() {
+            if (!container.is(".no-page")) {
+              for (let i=0;i<currentPages.length;i++) {
+                let this_page = currentPages[i];
+                if ($this.is("."+this_page)) {
+                  return true
+                }
+              }
+            } else {
+              return true
+            }
+          };
+          let today = new Date(),
+              this_date = $(this).attr("data-date"),
+              check_past = $("[name='past']").attr("checked"),
+              parts = this_date.split('/'),
+              year = parseFloat("20" + parts[2]),
+              parsedDate = new Date(year, parts[0] - 1, parts[1]),
+              dateResult = (parsedDate >= today) ? true : false;
+          var searchResult = qsRegex ? $this.attr("data-search").match( qsRegex ) : true;
+          var buttonResult = allFilters ? $this.is( allFilters ) : true;
+          return dateResult && buttonResult && pageResult() && searchResult;
+        }
+      });
+      handle_arrange();
+    }
+
+    function handle_arrange() {
+      let iso = container.data('isotope'),
+          visibleChildren = iso.filteredItems;
+      if (visibleChildren.length) {
+        $("#no_results").fadeOut("fast");
+      } else {
+        $("#no_results").fadeIn("slow");
+      }
+    }
+          let equal_height_blocks = function() {
+            var equalize = container,
+                max_height = 0;
+            if (equalize.length > 0) {
+              equalize.each(function() {
+                var blocks = $(this).find(filterItem);
+                blocks.each(function() {
+                  var height = $(this).outerHeight();
+                  if (height > max_height) {
+                    max_height = height;
+                  }
+                });
+                var new_height = max_height;
+                blocks.each(function() {
+                  $(this).css("height", new_height);
+                });
+              });
+            }
+          },
+          handle_mobile = function() {
+            if ($(window).width() < 768) {
+              $("fieldset").removeClass("active");
+            }
+          };
+
+    function clearAll(){
+      currentFilter = '*';
+      wordPage = 1;
+      init_grid();
+    }
+
+    $('#clear-filters').click(function(){clearAll()});
+
+    $(window).on("load", function() {
+      init_grid();
+      var itemReveal = Isotope.Item.prototype.reveal;
+      Isotope.Item.prototype.reveal = function() {
+        itemReveal.apply( this, arguments );
+        let this_child = $( this.element ),
+            this_image = this_child.find("[data-src]"),
+            this_src = this_image.attr('data-src');
+        this_image.attr("src", this_src);
+        this_child.attr("data-loaded", "true");
+        $( this.element ).removeClass('isotope-hidden');
+        $( this.element ).addClass('isotope-visible');
+      };
+      var itemHide = Isotope.Item.prototype.hide;
+      Isotope.Item.prototype.hide = function() {
+        itemHide.apply( this, arguments );
+        $( this.element ).addClass('isotope-hidden');
+        $( this.element ).removeClass('isotope-visible');
+      };
+      allFilters = ".upcoming";
+      init_grid();
+      //$("[name='upcoming']").closest(".data-filter").trigger("click");
+      console.log(allFilters);
+    });
+
+    $(window).on("resize", function() {
+      init_grid();
+      handle_mobile();
+    });
+
+    $('.data-filter').on( 'click', function( event ) {
+      var group = $(this).closest('fieldset').attr('data-group'),
+          checkbox = $(this).find("input"),
+          value = checkbox.attr('data-filter'),
+          hasFilter = false,
+          single_select =  $(this).closest('fieldset').is('.single-select') ? true : false;
+      var filterGroup = filters[ group ];
+      if ( !filterGroup ) { filterGroup = filters[ group ] = []; }
+      if ( checkbox.attr("checked") && value ) {
+        checkbox.attr("checked", false);
+        $(this).removeClass("active");
+        checkbox.closest("li").removeClass("active");
+        if (value.indexOf(" ") > -1) {
+          var value_array = value.split(" ");
+          for (let x=0; x<value_array.length; x++) {
+            var this_index = filterGroup.indexOf( value_array[x] );
+            filterGroup.splice( this_index, 1 );
+          }
+        } else {
+          var index = filterGroup.indexOf( value );
+          filterGroup.splice( index, 1 );
+        }
+      } else if (value) {
+        checkbox.attr("checked", true);
+        $(this).addClass("active");
+        if (single_select) {
+          $(this).siblings().removeClass('active').find("input").attr("checked", false);
+        }
+        if (value.indexOf(" ") > -1) {
+          var value_array = value.split(" ");
+          for (let i=0; i<value_array.length; i++) {
+            filterGroup.push( value_array[i] );
+          }
+        } else {
+          filterGroup.push( value );
+        }
+      }
+      if ($(this).closest("ul").is(".listing__filters-items")) {
+        $(this).siblings().removeClass("active").find("input").attr("checked", false);
+      }
+      var comboFilter = getComboFilter();
+      allFilters = single_select ? value : comboFilter;
+      init_grid();
+      //filterDisplay.text( comboFilter );
+      comboFilter = "";
+    });
+
+    function getComboFilter() {
+      var combo = [];
+      for ( var prop in filters ) {
+        var group = filters[ prop ];
+        if ( !group.length ) {
+          combo.push( "*" );
+          continue;
+        }
+        if ( !combo.length ) {
+          combo = group.slice(0);
+          continue;
+        }
+        var nextCombo = [];
+        for ( var i=0; i < combo.length; i++ ) {
+          for ( var j=0; j < group.length; j++ ) {
+            var item = combo[i] + group[j];
+            nextCombo.push( item );
+          }
+        }
+        combo = nextCombo;
+      }
+      var comboFilter = combo.join(', ');
+      return comboFilter;
+    }
+
+    function debounce( fn, threshold ) {
+      var timeout;
+      threshold = threshold || 100;
+      return function debounced() {
+        clearTimeout( timeout );
+        var args = arguments;
+        var _this = this;
+        function delayed() {
+          fn.apply( _this, args );
+        }
+        timeout = setTimeout( delayed, threshold );
+      };
+    }
+
+    var $quicksearch = $(`.listing__search input`).keyup( debounce( function() {
+      qsRegex = new RegExp( $quicksearch.val(), 'gi' );
+      currentPages = ['1'];
+      init_grid();
+    }) );
+    
+    {% if Query.search %}
+    
+    qsRegex = new RegExp( `{{ Query.search|urldecode }}`, 'gi' );
+    currentPages = ['1'];
+    init_grid();
+    
+    {% endif %}
+
+    const handle_clicks = function() {
+      $(".active-trigger").on('click', function() {
+        let target = $(this).attr("data-target");
+        $(target).toggleClass("active");
+      });
+      $("fieldset > label").on("click", function() {
+        if ($(this).parent().is(".active")) {
+          $(this).parent().removeClass("active").attr("aria-expanded", "false");
+          $(this).find("ul").attr("aria-hidden", "true");
+        } else {
+          $(this).parent().addClass("active").attr("aria-expanded", "true");
+          $(this).find("ul").attr("aria-hidden", "false");
+        }
+      });
+      $(".dnd-column[class*=background-color]:first-child h3").on("click", function() {
+        if ($(window).width() < 1300) {
+          let target = $(this).closest(".dnd-column[class*=background-color]:first-child");
+          if (target.is(".active")) {
+            target.removeClass('active');
+          } else {
+            target.addClass('active');
+          }
+        }
+      });
+    };
+
+    handle_clicks();
+
+    $(document).on("click", ".pager", function() {
+      let pageNumber = $(this).attr(pageAttribute);
+      currentPages.push(pageNumber);
+      $(this).addClass("active").siblings().removeClass('active');
+      /*$('html, body').animate({
+        scrollTop: container.offset().top-200
+      }, 'slow');*/
+      init_grid();
+    });
+    
+    $(document).on('click', function(event) {
+      const element = $('.event-card__options-wrap');
+      if (!element.is(event.target) && element.has(event.target).length === 0) {
+        element.removeClass('active');
+      }
+    });
+
+    function debounce(func, delay) {
+      let timer;
+      return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          func.apply(context, args);
+        }, delay);
+      };
+    }
+    
+    let init_infinite_scroll = function() {
+      $(window).on("scroll", function() {
+        var el = $(".events__wrap"),
+            scroll_top = $(window).scrollTop(),
+            scroll_bottom = scroll_top + $(window).height(),
+            list_height = el.height(),
+            scroll_height = el.offset().top,
+            threshold = 100,
+            page_trigger = scroll_height + list_height - threshold,
+            triggered = false;
+        console.log("sb: " + scroll_bottom + " // pt:" + page_trigger);
+        if (scroll_bottom > page_trigger) {
+          let next_button = el.closest("body").find(".pager.active:last").next();
+          console.log(next_button);
+          next_button.trigger("click");
+        }
+      });
+    };
+    
+    debounce(init_infinite_scroll(), 2000);
+    
+    function convertToBrowserTimezone(dateString) {
+      const parts = dateString.match(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/);
+      const isoFormattedString = `${parts[1]}-${parts[2]}-${parts[3]}T${parts[4]}:${parts[5]}:${parts[6]}`;
+      const date = new Date(isoFormattedString);
+      const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+      const adjustedDate = new Date(date.getTime() - userTimezoneOffset);
+      return adjustedDate.toLocaleString();
+    }
+
+    $(".event-card__date").each(function() {
+      let convertedDate = convertToBrowserTimezone($(this).attr("data-date")).split(", ")[0];
+      let convertedTime = convertToBrowserTimezone($(this).attr("data-date")).split(", ")[1],
+          final_time_ampm = convertedTime.split(" ")[1],
+          final_time_no_seconds = convertedTime.split(":")[0] + ":" + convertedTime.split(":")[1] + " " + final_time_ampm;
+      $(this).find("span:first-child").text(convertedDate);
+      $(this).find("span:last-child").text(final_time_no_seconds);
+    });
+    
+  });
+</script>
+{% end_require_js %#}

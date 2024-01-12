@@ -1,0 +1,28 @@
+[ {
+  "id" : "0d9b1f85-258c-d596-2bf9-f4ff53368328",
+  "name" : "form",
+  "display_width" : null,
+  "label" : "Form",
+  "required" : false,
+  "locked" : false,
+  "type" : "form",
+  "default" : {
+    "form_id" : "211bd309-f386-4b2a-bd7c-5937b8a57ed6",
+    "response_type" : "inline",
+    "message" : "<p>Thanks! Check your email for your login credentials and next steps. Email <a href=\"mailto:support@metal.men\" rel=\"noopener\">support@metal.men</a> if you can't find the email.&nbsp;</p>",
+    "gotowebinar_webinar_key" : null,
+    "form_type" : "HUBSPOT"
+  }
+}, {
+  "id" : "1dfde3d9-1723-660a-1c9a-a6508fccfd9f",
+  "name" : "custom_id",
+  "display_width" : null,
+  "label" : "Custom ID",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text",
+  "default" : "sign_up"
+} ]
