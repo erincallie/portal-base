@@ -1,0 +1,114 @@
+<!--
+  templateType: section
+  label: Video Hero Banner
+  isAvailableForNewContent: true
+  screenshotPath: ../images/template-previews/sections/video-hero.png
+  description: "Full size video background section with h1, content, and buttons"
+-->
+{% dnd_section
+  padding={
+    "default" : {
+      "bottom" : "0px",
+      "left" : "0px",
+      "right" : "0px",
+      "top" : "0px"
+    }
+  },
+  full_width=true
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/hero",
+        offset=0,
+        width=12,
+        background_options={
+          "add_curve" : false,
+          "background_style" : "video",
+          "background_video" : {
+            "use_file" : true,
+            "videoplayer" : {
+              "height" : 2160,
+              "player_id" : 151773190981,
+              "player_type" : "hsvideo2",
+              "width" : 3840
+            }
+          },
+          "overlay" : true,
+          "parallax_effect" : true,
+          "parallax_strength" : 0.65
+        },
+        content={
+          "buttons" : [ {
+            "button_text" : "Get Started",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "rel" : "",
+              "sponsored" : false,
+              "url" : {
+                "href" : "#start",
+                "type" : "EXTERNAL"
+              },
+              "user_generated_content" : false
+            },
+            "style" : "secondary"
+          } ],
+          "content" : "<span style='font-size: 20px;'>Tailored, efficient, and innovative solutions for any industry.</span>",
+          "title" : "Discover how BridgeRev's bespoke HubSpot solutions can revolutionize your business operations"
+        },
+        styles={
+          "background_styles" : {
+            "image" : {
+              "background_position" : "MIDDLE_CENTER",
+              "background_size" : "cover",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/01.jpg"
+            }
+          },
+          "module_styles" : {
+            "max_content_width" : 940,
+            "spacing" : {
+              "css" : "padding-top: 120px; padding-right: 30px; padding-bottom: 120px; padding-left: 30px;",
+              "padding" : {
+                "bottom" : {
+                  "units" : "px",
+                  "value" : 120
+                },
+                "left" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "right" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "top" : {
+                  "units" : "px",
+                  "value" : 120
+                }
+              }
+            }
+          },
+          "overlay_styles" : {
+            "color" : {
+              "color" : theme.global_colors.primary_color.color,
+              "opacity" : 90
+            }
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}

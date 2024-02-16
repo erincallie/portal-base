@@ -1,0 +1,73 @@
+<!--
+  templateType: section
+  label: Title Section
+  isAvailableForNewContent: true
+  screenshotPath: ../images/template-previews/sections/title-section.png
+  description: "Title and subtitle in a centered small container"
+-->
+{% dnd_section
+  background_color=theme.global_colors.light_color.color,
+  padding={
+    "default" : {
+      "bottom" : "80px",
+      "top" : "80px"
+    }
+  },
+  full_width=false,
+  max_width=740
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/content-block",
+        offset=0,
+        width=12,
+        card={
+          "content" : {
+            "content" : "<div style='position: relative;'><a id='start' data-hs-anchor='true' style='position: absolute; top: -200px;'></a><p>BridgeCore, presented by BridgeRev, is a meticulously crafted custom theme designed for HubSpot. This innovative theme caters to CMS users across a diverse skill spectrum, enabling them to effortlessly craft stunning, responsive websites. With user-friendliness at its core, BridgeCore bridges the gap between professional quality and accessibility, ensuring a seamless website creation experience for all users.</p></div>",
+            "small_title" : "Welcome to BridgeCore",
+            "title" : "Elevate Your HubSpot Website",
+            "title_tag" : "h2"
+          }
+        },
+        style={
+          "fonts" : {
+            "content_font" : {
+              "css" : "",
+              "font_set" : "DEFAULT"
+            },
+            "subtitle_font" : {
+              "css" : "",
+              "font_set" : "DEFAULT"
+            },
+            "title_font" : {
+              "css" : "",
+              "font_set" : "DEFAULT"
+            }
+          },
+          "general" : {
+            "alignment" : {
+              "css" : ""
+            },
+            "text_alignment" : {
+              "css" : "text-align: CENTER",
+              "text_align" : "CENTER"
+            }
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}

@@ -1,0 +1,133 @@
+{% set module_name = "dynamic-data" %}
+{% from "../../../templates/partials/utils/config.html" import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_card,
+  render_search,
+  render_filter_group,
+  render_filter,
+  render_product_card,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+ 
+{% macro render_list(type, title, link, link_text, headings, items, object_type) %}
+<div class="{{ module_name }}__{{ type }}">
+  <div class="{{ module_name }}__{{ type }}-title">
+    <h3>{{ title }}</h3>
+    <a class="button button--small button--secondary button--ghost" href="{{ link }}">{{ link_text }}</a>
+  </div>
+  <div class="{{ module_name }}__{{ type }}-row">
+    <div class="list-table {{ type }}">
+      <div class="list-table__inner">
+        <div class="list-table__headings list-flex">
+          {% for heading in headings %}
+          <div class="list-table__col">{{ heading.heading_text }}</div>
+          {% endfor %}
+        </div>
+        <div class="list-table__list">
+          {% for item in items %}
+          <div class="list-table__item list-flex">
+            {% for heading in headings %}
+            {% set this_prop = heading.property_name %}
+            {% set item_value = item[this_prop] %}
+            <div class="list-table__col">{{ item_value }}</div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+{% set objects_to_get = [] %}
+{% set all_object_data = [] %}
+{% set all_module_data = [] %}
+{% for list in module.dynamic_lists %}
+  {% do objects_to_get.append(list.object_type) %}
+  {% set these_props = [] %}
+  {% for heading in list.table_headings %}
+    {% set prop = heading.property_name %}
+    {% do these_props.append(prop) %}
+  {% endfor %}
+  {% do all_module_data.append({ "object": list.object_type, "props": these_props }) %}
+{% endfor %}
+{% set unique_objects = objects_to_get|unique %}
+{% for object in unique_objects %}
+  {% set these_props_to_get = [] %}
+  {% set all_props_to_get_groups = all_object_data|selectattr("object","==",object) %}
+  {% for group in all_props_to_get_groups %}
+    {% for property in group.props %}
+      {% do these_props_to_get.append(property) %}
+    {% endfor %}
+  {% endfor %}
+  {% set props_to_get = these_props_to_get|join("") %}
+  {% set these_objects = crm_objects(object, "limit=200", props_to_get).results if object %}
+  {% do all_module_data.append({ "object": object, "data": these_objects }) %}
+{% endfor %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__wrap">
+    <div class="{{ module_name }}__row">
+      {% for list in module.dynamic_lists %}
+        <div class="{{ module_name }}__col">
+          {% set this_object = list.object_type %}
+          {% set item_ids = these_student_ids if this_object == "students" else these_essay_ids %}
+          {% set these_items = all_data|selectattr("id","==",this_object)|first|attr("data")|selectattr("id", "in", item_ids) %}                    
+          {{ render_list(list.list_id, list.title, list.link.url.href, list.link_text, list.table_headings, these_items, this_object) }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+
+  {% set columns = module.dynamic_lists|length %}
+  {% set flex_object = "#" + name + " ." + module_name + "__row" %}
+  {{ flex_grid(flex_object, 767, columns, 0, 60) }}
+  
+  {% for list in module.dynamic_lists %}
+    {% set list_flex_object = "#" + name + " ." + list.list_id + " .list-flex" %}
+    {% set list_flex_object_columns = list.table_headings|length %}
+    {{ flex_grid(list_flex_object, 767, list_flex_object_columns, 10, 10) }}
+  {% endfor %}
+  
+  #{{ name }} .{{ module_name }}__wrap,
+  #{{ name }} .list-table__headings,
+  #{{ name }} .list-table__item {
+    width: 100%;
+  }
+  
+  #{{ name }} .list-table__headings {
+    font-weight: bold;
+  }
+  
+  #{{ name }} [class*='-title'] h3 {
+    margin: 0;
+  }
+  
+  #{{ name }} [class*='-title'] {
+    margin-bottom: 20px;
+  }
+  
+  @media screen and (min-width: 767px) {
+    #{{ name }} [class*='-title'] {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+  }
+  
+</style>
+{% end_require_css %}

@@ -1,0 +1,83 @@
+:root {
+  --dark-blue: #0c2340;
+  --light-blue: #425b76;
+  --teal: #04a38e;
+  --brown: #bf5700;
+  --dark: #333333;
+  --light: #abacac;
+  --white: #f8f8f8;
+  --red: #e31414
+}
+
+.button.button--success{
+  background-color: var(--teal);
+}
+
+.button.button--warning{
+  background-color: var(--dark-blue);
+}
+
+.button.button--error{
+  background-color: var(--red);
+}
+
+{# Group #}
+.todo-detail{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.todo-detail__header{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.todo-detail__buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todo-detail__content-content{
+  margin-bottom: 3rem;
+}
+
+{# Card #}
+
+.todo-detail__card{
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.todo-detail__section:not(:last-of-type){
+  border-bottom: 1px solid #f1f1f1;
+  margin-bottom: 1rem;
+}
+
+.todo-detail__section h3{
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+@media screen and (max-width: 900px){
+
+  .todo-detail__header{
+    flex-direction: column-reverse;
+  }
+
+  .todo-detail__buttons,
+  .todo-detail__buttons > div{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+  }
+
+}

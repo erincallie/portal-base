@@ -1,0 +1,139 @@
+{% set module_name = "data-graph" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% macro render_graph(graph, index) %}
+{% set labels = [] %}
+{% set datasets = [] %}
+{% for this_data in graph.data %}
+  {% for item in this_data.labels %}
+    {% do labels.append(item) %}
+  {% endfor %}
+{% endfor %}
+
+  <div class="graph graph__{{ index }} {{ " active" if index == 1 }}" data-target="canvas__{{ index }}" data-title="{{ graph.title }}" data-type="{{ graph.type }}" data-labels="{{ labels|join(";") }}">
+    {% for item in graph.data.datasets %}
+      {% set colors = [] %}
+      {% for color in item.colors %}
+        {% do colors.append(color.rgba) %}
+      {% endfor %}
+      {% if graph.type == "bubble" %}
+        {% set this_array = [] %}
+        {% for group in item.bubble_numbers %}
+          {% set append_this = group.x + "," + group.y + "," + group.r %}
+          {% do this_array.append(append_this) %}
+        {% endfor %}
+        {% set final_data = this_array|join(";") %}
+      {% else %}
+        {% set final_data = item.numbers|join(";") %}
+      {% endif %}
+      <div class="graph__dataset" data-label="{{ item.dataset_title }}" data-data="{{ final_data }}" data-colors="{{ colors|join(";") }}"></div>
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="graphs__wrap">
+    {% for graph in module.graphs %}
+      <canvas id="canvas__{{ loop.index }}" class="graph__{{ loop.index }}{{ " active" if loop.first }}" width="400" height="400"></canvas>
+    {% endfor %}
+  </div>
+  <div class="graphs__wrap hide">
+    {% for graph in module.graphs %}
+      {{ render_graph(graph, loop.index) }}
+    {% endfor %}
+  </div>
+</div>
+
+{% require_css %}
+<style>
+
+  
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+
+  $(function() {
+    
+    let this_chart;
+    let init_graphs = function() {
+      let graphs = $(".graph"),
+          counted = [];
+      graphs.each(function() {
+        this_chart && this_chart.update();
+        let type = $(this).attr("data-type"),
+            target = $(this).attr("data-target"),
+            title = $(this).attr("data-title"),
+            labels = $(this).attr("data-labels").split(";"),
+            dataset_objects = $(this).children(".graph__dataset");
+        let datasets = [];
+        dataset_objects.each(function() {
+          let label = $(this).attr("data-label"),
+              data = $(this).attr("data-data").split(";"),
+              backgroundColor = $(this).attr("data-colors").split(";"),
+              result = data.map(function (x) { 
+                return parseInt(x, 10); 
+              }),
+              push_this;
+          if (type == "bubble") {
+            let all_data = [];
+            $.each(data, function() {
+              let this_data = this.split(",");
+              let this_array = {
+                "x": this_data[0],
+                "y": this_data[1],
+                "r": this_data[2]
+              };
+              all_data.push(this_array);
+            });
+            push_this = {
+              label: label,
+              data: all_data,
+              backgroundColor: backgroundColor
+            };
+          } else {
+            push_this = {
+              label: label,
+              data: result,
+              backgroundColor: backgroundColor
+            };
+          }
+          datasets.push(push_this);
+        });
+        let config = {
+          type: type,
+          data: {
+            labels: labels,
+            datasets: datasets
+          },
+          options: {
+            plugins: {
+              title: {
+                display: false
+              }
+            }
+          }
+        };
+        console.log(config);
+        let ctx = document.getElementById(target);
+        this_chart = new Chart(ctx, config);
+      });
+    };
+
+    init_graphs();
+
+  });
+
+</script>
+{% end_require_js %}

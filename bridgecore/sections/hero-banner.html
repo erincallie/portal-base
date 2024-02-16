@@ -1,0 +1,98 @@
+<!--
+  templateType: section
+  label: Hero Banner
+  isAvailableForNewContent: true
+  screenshotPath: ../images/template-previews/sections/hero-banner.png
+  description: "Full size parallax background image section with h1 and accent curve"
+-->
+{% dnd_section
+  padding={
+    "default" : {
+      "bottom" : "0px",
+      "left" : "0px",
+      "right" : "0px",
+      "top" : "0px"
+    }
+  },
+  full_width=true
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/hero",
+        offset=0,
+        width=12,
+        background_options={
+          "add_curve" : false,
+          "overlay" : false,
+          "parallax_effect" : false,
+          "parallax_strength" : 0.05
+        },
+        content={
+          "buttons" : [ {
+            "button_text" : "Join Now",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "rel" : "",
+              "sponsored" : false,
+              "url" : {
+                "href" : "/join",
+                "type" : "EXTERNAL"
+              },
+              "user_generated_content" : false
+            },
+            "style" : "primary"
+          } ],
+          "content" : "Lorem ipsum dolor sit amet.",
+          "title" : "Inner Page"
+        },
+        styles={
+          "background_styles" : {
+            "image" : {
+              "background_position" : "MIDDLE_LEFT",
+              "background_size" : "cover",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/blurred-bg.jpg"
+            }
+          },
+          "module_styles" : {
+            "max_content_width" : 940,
+            "spacing" : {
+              "css" : "padding-top: 120px; padding-right: 30px; padding-bottom: 120px; padding-left: 30px;",
+              "padding" : {
+                "bottom" : {
+                  "units" : "px",
+                  "value" : 120
+                },
+                "left" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "right" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "top" : {
+                  "units" : "px",
+                  "value" : 120
+                }
+              }
+            }
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}

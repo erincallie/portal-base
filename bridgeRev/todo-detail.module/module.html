@@ -1,0 +1,93 @@
+{% set module_name = "todo-detail" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% if dynamic_page_crm_object %}
+
+{% set this_todo = dynamic_page_crm_object %}
+  {% set month_defs = {
+  January: "Winter",
+  February: "Winter",
+  March: "Spring",
+  April: "Spring",
+  May: "Spring",
+  June: "Summer",
+  July: "Summer",
+  August: "Summer",
+  September: "Fall",
+  October: "Fall",
+  November: "Fall",
+  December: "Winter"
+} %}
+{% set season = month_defs[this_todo.to_do_date|format_date('MMMM')] %}
+
+<section id="{{ module_name }}" class="todo-detail">
+  
+  <div class="todo-detail__card">
+    <div class="todo-detail__header">
+      <div>
+        <div>{{ this_todo.service_category or 'Category' }}</div>
+        <h1>{{ this_todo.myhometodoitem }}</h1>
+      </div>
+      <div>
+        <span>Recommended Timeframe: {{ season }} {{ year }}</span>
+      </div>
+    </div>
+    
+    <div class="todo-detail__buttons">
+      <div>
+        <a class="button button--success" data-action="book" href="#">Book</a>
+        <a class="button button--success" data-action="complete" data-stage="145791801">DIY/Mark Complete</a>
+        <a class="button button--warning" data-action="punt" href="#">Punt</a>
+        <a class="button button--error" href="#" data-action="remove">Delete</a>
+      </div>
+      <a class="button button--warning" href="#">Upload</a>
+    </div>
+  </div>
+
+  <div class="todo-detail__card">
+    
+    {% for section in module.section %}
+    <div>
+      {% if section.title %}<div class="{{ module_name }}__content-title"><h2>{{ section.title }}</h2></div>{% endif %}
+      {% if section.content %}<div class="{{ module_name }}__content-content">{{ section.content }}</div>{% endif %}
+      {% for prop in section.properties %}
+
+        {% set prop_label = prop.to_do_property.property_definition.label  %}
+        {% set prop_name = prop.to_do_property.property_definition.name  %}
+
+        <div class="todo-detail__section">
+          <h3>{{ prop_label }}</h3>
+          {% if prop.to_do_property.property_definition.type == 'date' %}
+            <p>{{ this_todo[prop_name] ? this_todo[prop_name]|format_date('long') : '--' }}</p>
+          {% else %}
+            <p>{{ this_todo[prop_name] or '--' }}</p>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+
+    <div>
+      <a class="button button--success" href="#update__myhometodo" data-lity>Update</a>
+    </div>
+    
+  </div>
+  
+</section>
+
+{% endif %}

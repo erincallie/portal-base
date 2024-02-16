@@ -1,0 +1,40 @@
+.custom-search {
+  position: relative;
+}
+
+.custom-search button {
+  background-color: transparent;
+  border: none;
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9;
+}
+
+.custom-search input {
+  position: relative;
+  border-radius: 30px;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,.05));
+  padding: .75rem 2rem;
+}
+
+.custom-search .twitter-typeahead {
+  width: 100%; 
+}
+
+.tt-menu {
+  position: absolute;
+  left: 2rem !important;
+  background-color: white;
+  padding: 1rem;
+  width: calc(100% - 4rem);
+}
+
+.tt-suggestion {
+  padding: .25rem;
+}
+
+.tt-suggestion + * {
+  margin-top: .5rem;
+}

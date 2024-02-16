@@ -1,0 +1,94 @@
+{% set module_name = "stat-blocks" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  render_card,
+  render_blog,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% macro render_block(stat_block) %}
+<div class="{{ module_name }}__block stat-block" style="background-color:{{ stat_block.background_color.css }};">
+  <div class="stat-block__inner">
+    <div class="stat-block__number">
+      {% if stat_block.prefix %}<span>{{ stat_block.prefix }}</span>{% endif %}
+      <span data-stat="{{ stat_block.number }}" id="stat--{{ loop.index }}" class="counter">{{ stat_block.number }}</span>
+      {% if stat_block.suffix %}<span>{{ stat_block.suffix }}</span>{% endif %}
+    </div>
+    <div class="stat-block__content">
+      {{ stat_block.content }}
+    </div>
+    <div class="stat-block__logo">
+      {% if stat_block.logo.src %}
+        <img src="{{ stat_block.logo.src }}" alt="{{ stat_block.logo.alt }}">
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row">
+      {% for stat_block in module.stat_blocks %}
+        {{ render_block(stat_block) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+
+<style>
+	
+	{{ flex_grid(".stat-blocks__row", 767, 3, 60, 60) }}
+  
+  #{{ name }} .stat-block__number span {
+    {{ module.style.stat_font.css }}
+  }
+  
+  #{{ name }} .stat-block__content h3 {
+    {{ module.style.heading_font.css }}
+  }
+  
+  #{{ name }} .stat-block__content {
+    {{ module.style.content_font.css }}
+  }
+	
+</style>
+
+{% end_require_css %}
+
+{% require_js position="footer" defer=true %}
+<script>
+$(document).ready(function() {
+  $.getScript("https://cdn.jsdelivr.net/npm/countup@1.8.2/dist/countUp.min.js", function() {
+    $.fn.isInViewport = function() {
+      var elementTop = $(this).offset().top;
+      var elementBottom = elementTop + $(this).outerHeight();
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+      return elementBottom > viewportTop && elementTop < viewportBottom;
+    };
+    $(".counter").each(function() {
+      var el= $(this),
+          val = el.data("stat"),
+          id = el.attr("id"),
+          decimals = (val % 1 != 0) ? 2 : 0,
+          counter = new CountUp(id, 0, val, decimals, 2.5);
+      $(window).scroll(function() {
+        if (el.isInViewport() && !counter.error && !el.is(".counted")) {
+          counter.start();
+          el.addClass("counted");
+        }
+      });
+    });
+  });
+});
+</script>
+{% end_require_js %}

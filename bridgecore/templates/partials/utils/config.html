@@ -1,0 +1,83 @@
+<!--
+    templateType: page
+    isAvailableForNewContent: false
+-->
+
+{% macro global_config(widget_data, module_table_id, all_items) %}
+  
+  {% set all_tables = [] %}
+  {% set all_blogs = [] %}
+  {% set all_data = [] %}
+  {% set all_filters = [] %}
+  {% set filter_props = [] %}
+  {% set search_props = [] %}
+
+  {% set global_hubdb_filters = widget_data.hubdb_filters %}
+
+  {% for data in global_hubdb_filters %}
+    {% set table_id = data.hubdb_table %}
+    {% do all_tables.append(table_id) %}
+  {% endfor %}
+
+  {% for table_data in global_hubdb_filters %}
+    {% set filter_props = table_data.row_filters %}
+    {% set search_props = table_data.searchable_columns %}
+    {% do all_data.append({ "table":table_data.hubdb_table, "data": table_data, "filter_properties": filter_props, "search_properties": search_props }) %}
+  {% endfor %}
+
+  {% for this_table_id in all_tables %}
+    {% if this_table_id == module_table_id %}
+      {% set filter_properties = all_data|selectattr("table", "in", [this_table_id])|first|attr("filter_properties") %}
+      {% set search_properties = all_data|selectattr("table", "in", [this_table_id])|first|attr("search_properties") %}
+      {% set unique_filter_props = [] %}
+      {% set unique_search_props = [] %}
+      {% for property in filter_properties %}
+        {% set filter_column = property.column_name %}
+        {% unless filter_column in unique_filter_props %}
+          {% do unique_filter_props.append(filter_column) %}
+          {% do filter_props.append(filter_column) %}
+          {% set prop_dropdown_options = hubdb_table(this_table_id).columns[filter_column].options %}
+          {% set prop_foreignId_options = hubdb_table(this_table_id).columns[filter_column].foreignIds %}
+          {% set prop_options = prop_dropdown_options or prop_foreignId_options or [] %}
+          {% if prop_options == [] %}
+            {% set these_options = [] %}
+            {% for item in all_items %}
+              {% set this_value = item[filter_column] or item.columns[filter_column] %}
+              {% set is_array = true if this_value is iterable else false %}
+              {% if is_array %}
+                {% for val in this_value %}
+                  {% set append_this = val.label or val.name %}
+                  {% do these_options.append(append_this) %}
+                {% endfor %}
+              {% else %}
+                {% set append_this = this_value.label or this_value.name %}
+                {% do these_options.append(append_this) %}
+              {% endif %}
+            {% endfor %}
+            {% set unique_options = these_options|unique %}
+            {% set this_object = { "column_name": filter_column, "options": unique_options } %}
+            {% do all_filters.append(this_object) %}
+          {% else %}
+            {% set this_object = { "column_name": filter_column, "options": prop_options } %}
+            {% do all_filters.append(this_object) %}
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+      {% for property in search_properties %}
+        {% unless property in unique_search_props %}
+          {% do unique_search_props.append(property) %}
+          {% do search_props.append(property) %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+  {% if Query.debug %}
+  <script>
+    console.log({{ global_hubdb_filters|tojson }});
+  </script>
+  {% endif %}
+
+  {{ caller() }}
+
+{% endmacro %}

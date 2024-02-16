@@ -1,0 +1,37 @@
+.fancy-video {
+  position: relative;
+  z-index: 0;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+}
+
+.fancy-video__thumbnail,
+.fancy-video__overlay,
+.fancy-video__play {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fancy-video__thumbnail {
+  z-index: 1;
+}
+
+.fancy-video__thumbnail img {
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.fancy-video__overlay {
+  z-index: 2;
+}
+
+.fancy-video__play {
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

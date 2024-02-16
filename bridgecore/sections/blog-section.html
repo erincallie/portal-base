@@ -1,0 +1,67 @@
+<!--
+  templateType: section
+  label: Blog Section
+  isAvailableForNewContent: true
+  screenshotPath: ../images/template-previews/sections/blogs.png
+  description: "Flexible blog post listing section"
+-->
+
+{% dnd_section
+  padding={
+    "default" : {
+      "bottom" : "0px",
+      "left" : "0px",
+      "right" : "0px",
+      "top" : "0px"
+    }
+  },
+  full_width=true
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/blogs",
+        offset=0,
+        width=12,
+        card_style="cards",
+        offset=0,
+        width=12,
+        limit={{ context.limit || 2 }},
+        source="default",
+        show_view_all_link={{ context.show_view_all_link || true }},
+        listing_options={
+          "pagination": context.pagination || false,
+          "allow_search": context.allow_search || false,
+          "allow_filter": context.allow_search || false
+        },
+        view_all_link={
+          "link_text": "View All Events",
+          "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : context.button_link || "/blog",
+                "type" : "EXTERNAL"
+              }
+            }
+        },
+        styles={
+          "horizontal_spacing" : 30,
+          "vertical_spacing" : 30
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}

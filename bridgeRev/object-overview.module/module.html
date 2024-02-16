@@ -1,0 +1,230 @@
+{% set module_name = "object-overview" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set property_names = [] %}
+{% for section in module.sections %}
+  {% for row in section.rows %}
+    {% for property in row.properties %}
+      {% do property_names.append(property.property) %}
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
+
+{% set this_object = module.object_id %}
+{% set props_to_get = property_names|join(",") %}
+{% set all_property_defs = crm_property_definitions(this_object, props_to_get) if this_object %}
+{% set all_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data") %}
+{% set all_associations = data_query.data.CRM.contact.associations %}
+{% set all_association_props = data_query.data.CRM.contact %}
+{% set associated_objects = [] %}
+{% for key, value in all_associations.items() %}
+  {% if key is string_containing this_object %}
+    {% do associated_objects.append(value.items) %}
+  {% endif %}
+{% endfor %}
+{% set associated_object_ids = [] %}
+{% for key, value in all_association_props.items() %}
+  {% if key is string_containing this_object or (this_object == "contact" and key is string_containing "associated_users")%}
+    {% set item_array = value|split(",") if value is string_containing "," else [value] %}
+    {% for item in item_array %}
+      {% do associated_object_ids.append(item) %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% for object in associated_objects|first %}
+  {% do associated_object_ids.append(object.hs_object_id) %}
+{% endfor %}
+{% set unique_ids = associated_object_ids|unique %}
+{% set associated_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "in", unique_ids) %}
+
+{% set global_data = widget_data.global_data %}
+{% set all_objects = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("hs_object_id", "in", unique_ids) %}
+
+{% set this_object_id = widget_data.page_settings.testing_page_slug if widget_data.page_settings.testing == "true" else dynamic_page_crm_object.id %}
+{% if widget_data.page_settings.testing == "true" %}
+  {% set this_object_data = crm_objects(this_object, [this_object_id], props_to_get).results|first %}
+{% else %}
+  {% set this_object_data = dynamic_page_crm_object %}
+{% endif %}
+
+{% call global_config(global_data, this_object, all_objects, all_data) %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    {% for section in module.sections %}
+      <div class="{{ module_name }}__section">
+        <h3>{{ section.title }}</h3>
+        {% for row in section.rows %}
+          <div class="{{ module_name }}__row">
+            {% for property in row.properties %}
+              {% set prop_name = property.property %}
+              {% set this_value = this_object_data[prop_name] %}
+              {% set this_property_def = all_property_defs|selectattr("name", "==", prop_name)|first %}
+              <div class="{{ module_name }}__property">
+                <div class="{{ module_name }}__input">
+                  <label>{{ this_property_def.label }}</label>
+                  <input name="{{ prop_name }}" value="{{ this_value }}" {{ "disabled" if property.allow_edit != "true" }} />
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% require_css %}
+<style>
+
+  :root {
+    --dark-blue: #0c2340;
+    --light-blue: #425b76;
+    --teal: #04a38e;
+    --brown: #bf5700;
+    --dark: #333333;
+    --light: #abacac;
+    --white: #f8f8f8;
+  }
+  
+  {% set object = "#view--board" %}
+  {% set columns = module.board_options.categories|length + 1 %}
+  {{ flex_grid(object, 767, columns, 10, 10) }}
+ 
+  .{{ module_name }}__item {
+    padding: 20px;
+    background-color: white;
+    position: relative;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    /*box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);*/
+  }
+  
+  .{{ module_name }}__item + * {
+    margin-top: 20px;
+  }
+  
+  .{{ module_name }}__property-label {
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  
+  .item__image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 30px;
+    margin-right: 40px;
+    display: flex;
+  }
+  
+  .item__image:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%,-50%);
+    background-color: #f7f7f7;
+    z-index: 0;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 9;
+  }
+  
+  .item__actions > span {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+  }
+  
+  .item__actions ul {
+    list-style: none;
+    margin: 0;
+    padding: 1rem;
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 1px 1px 10px rgba(0,0,0,.12);
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: calc(100% - 20px);
+    z-index: 999;
+  }
+  
+  .item__actions ul li {
+    white-space:nowrap;
+    display: block;
+  }
+  
+  .item__actions ul li a {
+    padding: .5rem;
+    display: block;
+  }
+  
+  .item__actions span.active + ul {
+    display: block;
+  }
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+
+  $(function() {
+    
+    var fieldset_triggers = $("fieldset > label");
+    fieldset_triggers.on("click", function() {
+      if ($(this).parent().is(".active")) {
+        $(this).parent().removeClass("active");
+      } else {
+        $(this).parent().addClass("active");
+      }
+    });
+
+    var filters = {},
+        container = $(`#{{ name }} .isotope-container`),
+        containerTop = $(`#{{ name }}`).offset().top,
+        filterDisplay = $('#filter-display');
+    
+    var responsiveIsotope = [ [480, 6] , [720, {{ module.options.limit_per_page || 6 }}] ];
+    var itemsPerPageDefault = {{ module.options.limit_per_page || 6 }};
+
+    {#{ isotope_js() }#}
+    
+  });
+
+</script>
+{% end_require_js %}
+
+{% endcall %}

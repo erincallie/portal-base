@@ -1,0 +1,260 @@
+{% set module_name = "survey" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set survey_name = module.survey_name.columns.name %}
+{% set contact_access_array = request.contact.contact_without_defaults.survey_type_access|split(", ") %}
+{% set all_surveys = hubdb_table_rows("surveys", "&limit=200") %}
+{% set all_access_rows = hubdb_table_rows("access_lists", "&limit=200") %}
+{% set this_prop = [] %}
+{% for row in all_access_rows %}
+  {% for survey in row.surveys %}
+    {% if survey.name == survey_name %}
+      {% do this_prop.append(row.name) %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+{% set has_survey_access = "true" if this_prop|first in contact_access_array else "false" %}
+
+{% set list_ids_array = request_contact.list_memberships %}
+{% set has_access_array = [] %}
+{% for list in module.access_lists %}
+  {% do has_access_array.append("true") if list in list_ids_array %}
+{% endfor %}
+{% set has_access = "true" if "true" in has_access_array else "false" %}
+
+{% set all_question_rows = hubdb_table_rows("questions", "&limit=100") %}
+{% set all_answer_rows = hubdb_table_rows("answers", "&limit=200") %}
+
+{% set this_id = module.custom_id or name %}
+
+{% macro render_question(question) %}
+  {% set dq = [] %}
+  {% set da = [] %}
+  {% set op = [] %}
+  {% set question_id = question.question.id %}
+  {% set question_row = all_question_rows|selectattr("hs_id", "==", question_id)|first %}
+  {% set question_answers = question_row.answers %}
+  {% for item in question.dependencies %}
+    {% do dq.append(item.question.id) %}
+    {% do da.append(item.answer.id) %}
+    {% do op.append(item.operator) %}
+  {% endfor %}
+  {% set q_attributes = {
+                        "data-id": question_id,
+                        "data-dq": dq|join(","),
+                        "data-da": da|join(","),
+                        "data-op": op|join(","),
+                        "data-answer": "false"
+                      } %} 
+<div class="{{ module_name }}__question {{ module_name }}-question{{ " hide" if dq != [] }}" {{ q_attributes|xmlattr }}>
+  <div class="{{ module_name }}-question__inner">
+    <div class="{{ module_name }}-question__question">
+      {{ question_row.name }}
+    </div>
+    <div class="{{ module_name }}-question__answers">
+      {% for answer in question_answers %}
+        {% set answer_id = answer.hs_id %}
+        {% set answer_row = all_answer_rows|selectattr("hs_id","==",answer_id)|first %}
+        {% set a_attributes = { "data-score": answer_row["score_value__1"], "data-id": answer.hs_id } %}
+        <div class="{{ module_name }}-question__answer {{ module_name }}-answer" {{ a_attributes|xmlattr }} tab-index="0">
+          <label for="{{ answer.hs_id }}">
+            <input type="checkbox" name="{{ answer.hs_id }}">
+            <span>{{ answer.name }}</span>
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+
+{% if (has_access == "true" && has_survey_access == "true") or is_in_page_editor %}
+<div id="{{ this_id }}" class="{{ module_name }}">
+  <div class="{{ module_name }}_container">
+    <div class="{{ module_name }}__steps owl-carousel owl-theme">
+      {% for step in module.steps %}
+        <div class="{{ module_name }}__step">
+          <div class="step__inner">
+            <div class="step__header">
+              {% set end = step.title|split(" ")|last %}
+              {% set beginning = step.title|replace(end, "") %}
+              <h2>{{ beginning }}<span>{{ end }}</span></h2>
+              <div class="step__header-content">{{ step.content }}</div>
+            </div>
+            <div class="step__main">
+              {% for question in step.questions %}
+                <div class="step__question">
+                  {{ render_question(question) }}
+                </div>
+              {% endfor %}
+            </div>
+            <div class="step__action">
+              <a id="get_results" class="button button--secondary">{{ step.button_text }}</a>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="bouncing-loader">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+{% else %}
+<h2>
+  You Do Not Have Access
+</h2>
+{% endif %}
+
+{% require_css %}
+<style>
+  
+  #{{ this_id }} {
+    position: relative; 
+  }
+  
+  #{{ this_id }} .step__main > * + * {
+    margin-top: 30px;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-question__answers {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-question__answers > *:not(:last-child) {
+    margin-right: .5rem;
+    margin-bottom: .5rem;
+  }
+
+  #{{ this_id }} .{{ module_name }}-question__answers label span {
+    display: inline-block;
+    padding: 1rem 2rem;
+    cursor: pointer;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-question__answers label input {
+    display: none;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-question__answers label {
+    border: 1px solid var(--secondary-color);
+    display: inline-block;
+  }
+  
+  #{{ this_id }} .step__inner .step__header {
+    margin-bottom: 20px;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-answer.selected {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  .lity-container {
+    position: relative;
+  }
+  
+  .lity-close {
+    position: absolute !important;
+    color: var(--dark-color);
+    text-shadow: none;
+  }
+  
+  #{{ this_id }} .{{ module_name }}__steps > .owl-dots {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: fit-content;
+  }
+  
+  #{{ this_id }} .{{ module_name }}__steps > .owl-nav {
+    margin-top: 40px;
+  }
+  
+  #{{ this_id }} .step__inner .owl-dots {
+    position: absolute;
+    right: 0;
+    top: 200px;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background: #f1f0ec;
+    padding: 1rem;
+  }
+  
+  #{{ this_id }} .step__inner .owl-dots .owl-dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+  }
+  
+  #{{ this_id }} .step__inner .owl-dots .owl-dot + * {
+    margin-top: 2rem;
+  }
+  
+  .lity-container:has(.{{ module_name }}) .lity-close {
+    color: white;
+    margin: 30px;
+  }
+  
+  @keyframes bouncing-loader {
+    to {
+      opacity: 0.1;
+      transform: translate3d(0, -1rem, 0);
+    }
+  }
+  .bouncing-loader {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #274f5b;
+    z-index: 99;
+    opacity: 1;
+    transition: all .5s ease-in-out;
+  }
+  .bouncing-loader > div {
+    width: 1rem;
+    height: 1rem;
+    margin: 3rem 0.2rem;
+    background: #e37539;
+    border-radius: 50%;
+    animation: bouncing-loader 0.6s infinite alternate;
+  }
+  .bouncing-loader > div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .bouncing-loader > div:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  .bouncing-loader {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+</style>
+{% end_require_css %}

@@ -1,0 +1,32 @@
+[ {
+  "id" : "01c38e4c-cbae-117f-c2b1-24ae4b59ea9b",
+  "name" : "locations",
+  "display_width" : null,
+  "label" : "Locations",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : null,
+    "default" : null
+  },
+  "table_name_or_id" : "locations",
+  "display_columns" : [ "name" ],
+  "type" : "hubdbrow",
+  "default" : {
+    "id" : null
+  }
+}, {
+  "id" : "112bb80e-0b4b-9f10-36a0-8ea86c9c8aef",
+  "name" : "api_key",
+  "display_width" : null,
+  "label" : "API Key",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text",
+  "default" : "AIzaSyBDVEc3ZDbF7ZkfyBmhG0LkVLlDk5zPh3Q"
+} ]

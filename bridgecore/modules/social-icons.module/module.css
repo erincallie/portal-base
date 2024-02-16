@@ -1,0 +1,19 @@
+.social-container {
+  display: flex;
+}
+
+.social-inner {
+  display: grid;
+  align-items: center;
+}
+
+.social-link-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+}
+
+.social-container svg {
+  margin-top: 25%;
+}

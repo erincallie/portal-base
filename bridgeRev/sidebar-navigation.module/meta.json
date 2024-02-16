@@ -1,0 +1,8 @@
+{
+  "global" : false,
+  "icon" : "fontawesome-5.14.0:Compass",
+  "host_template_types" : [ "PAGE", "BLOG_POST", "BLOG_LISTING" ],
+  "module_id" : 154561997345,
+  "label" : "Sidebar Navigation",
+  "is_available_for_new_content" : true
+}

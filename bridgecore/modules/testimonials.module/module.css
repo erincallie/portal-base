@@ -1,0 +1,162 @@
+.quote-item {
+  position: relative;
+}
+
+.quote-item__wrap {
+  padding: 20px;
+}
+
+.quote-item__image {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  aspect-ratio: 3 / 1;
+  display: flex;
+}
+
+.quote-item__company {
+  position: relative;
+  height: auto;
+  width: 100px;
+  aspect-ratio: 5 / 2;
+  margin: 30px 0 0 auto;
+}
+
+.quote-item__image > img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit:cover;
+}
+
+.quote-item__company > img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit:contain;
+}
+
+.slider-item__person,
+.quote-item__person {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 30px;
+} 
+
+.slider-item__person {
+  justify-content: center;
+  margin-bottom: 30px;
+  margin-top: 1rem;
+}
+
+.slider-item__person span + span,
+.quote-item__person span + span {
+  margin-left: .5rem;
+  padding-left: .5rem;
+  border-left: 1px solid;
+}
+
+.slider-item__content {
+  text-align: center;
+  margin-top: 30px;
+  position: relative;
+}
+
+.slider-item__content svg {
+  position: absolute;
+  width: 100px;
+  height: auto;
+  z-index: 0;
+  left: calc(50% - 250px);
+  top: -30px;
+}
+
+.slider-item__content-content {
+  position: relative;
+  z-index: 9;
+}
+
+@media screen and (min-width: 768px) {
+  .owl-carousel .owl-stage {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .quote-item__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+  }
+  .quote-item__image {
+    max-width: min(500px, 33%);
+  }
+  .quote-item__image {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/**
+* Owl Carousel v2.3.4
+* Copyright 2013-2018 David Deutsch
+* Licensed under: SEE LICENSE IN https://github.com/OwlCarousel2/OwlCarousel2/blob/master/LICENSE
+*/
+/*
+* 	Default theme - Owl Carousel CSS File
+*/
+.owl-theme .owl-nav {
+  margin-top: 10px;
+  text-align: center;
+  -webkit-tap-highlight-color: transparent; }
+.owl-theme .owl-nav [class*='owl-'] {
+  color: #FFF;
+  font-size: 14px;
+  margin: 5px;
+  padding: 4px 7px;
+  display: block;
+  cursor: pointer;
+  border-radius: 3px; }
+.owl-theme .owl-nav [class*='owl-']:hover {
+  text-decoration: none; }
+.owl-theme .owl-nav .disabled {
+  opacity: 0.5;
+  cursor: default; }
+
+.owl-theme .owl-nav.disabled + .owl-dots {
+  margin-top: 10px; }
+
+.owl-theme .owl-dots {
+  text-align: center;
+  -webkit-tap-highlight-color: transparent; }
+.owl-theme .owl-dots .owl-dot {
+  display: inline-block;
+  zoom: 1;
+  *display: inline; }
+.owl-theme .owl-dots .owl-dot span {
+  width: 10px;
+  height: 10px;
+  margin: 5px 7px;
+  background: #D6D6D6;
+  display: block;
+  -webkit-backface-visibility: visible;
+  transition: opacity 200ms ease;
+  border-radius: 30px; }
+.owl-theme .owl-dots .owl-dot.active span, .owl-theme .owl-dots .owl-dot:hover span {
+  background: #869791; }
+
+.owl-nav button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.owl-nav button:first-child {
+  left: 0;
+}
+
+.owl-nav button:last-child {
+  right: 0;
+}
+
+.owl-nav button span {
+  font-size: 3rem;
+  color: var(--primary-color);
+}

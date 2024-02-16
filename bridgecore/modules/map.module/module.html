@@ -1,0 +1,67 @@
+{% set module_name = "custom-map" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__wrap">
+    <div id="map"></div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+   
+
+</style>
+{% end_require_css %}
+
+{% if module.locations %}
+{% require_js position="footer" defer="true" %}
+<script>
+  
+  $(function() {
+      $("#map").closest(".dnd-section").addClass("map-section");
+      $("#map").closest(".dnd-column").addClass("map-column");
+  });
+  
+
+  
+  function initMap() {} // now it IS a function and it is in global
+  
+  {% set first_location = module.locations|first %}
+
+  $(() => {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: {{first_location.columns.location["lat"] }}, lng: {{ first_location.columns.location["long"] }}}, zoom: 16
+      });
+
+      {% for row in module.locations %}         
+        var marker_{{ row.columns.hs_id }} = new google.maps.Marker({
+          map: map,
+          position: {lat: {{ row.columns.location["lat"] }}, lng: {{ row.columns.location["long"] }}},
+          title: `{{ row.columns.name }}`,
+          icon: { scaledSize: {width:40, height:40}, url: `{{ module.marker.src }}`}
+        });
+    
+        marker_{{ row.columns.hs_id }}.addListener('click', function() {
+          new google.maps.InfoWindow({
+              content: '<div> {{ row.columns.name }} </div>'
+          }).open(map, marker_{{ row.columns.hs_id }});
+        });
+      {% endfor %}
+    
+  });
+  
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ module.api_key }}&callback=initMap" defer></script>
+
+{% end_require_js %}
+ {% endif %}

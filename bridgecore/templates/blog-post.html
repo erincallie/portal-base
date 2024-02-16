@@ -1,0 +1,27 @@
+<!--
+  templateType: blog_post
+  isAvailableForNewContent: true
+  label: Blog Post
+  screenshotPath: ../images/template-previews/blog-post.png
+-->
+{% set template_css = "../../css/templates/blog.css" %}
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+<div class="blog-post__container">
+  <div class="blog-post__title">
+    <h1>{{ content.name }}</h1>
+  </div>
+  <div class="blog-post__content">
+    {{ content.post_body }}
+  </div>
+</div>
+
+{% module "related_blogs" path="../modules/blogs", label="Related Blogs" context={
+  "limit": 3
+} %}
+
+{% module "blog_footer_subscribe" path="../modules/banner", label="Blog Footer Subscribe" %}
+
+{% endblock body %}

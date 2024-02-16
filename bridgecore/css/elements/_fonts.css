@@ -1,0 +1,239 @@
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-ExtraBoldItalic.eot');
+    src: url('fonts/ChesnaGrotesk-ExtraBoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-ExtraBoldItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-ExtraBoldItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-ExtraBoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-ExtraBold.eot');
+    src: url('fonts/ChesnaGrotesk-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-ExtraBold.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-ExtraBold.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-ExtraBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-BlackItalic.eot');
+    src: url('fonts/ChesnaGrotesk-BlackItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-BlackItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-BlackItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-ExtraLight.eot');
+    src: url('fonts/ChesnaGrotesk-ExtraLight.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-ExtraLight.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-ExtraLight.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-Bold.eot');
+    src: url('fonts/ChesnaGrotesk-Bold.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-Bold.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-Bold.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-Black.eot');
+    src: url('fonts/ChesnaGrotesk-Black.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-Black.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-Black.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-BookItalic.eot');
+    src: url('fonts/ChesnaGrotesk-BookItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-BookItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-BookItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-BookItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-LightItalic.eot');
+    src: url('fonts/ChesnaGrotesk-LightItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-LightItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-LightItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-BoldItalic.eot');
+    src: url('fonts/ChesnaGrotesk-BoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-BoldItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-BoldItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-Light.eot');
+    src: url('fonts/ChesnaGrotesk-Light.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-Light.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-Light.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-Book.eot');
+    src: url('fonts/ChesnaGrotesk-Book.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-Book.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-Book.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-Book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-ExtLtIta.eot');
+    src: url('fonts/ChesnaGrotesk-ExtLtIta.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-ExtLtIta.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-ExtLtIta.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-ExtLtIta.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-Medium.eot');
+    src: url('fonts/ChesnaGrotesk-Medium.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-Medium.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-Medium.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-MediumItalic.eot');
+    src: url('fonts/ChesnaGrotesk-MediumItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-MediumItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-MediumItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-SemiBold.eot');
+    src: url('fonts/ChesnaGrotesk-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-SemiBold.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-SemiBold.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-ThinItalic.eot');
+    src: url('fonts/ChesnaGrotesk-ThinItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-ThinItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-ThinItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-ThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-Thin.eot');
+    src: url('fonts/ChesnaGrotesk-Thin.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-Thin.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-Thin.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-Regular.eot');
+    src: url('fonts/ChesnaGrotesk-Regular.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-Regular.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-Regular.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-RegularItalic.eot');
+    src: url('fonts/ChesnaGrotesk-RegularItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-RegularItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-RegularItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-RegularItalic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Chesna Grotesk';
+    src: url('fonts/ChesnaGrotesk-SemiBoldItalic.eot');
+    src: url('fonts/ChesnaGrotesk-SemiBoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('fonts/ChesnaGrotesk-SemiBoldItalic.woff2') format('woff2'),
+        url('fonts/ChesnaGrotesk-SemiBoldItalic.woff') format('woff'),
+        url('fonts/ChesnaGrotesk-SemiBoldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}

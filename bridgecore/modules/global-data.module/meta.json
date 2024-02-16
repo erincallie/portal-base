@@ -1,0 +1,10 @@
+{
+  "global" : true,
+  "content_types" : [ "LANDING_PAGE", "SITE_PAGE", "BLOG_LISTING", "BLOG_POST" ],
+  "smart_type" : "NOT_SMART",
+  "icon" : "fontawesome-5.14.0:Globe%20with%20Americas%20shown:SOLID",
+  "host_template_types" : [ "PAGE", "BLOG_POST", "BLOG_LISTING" ],
+  "module_id" : 142849459802,
+  "label" : "Global Data",
+  "is_available_for_new_content" : true
+}

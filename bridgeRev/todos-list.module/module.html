@@ -1,0 +1,807 @@
+{% set module_name = "todos-list" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set property_names = [] %}
+{% for section in module.sections %}
+  {% for row in section.rows %}
+    {% for property in row.properties %}
+      {% do property_names.append(property) %}
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
+
+{% set this_object = module.object_id %}
+{% set props_to_get = property_names|join(",") %}
+{% set all_property_defs = crm_property_definitions(this_object, props_to_get) if this_object %}
+{% set all_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data") %}
+{% set all_associations = data_query.data.CRM.p_myhomeprofiles.associations %}
+{% set all_association_props = data_query.data.CRM.p_myhomeprofiles %}
+{% set associated_objects = [] %}
+{% for key, value in all_associations.items() %}
+  {% if key is string_containing this_object %}
+    {% do associated_objects.append(value.items) %}
+  {% endif %}
+{% endfor %}
+{% set associated_object_ids = [] %}
+{% for key, value in all_association_props.items() %}
+  {% if key is string_containing this_object or (this_object == "contact" and key is string_containing "associated_users")%}
+    {% set item_array = value|split(",") if value is string_containing "," else [value] %}
+    {% for item in item_array %}
+      {% do associated_object_ids.append(item) %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% for object in associated_objects|first %}
+  {% do associated_object_ids.append(object.hs_object_id) %}
+{% endfor %}
+{% set unique_ids = associated_object_ids|unique %}
+{% set associated_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "in", unique_ids) %}
+
+{% set global_data = widget_data.global_data %}
+{% set all_objects = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("hs_object_id", "in", unique_ids) %}
+
+{% if Query.debug %}
+<div>unique ids: {{ associated_object_ids }}</div>
+<div>this object: {{ this_object }}</div>
+<div>all object data: {{ all_object_data }}</div>
+<div>all data: {{ all_data }}</div>
+{% endif %}
+
+{# Allow for toggling between views #}
+{% if request.query_dict.listview or !request.query_dict.boardview %}
+
+{% call global_config(global_data, this_object, all_objects, all_data) %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    {% if module.options.allow_filter or module.options.allow_search %}
+      <div class="{{ module_name }}__section">
+        {% if module.options.allow_filter %}
+          <div class="listing__filters-wrap">
+            <ul class="listing__filters-items">
+              {% call render_filter_group("group") %}
+                {% for this_filter in all_filters %}
+                  {% set slug = slugify(this_filter) %}
+                  {{ render_filter(slug, this_filter, loop.first) }}
+                {% endfor %}
+              {% endcall %}
+            </ul>
+          </div>
+        {% endif %}
+        {% if module.options.allow_search %}
+          <div class="listing__search">
+            {% set placeholder = module.search_options.placeholder %}
+            {% set search_id = name + "__search" %}
+            {{ render_search(placeholder, "", search_id) }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="{{ module_name }}__section">
+      <div class="{{ module_name }}__row isotope-container">
+        
+        
+        {% for id in unique_ids %}
+        {% set this_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "==", id)|first %}
+        {% set has_value = { "value": true } %}
+        {% for section in module.sections %}
+          {% for row in section.rows %}
+            {% for property in row.properties %}
+              {% set this_def = all_property_defs|selectattr("name", "==", property)|first %}
+              {% set this_label = this_def.label %}
+              {% set this_value = this_data[property] %}
+              {% do has_value.update({"value": true }) if this_value %}
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+        
+        {% if has_value.value %}
+
+        {# To Do Data Build #}
+        {% set previous_ticket = data_query.data.CRM.p_myhomeprofiles.associations %}
+
+        {% set todo_date_raw = this_data.to_do_date|split('/') %}
+        {% set todo_day = ( todo_date_raw[1]|int > 9 ?  todo_date_raw[1] : '0' ~ todo_date_raw[1] ) %}
+        {% set todo_month = ( todo_date_raw|first|int > 9 ?  todo_date_raw|first : '0' ~ todo_date_raw|first ) %}
+        {% set todo_year = '20' ~ todo_date_raw|last %}
+        {% set todo_date = (todo_year ~ '-' ~ todo_month ~ '-' ~ todo_day ~ 'T12:00:00+0000')|strtotime("yyyy-MM-dd'T'HH:mm:ssZ")|unixtimestamp %}
+        
+        {% set month_defs = {
+          January: "Winter",
+          February: "Winter",
+          March: "Spring",
+          April: "Spring",
+          May: "Spring",
+          June: "Summer",
+          July: "Summer",
+          August: "Summer",
+          September: "Fall",
+          October: "Fall",
+          November: "Fall",
+          December: "Winter"
+        } %}
+        {% set season = month_defs[todo_date|format_date('MMMM')] %}
+
+        {# Determine status by todo_date in relation to today's date +/- 90 days on either side #}
+        {% set todo_status = ( todo_date|plus_time(90, 'days')|unixtimestamp >= today()|unixtimestamp and todo_date|minus_time(90, 'days')|unixtimestamp <= today()|unixtimestamp ) ? 'Needs Attention' : 'Planned' %}
+        {% if this_data.completed_date %}
+          {% set todo_status = 'Complete' %}
+        {% endif %}
+        {% set status_color_defs = {
+          needsattention: 'var(--teal)',
+          planned: 'var(--dark-blue)',
+          complete: 'green'
+        } %}
+
+        <div id="{{ id }}" class="{{ module_name }}__item todo isotope-item {{ slugify(todo_status)|trim }}" data-id="{{ id }}" data-object="{{ module.object_id }}" data-date="{{ todo_date }}" data-search="{{ this_data.service_category }} {{ this_data.myhometodoitem }} {{ this_data.to_do_notes }}">
+          <div>
+            <input type="checkbox" name="{{ id }}__todoselect" data-id="{{ id }}">
+          </div>
+          <div class="todo__card">
+            <div class="todo__status" style="background-color: {{ status_color_defs[todo_status|lower|replace(' ', '')] }};">
+              <div class="todo__status--status">{{ todo_status }}</div>
+            </div>
+            <div class="todo__inner">
+              {% if this_object != "subscription" and (module.options.allow_editing or module.options.allow_deleting) %}
+              <div class="item__actions">
+                <span class="toggle-active">{{ icons("dots") }}</span>
+                <ul>
+                  {% if module.options.allow_deleting %}
+                  <li>
+                    <a data-action="remove">{{ icons("plus") }} Remove</a>
+                  </li>
+                  {% endif %}
+                  <li>
+                    <a data-action="complete" data-stage="145791801">{{ icons("plus") }} DIY/Mark Complete</a>
+                  </li>
+                </ul>
+              </div>
+              {% endif %}
+              <div class="todo__top">
+                <div>
+                  {% if this_data.service_category %}
+                  <span class="todo--category">{{ this_data.service_category }}</span>
+                  {% endif %}
+                </div>
+                <div class="todo--timeframe">Recommended Timeframe: <span>{{ season }} {{ todo_year }}</span></div>
+              </div>
+              <div class="todo__details">
+                <a href="/preventative/{{ id }}" target="_blank"><strong>{{ this_data.myhometodoitem or this_data.service_category }}</strong></a>
+                <div>{{ this_data.to_do_notes }}</div>
+              </div>
+              <div class="todo__ticket">
+                {% if MyHomeService or true %}
+                <div>Last Service Provider (if exists on Ticket/MyHomeService)</div>
+                <a href="#">Last Completed Date: 2/15/23</a>
+                {% endif %}
+              </div>
+              <div class="todo__buttons">
+                <div>
+                  <a class="button button--success" href="/service-requests?objectType={{ module.object_id }}&objectId={{ id }}&serviceCategory={{ this_data.service_category }}&name={{ this_data.myhometodoitem }}">Book</a>
+                  <a class="button button--success" data-action="complete" data-stage="145791801">DIY/Mark Complete</a>
+                  <a class="button button--warning" href="#{{ id }}__punt" data-lity>Punt</a>
+                  {% if module.options.allow_deleting %}<a class="button button--error" href="#" data-action="remove">Delete</a>{% endif %}
+                </div>
+                <a class="button button--warning" href="#">Upload</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+{# Punt Modal #}
+{% for id in unique_ids %}
+  {% set this_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "==", id)|first %}
+  {% set has_value = { "value": true } %}
+  {% for section in module.sections %}
+    {% for row in section.rows %}
+      {% for property in row.properties %}
+        {% set this_def = all_property_defs|selectattr("name", "==", property)|first %}
+        {% set this_label = this_def.label %}
+        {% set this_value = this_data[property] %}
+        {% do has_value.update({"value": true }) if this_value %}
+      {% endfor %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if has_value.value %}
+    <div id="{{ id }}__punt" class="{{ module_name }}__item modal lity-hide" data-id="{{ id }}" data-object="{{ module.object_id }}">
+
+    {% set todo_date_raw = this_data.to_do_date|split('/') %}
+    {% set todo_day = ( todo_date_raw[1]|int > 9 ?  todo_date_raw[1] : '0' ~ todo_date_raw[1] ) %}
+    {% set todo_month = ( todo_date_raw|first|int > 9 ?  todo_date_raw|first : '0' ~ todo_date_raw|first ) %}
+    {% set todo_year = '20' ~ todo_date_raw|last %}
+    {% set todo_date = (todo_year ~ '-' ~ todo_month ~ '-' ~ todo_day ~ 'T12:00:00+0000')|strtotime("yyyy-MM-dd'T'HH:mm:ssZ")|unixtimestamp %}
+
+      <h3>Punt To Do</h3>
+      <form class="form--punt" data-id="{{ id }}" data-object="{{ module.object_id }}">
+        <input type="date" min="{{ today()|format_date('YYYY-MM-dd') }}" max="{{ year }}-12-31" value="{{ (todo_year ~ '-' ~ todo_month ~ '-' ~ todo_day) }}" />
+        <button>Update To Do</button>
+      </form>
+
+
+    </div>
+  {% endif %}
+
+{% endfor %}
+
+
+{# Put this in the right place once we are done #}
+<section style="display: grid; grid-template-columns: 3fr 1fr; gap: 2rem;">
+
+  <div>
+    <a class="button button--primary" href="#add__myhometodos" data-lity>Add a To Do</a>
+  </div>
+
+
+</section>
+
+
+{% require_js position="footer" defer="true" %}
+<script>
+
+  $(function() {
+
+    function send_to_serverless(object) {
+      let endpoint = `https://{{ request.domain }}/_hcms/api/actions`;
+      var submit_this = JSON.stringify(object);
+      var response = fetch(endpoint, {
+        method: 'POST',
+        body: submit_this,
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      return response;
+    }
+
+
+    $('.form--punt').submit(function(e){
+      e.preventDefault();
+
+      let $form = $(this);
+
+      let payload = {
+        objectId: $form.attr('data-id'),
+        objectType: $form.attr('data-object'),
+        associations: [],
+        properties: {
+          to_do_date: $form.children('input').val()
+        }
+      }
+
+      console.log(payload)
+      send_to_serverless(payload)
+
+      setTimeout(() => {
+        location.reload()
+      }, 1000)
+
+    })
+    
+    var fieldset_triggers = $("fieldset > label");
+    fieldset_triggers.on("click", function() {
+      if ($(this).parent().is(".active")) {
+        $(this).parent().removeClass("active");
+      } else {
+        $(this).parent().addClass("active");
+      }
+    });
+
+    var filters = {},
+        container = $(`#{{ name }} .isotope-container`),
+        containerTop = $(`#{{ name }}`).offset().top,
+        filterDisplay = $('#filter-display');
+    
+    var responsiveIsotope = [ [480, 8] , [720, {{ module.options.limit_per_page || 68 }}] ];
+    var itemsPerPageDefault = {{ module.options.limit_per_page || 8 }};
+
+    var itemsPerPage = defineItemsPerPage();
+    var currentNumberPages = 1;
+    var currentPage = 1;
+    var currentFilter = '*';
+    var filterAttribute = 'data-filter';
+    var filterValue = "";
+    var filterItem = ".isotope-item";
+    var pageAttribute = 'data-page';
+    var pagerClass = 'isotope-pager';
+    var qsRegex;
+    var allFilters;
+    var wordPage;
+    
+     var CreatePagers = function() {
+      var $isotopePager = ( $('.'+pagerClass).length == 0 ) ? $('<div class="'+pagerClass+'"></div>') : $('.'+pagerClass);
+      $isotopePager.html('');
+      if(currentNumberPages > 1) {
+        for( var i = 0; i < currentNumberPages; i++ ) {
+          var extra_class = (i + 1 == currentPage) ? "active" : "";
+          var $pager = $(`<a class="pager ${extra_class}" ${pageAttribute}="${(i+1)}"></a>`);
+          $pager.html(i+1);
+          $pager.appendTo($isotopePager);
+        }
+      }
+      container.after($isotopePager);
+    };
+    
+    function defineItemsPerPage() {
+      var pages = itemsPerPageDefault;
+      for( var i = 0; i < responsiveIsotope.length; i++ ) {
+        if( $(window).width() <= responsiveIsotope[i][0] ) {
+          pages = responsiveIsotope[i][1];
+          break;
+        }
+      }
+      return pages;
+    }
+
+    function setPagination() {
+      var SettingsPagesOnItems = function(){
+        var itemsLength = container.children(filterItem).length;
+        var pages = Math.ceil(itemsLength / itemsPerPage);
+        var item = 1;
+        var page = 1;
+        var selector = filterItem;
+        container.children(allFilters).each(function(){
+          if( item > itemsPerPage ) {
+            page++;
+            item = 1;
+          }
+          wordPage = page.toString();
+          var this_page = $(this).attr('data-page');
+          if(this_page) {
+            $(this).addClass(this_page);
+          } else {
+            $(this).addClass(wordPage); 
+          }
+          item++;
+        });
+        currentNumberPages = page;
+      }();
+      CreatePagers();
+    }
+
+    function init_grid() {
+      if (!container.is(".no-page")) {
+        setPagination();
+        var thisPage = currentPage.toString();
+      }
+      if (container.is(".hubdb-events__row")) {
+        container.isotope({
+          itemSelector: filterItem,
+          layoutMode: 'vertical',
+          getSortData: {
+              status: function (el) {
+              return $(el).attr("data-date");
+            }
+          },
+          sortBy: 'status',
+          filter: function() {
+            var $this = $(this);
+            var pageResult = !container.is(".no-page") ? $this.is("."+thisPage) : true;
+            var searchResult = qsRegex ? $this.attr("data-search").match( qsRegex ) : true;
+            var buttonResult = allFilters ? $this.is( allFilters ) : true;
+            return buttonResult && pageResult && searchResult;
+          }
+        });
+      } else {
+          container.isotope({
+            itemSelector: filterItem,
+            layoutMode: 'fitRows',
+            getSortData: {
+                status: function (el) {
+                return $(el).attr("data-date");
+              }
+            },
+            sortBy: 'status',
+            filter: function() {
+              var $this = $(this);
+              var pageResult = !container.is(".no-page") ? $this.is("."+thisPage) : true;
+              var searchResult = qsRegex ? $this.attr("data-search").match( qsRegex ) : true;
+              var buttonResult = allFilters ? $this.is( allFilters ) : true;
+              return buttonResult && pageResult && searchResult;
+            }
+          });
+      }
+      
+    }
+
+    const handle_arrange = function() {
+      // do something when finished with arrange
+    },
+          equal_height_blocks = function() {
+            var equalize = container,
+                max_height = 0;
+            if (equalize.length > 0) {
+              equalize.each(function() {
+                var blocks = $(this).find(filterItem);
+                blocks.each(function() {
+                  var height = $(this).outerHeight();
+                  if (height > max_height) {
+                    max_height = height;
+                  }
+                });
+                var new_height = max_height;
+                blocks.each(function() {
+                  $(this).css("height", new_height);
+                });
+              });
+            }
+          },
+          handle_mobile = function() {
+            if ($(window).width() < 768) {
+              $("fieldset").removeClass("active");
+            }
+          };
+
+    function clearAll(){
+      currentFilter = '*';
+      wordPage = 1;
+      init_grid();
+    }
+                                        
+    var itemReveal = Isotope.Item.prototype.reveal;
+    Isotope.Item.prototype.reveal = function() {
+      itemReveal.apply( this, arguments );
+      $( this.element ).removeClass('isotope-hidden');
+      $( this.element ).addClass('isotope-visible');
+    };
+
+    var itemHide = Isotope.Item.prototype.hide;
+    Isotope.Item.prototype.hide = function() {
+      itemHide.apply( this, arguments );
+      $( this.element ).addClass('isotope-hidden');
+      $( this.element ).removeClass('isotope-visible');
+    };
+    
+    $('#clear-filters').click(function(){clearAll()});
+
+    $(window).on("load", function() {
+      init_grid();
+    });
+
+    $(window).on("resize", function() {
+      init_grid();
+      handle_mobile();
+    });
+
+    $('.data-filter').on( 'click', function( event ) {
+      var group = $(this).closest('fieldset').attr('data-group'),
+          checkbox = $(this).find("input"),
+          value = checkbox.attr('data-filter'),
+          hasFilter = false,
+                                        single_select =  $(this).closest('fieldset').is('.single-select') ? true : false;
+      var filterGroup = filters[ group ];
+      if ( !filterGroup ) { filterGroup = filters[ group ] = []; }
+      if ( checkbox.attr("checked") && value ) {
+        checkbox.attr("checked", false);
+        $(this).removeClass("active");
+        checkbox.closest("li").removeClass("active");
+        if (value.indexOf(" ") > -1) {
+          var value_array = value.split(" ");
+          for (let x=0; x<value_array.length; x++) {
+            var this_index = filterGroup.indexOf( value_array[x] );
+            filterGroup.splice( this_index, 1 );
+          }
+        } else {
+          var index = filterGroup.indexOf( value );
+          filterGroup.splice( index, 1 );
+        }
+      } else if (value) {
+        checkbox.attr("checked", true);
+        $(this).addClass("active");
+                                              if (single_select) {
+                                                $(this).siblings().removeClass('active').find("input").attr("checked", false);
+                                              }
+        if (value.indexOf(" ") > -1) {
+          var value_array = value.split(" ");
+          for (let i=0; i<value_array.length; i++) {
+            filterGroup.push( value_array[i] );
+          }
+        } else {
+          filterGroup.push( value );
+        }
+      }
+      var comboFilter = getComboFilter();
+      allFilters = single_select ? value : comboFilter;
+      init_grid();
+                                              console.log(allFilters);
+      //filterDisplay.text( comboFilter );
+      comboFilter = "";
+    });
+
+    function getComboFilter() {
+      var combo = [];
+      for ( var prop in filters ) {
+        var group = filters[ prop ];
+        if ( !group.length ) {
+          combo.push( "*" );
+          continue;
+        }
+        if ( !combo.length ) {
+          combo = group.slice(0);
+          continue;
+        }
+        var nextCombo = [];
+        for ( var i=0; i < combo.length; i++ ) {
+          for ( var j=0; j < group.length; j++ ) {
+            var item = combo[i] + group[j];
+            nextCombo.push( item );
+          }
+        }
+        combo = nextCombo;
+      }
+      var comboFilter = combo.join(', ');
+      return comboFilter;
+    }
+
+    function debounce( fn, threshold ) {
+      var timeout;
+      threshold = threshold || 100;
+      return function debounced() {
+        clearTimeout( timeout );
+        var args = arguments;
+        var _this = this;
+        function delayed() {
+          fn.apply( _this, args );
+        }
+        timeout = setTimeout( delayed, threshold );
+      };
+    }
+
+    var $quicksearch = $(`.listing-search input`).keyup( debounce( function() {
+      qsRegex = new RegExp( $quicksearch.val(), 'gi' );
+      currentPage = 1;
+      init_grid();
+    }) );
+
+    const handle_clicks = function() {
+      $(".active-trigger").on('click', function() {
+        let target = $(this).attr("data-target");
+        $(target).toggleClass("active");
+      });
+      $("fieldset > label").on("click", function() {
+        if ($(this).parent().is(".active")) {
+          $(this).parent().removeClass("active").attr("aria-expanded", "false");
+          $(this).find("ul").attr("aria-hidden", "true");
+        } else {
+          $(this).parent().addClass("active").attr("aria-expanded", "true");
+          $(this).find("ul").attr("aria-hidden", "false");
+        }
+      });
+    };
+
+    handle_clicks();
+                                          
+      $(document).on("click", ".pager", function() {
+        let pageNumber = $(this).attr(pageAttribute);
+        currentPage = pageNumber;
+        window.location.hash = window.location.href.split('#')[0];
+        window.location.hash = `#{{ name }}`;
+        init_grid();
+      });
+    
+  });
+
+</script>
+{% end_require_js %}
+
+{% require_css %}
+<style>
+
+  :root {
+    --dark-blue: #0c2340;
+    --light-blue: #425b76;
+    --teal: #04a38e;
+    --brown: #bf5700;
+    --dark: #333333;
+    --light: #abacac;
+    --white: #f8f8f8;
+    --red: #e31414
+  }
+
+  .modal{
+    background-color: #fff;
+    padding: 2rem;
+    margin-top: 0 !important;
+    border-radius: 1rem;
+  }
+  
+  .{{ module_name }}__item {
+    margin-top: 2rem;
+  }
+  
+  .{{ module_name }}__property-label {
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  
+  .button.button--success{
+    background-color: var(--teal);
+  }
+  
+  .button.button--warning{
+    background-color: var(--dark-blue);
+  }
+  
+  .button.button--error{
+    background-color: var(--red);
+  }
+  
+  .todo{
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .todo input[type=checkbox]{
+    width: 20px;
+  }
+  
+  .todo__card{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    background-color: #fff;
+    border-radius: 1rem;
+    width: 100%;
+  }
+  
+  .todo__status{
+    position: relative;
+    width: 4rem;
+    border-radius: 1rem 0 0 1rem;
+  }
+  
+  .todo__status--status{
+    rotate: 90deg;
+    width: 300%;
+    position: absolute;
+    bottom: 50%;
+    transform: translate(5%, 250%);
+    z-index: 1;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .todo__inner{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.5rem;
+  }
+  
+  .todo__top{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .todo__top .todo--category{
+    padding: 0.5rem 1rem;
+    background-color: #f7f7f7;
+    border-radius: 1rem;
+  }
+  
+  .todo__top .todo--category,
+  .todo__top .todo--timeframe{
+    font-size: 1rem;
+  }
+  
+  .todo__ticket{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  
+  .todo__buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .item__image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 30px;
+    margin-right: 40px;
+    display: flex;
+  }
+  
+  .item__image:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%,-50%);
+    background-color: #f7f7f7;
+    z-index: 0;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 9;
+  }
+  
+  .item__actions > span {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+  }
+  
+  .item__actions ul {
+    list-style: none;
+    margin: 0;
+    padding: 1rem;
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 1px 1px 10px rgba(0,0,0,.12);
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: calc(100% - 20px);
+    z-index: 999;
+  }
+  
+  .item__actions ul li {
+    white-space:nowrap;
+    display: block;
+  }
+  
+  .item__actions ul li a {
+    padding: .5rem;
+    display: block;
+  }
+  
+  .item__actions span.active + ul {
+    display: block;
+  }
+
+</style>
+{% end_require_css %}
+
+{% endcall %}
+
+{% endif %}

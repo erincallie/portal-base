@@ -1,0 +1,23 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Inner
+  screenshotPath: ../images/template-previews/inner-page.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--inner"
+%}
+
+  {% include_dnd_partial path="../sections/hero-banner.html" context={} %}
+
+  {% include_dnd_partial path="../sections/title-section.html" context={} %}
+
+  {% include_dnd_partial path="../sections/centered-banner.html" context={} %}
+  
+{% end_dnd_area %}
+{% endblock body %}

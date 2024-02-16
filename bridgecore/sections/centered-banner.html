@@ -1,0 +1,90 @@
+<!--
+  templateType: section
+  label: Centered Subscribe
+  isAvailableForNewContent: true
+  screenshotPath: ../images/template-previews/sections/centered-subscribe.png
+  description: "Centered block with subscription CTA and form"
+-->
+{% dnd_section
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/banner",
+        offset=0,
+        width=12,
+        background_options={
+          "overlay" : false,
+          "parallax_effect" : true,
+          "parallax_strength" : 0.25
+        },
+        content={
+          "buttons" : [ {
+            "button_text" : "Get Started",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "rel" : "",
+              "sponsored" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              },
+              "user_generated_content" : false
+            },
+            "style" : "secondary"
+          } ],
+          "content" : "Empower your businesses with elite HubSpot solutions.",
+          "title" : "Amplify Your HubSpot ROI"
+        },
+        styles={
+          "background_styles" : {
+            "image" : {
+              "background_position" : "BOTTOM_CENTER",
+              "background_size" : "cover",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/blurred-bg.jpg"
+            }
+          },
+          "module_styles" : {
+            "border_radius" : 20,
+            "content_font" : {
+              "color" : "#110B11",
+              "font_set" : "DEFAULT"
+            },
+            "header_font" : {
+              "color" : "#110B11",
+              "font_set" : "DEFAULT"
+            },
+            "spacing" : {
+              "css" : "padding-top: 60px; padding-right: 30px; padding-bottom: 60px; padding-left: 30px;",
+              "padding" : {
+                "bottom" : {
+                  "units" : "px",
+                  "value" : 60
+                },
+                "left" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "right" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "top" : {
+                  "units" : "px",
+                  "value" : 60
+                }
+              }
+            }
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}

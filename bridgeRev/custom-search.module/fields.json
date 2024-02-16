@@ -1,0 +1,12 @@
+[ {
+  "id" : "00e66c60-6ef1-2ca3-5e24-58d1e0a937fa",
+  "name" : "placeholder_text",
+  "display_width" : null,
+  "label" : "Placeholder Text",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text"
+} ]

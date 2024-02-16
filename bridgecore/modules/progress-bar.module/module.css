@@ -1,0 +1,21 @@
+.progress-bar__labels {
+  margin-bottom: 1rem;
+}
+
+.progress-bar__labels > * > * + * {
+  margin-left: .5rem;
+}
+
+@media screen and (min-width: 768px) {
+  .progress-bar__labels {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .progress-bar__labels > * {
+    width: auto;
+  }
+  .progress-bar__labels > *:last-child {
+    text-align: right;
+  }
+}

@@ -1,0 +1,41 @@
+[ {
+  "id" : "8dcf3dc0-f221-160b-1bcf-29daf2a1cbfd",
+  "name" : "stages",
+  "display_width" : null,
+  "label" : "Stages",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "b0acafc1-112b-8321-9a4e-019da3b48237",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "b0acafc1-112b-8321-9a4e-019da3b48237",
+    "name" : "stage_name",
+    "display_width" : null,
+    "label" : "Stage Name",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "718398b7-ea3e-152b-7209-b45c318741c6",
+    "name" : "stage_value",
+    "display_width" : null,
+    "label" : "Stage Value",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

@@ -1,0 +1,29 @@
+{% macro transition(value) %}-webkit-transition: {{ value }};-moz-transition: {{ value }};-o-transition: {{ value }};-ms-transition: {{ value }};transition: {{ value }};{% endmacro %}
+{% macro borderRadius(value) %}-webkit-border-radius: {{ value }};-moz-border-radius: {{ value }};-o-border-radius: {{ value }};-ms-border-radius: {{ value }};border-radius: {{ value }};{% endmacro %}
+{% macro boxShadow(value) %}-webkit-box-shadow: {{ value }};-moz-box-shadow: {{ value }};-o-box-shadow: {{ value }};-ms-box-shadow: {{ value }};box-shadow: {{ value }};{% endmacro %}
+{% macro textShadow(value) %}-webkit-text-shadow: {{ value }};-moz-text-shadow: {{ value }};-o-text-shadow: {{ value }};-ms-text-shadow: {{ value }};text-shadow: {{ value }};{% endmacro %}
+{% macro transform(value) %}-webkit-transform: {{ value }};-moz-transform: {{ value }};-o-transform: {{ value }};-ms-transform: {{ value }}; transform: {{ value }};{% endmacro %}
+
+{% macro flex_grid(obj, break, col_num, vert_spacing, horiz_spacing) %}
+  {% set width =  1 / col_num * 100 %}
+  {% set row_two = col_num + 1 %}
+  {% set next = break + 1 %}
+  {% set margin_adjust = horiz_spacing * ((col_num - 1) / col_num) %}
+  @media screen and (max-width: {{ break }}px) { {{ obj }} > *:not(:last-child) { margin-bottom: {{ vert_spacing }}px; } }
+  @media screen and (min-width: {{ next }}px) { 
+    {{ obj }} { display: flex; flex-wrap: wrap; }
+    {{ obj }} > * { display: inline-block; width: calc({{ width }}% - {{ margin_adjust }}px); margin-right: {{ horiz_spacing }}px !important; margin-bottom: 0; }
+    {{ obj }} > *:nth-child({{ col_num }}n) { margin-right: 0 !important; }
+    {{ obj }} > *:nth-child(1n+{{ row_two }}) { margin-top:  {{ vert_spacing }}px; }
+  }		
+{% endmacro %}
+
+{% macro color(value) %}
+  {% set colorhex = value.color|convert_rgb %}
+  {% if value.opacity != null %}
+      {% set coloropacity = value.opacity / 100 %}
+  {% else %}
+      {% set coloropacity = '1' %}
+  {% endif %}
+  rgba({{ colorhex }}, {{ coloropacity }})
+{% endmacro %}

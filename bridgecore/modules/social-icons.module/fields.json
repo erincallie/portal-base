@@ -1,0 +1,213 @@
+[ {
+  "id" : "icons",
+  "name" : "icons",
+  "display_width" : null,
+  "label" : "Icons",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : null,
+    "default" : 3
+  },
+  "children" : [ {
+    "id" : "icon_type",
+    "name" : "icon_type",
+    "display_width" : null,
+    "label" : "Icon Type",
+    "required" : false,
+    "locked" : false,
+    "display" : "select",
+    "choices" : [ [ "hubspot", "HubSpot Icon" ], [ "custom", "Custom Image" ] ],
+    "multiple" : false,
+    "reordering_enabled" : true,
+    "preset" : null,
+    "type" : "choice",
+    "default" : "hubspot"
+  }, {
+    "id" : "icons.icon",
+    "name" : "icon",
+    "display_width" : null,
+    "label" : "Icon",
+    "required" : false,
+    "locked" : false,
+    "visibility" : {
+      "controlling_field" : "icon_type",
+      "controlling_field_path" : null,
+      "controlling_value_regex" : "hubspot",
+      "property" : null,
+      "operator" : "EQUAL",
+      "access" : null
+    },
+    "icon_set" : "fontawesome-5.0.10",
+    "type" : "icon",
+    "default" : {
+      "name" : "facebook"
+    }
+  }, {
+    "id" : "icons.custom_image",
+    "name" : "custom_image",
+    "display_width" : null,
+    "label" : "Custom Image",
+    "required" : false,
+    "locked" : false,
+    "visibility" : {
+      "controlling_field" : "icon_type",
+      "controlling_field_path" : null,
+      "controlling_value_regex" : "custom",
+      "property" : null,
+      "operator" : "EQUAL",
+      "access" : null
+    },
+    "responsive" : false,
+    "resizable" : false,
+    "show_loading" : false,
+    "type" : "image",
+    "default" : {
+      "src" : "",
+      "alt" : null,
+      "size_type" : null,
+      "width" : null,
+      "height" : null,
+      "max_width" : null,
+      "max_height" : null,
+      "loading" : "disabled"
+    }
+  }, {
+    "id" : "icons.link",
+    "name" : "link",
+    "display_width" : null,
+    "label" : "Link",
+    "required" : false,
+    "locked" : false,
+    "supported_types" : [ "EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG" ],
+    "show_advanced_rel_options" : false,
+    "type" : "link",
+    "default" : {
+      "url" : {
+        "type" : "EXTERNAL",
+        "content_id" : null,
+        "href" : ""
+      },
+      "open_in_new_tab" : false,
+      "no_follow" : false,
+      "sponsored" : false,
+      "user_generated_content" : false
+    }
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ {
+    "icon_type" : "hubspot",
+    "icon" : {
+      "name" : "facebook"
+    }
+  }, {
+    "icon_type" : "hubspot",
+    "icon" : {
+      "name" : "twitter"
+    }
+  }, {
+    "icon_type" : "hubspot",
+    "icon" : {
+      "name" : "instagram"
+    }
+  } ]
+}, {
+  "id" : "style",
+  "name" : "style",
+  "display_width" : null,
+  "label" : "Style",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "style.alignment",
+    "name" : "alignment",
+    "display_width" : null,
+    "label" : "Alignment",
+    "required" : false,
+    "locked" : false,
+    "alignment_direction" : "HORIZONTAL",
+    "type" : "alignment",
+    "default" : {
+      "horizontal_align" : "LEFT"
+    }
+  }, {
+    "id" : "style.icon_fill_color",
+    "name" : "icon_fill_color",
+    "display_width" : null,
+    "label" : "Icon Fill Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : "#FFFFFF",
+      "opacity" : 100
+    }
+  }, {
+    "id" : "style.icon_hover_color",
+    "name" : "icon_hover_color",
+    "display_width" : null,
+    "label" : "Icon Hover Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : "#FFFFFF",
+      "opacity" : 100
+    }
+  }, {
+    "id" : "style.icon_background_color",
+    "name" : "icon_background_color",
+    "display_width" : null,
+    "label" : "Icon Background Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : "#297373",
+      "opacity" : 100
+    }
+  }, {
+    "id" : "style.icon_background_hover_color",
+    "name" : "icon_background_hover_color",
+    "display_width" : null,
+    "label" : "Icon Background Hover Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : "#85FFC7",
+      "opacity" : 100
+    }
+  }, {
+    "id" : "style.icon_height",
+    "name" : "icon_height",
+    "display_width" : null,
+    "label" : "Icon Height",
+    "required" : false,
+    "locked" : false,
+    "display" : "text",
+    "step" : 1,
+    "suffix" : "px",
+    "type" : "number",
+    "default" : 18
+  }, {
+    "id" : "style.margin",
+    "name" : "margin",
+    "display_width" : null,
+    "label" : "Margin Between",
+    "required" : false,
+    "locked" : false,
+    "display" : "text",
+    "step" : 1,
+    "suffix" : "px",
+    "type" : "number",
+    "default" : 20
+  } ],
+  "tab" : "STYLE",
+  "expanded" : false,
+  "type" : "group"
+} ]

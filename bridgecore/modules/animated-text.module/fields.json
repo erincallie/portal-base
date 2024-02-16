@@ -1,0 +1,101 @@
+[ {
+  "id" : "static_text",
+  "name" : "static_text",
+  "display_width" : null,
+  "label" : "Static Text",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text",
+  "default" : "This doesn't animate, "
+}, {
+  "id" : "animated_text",
+  "name" : "animated_text",
+  "display_width" : null,
+  "label" : "Animated Text",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text",
+  "default" : "and this does!"
+}, {
+  "id" : "selected_animation",
+  "name" : "selected_animation",
+  "display_width" : null,
+  "label" : "Select Animation",
+  "required" : false,
+  "locked" : false,
+  "display" : "select",
+  "choices" : [ [ "slide-in-top", "Slide-In Top" ], [ "slide-in-left", "Slide-In Left" ], [ "slide-in-right", "Slide-In Right" ], [ "slide-in-bottom", "Slide-In Bottom" ], [ "zoom-in", "Zoom In" ], [ "fade-in", "Fade In" ] ],
+  "multiple" : false,
+  "reordering_enabled" : true,
+  "preset" : null,
+  "type" : "choice"
+}, {
+  "id" : "delay",
+  "name" : "delay",
+  "display_width" : null,
+  "label" : "Animation Delay",
+  "required" : false,
+  "locked" : false,
+  "display" : "text",
+  "step" : 1,
+  "suffix" : "ms",
+  "type" : "number",
+  "default" : 0
+}, {
+  "id" : "style",
+  "name" : "style",
+  "display_width" : null,
+  "label" : "Style",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "style.font",
+    "name" : "font",
+    "display_width" : null,
+    "label" : "Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : {
+      "font" : null,
+      "font_set" : "DEFAULT",
+      "styles" : null,
+      "size" : null,
+      "size_unit" : null,
+      "color" : null,
+      "variant" : null,
+      "fallback" : null,
+      "style" : null
+    }
+  }, {
+    "id" : "style.text_alignment",
+    "name" : "text_alignment",
+    "display_width" : null,
+    "label" : "Text Alignment",
+    "required" : false,
+    "locked" : false,
+    "type" : "textalignment",
+    "default" : {
+      "text_align" : "LEFT"
+    }
+  }, {
+    "id" : "style.spacing",
+    "name" : "spacing",
+    "display_width" : null,
+    "label" : "Spacing",
+    "required" : false,
+    "locked" : false,
+    "type" : "spacing",
+    "default" : { }
+  } ],
+  "tab" : "STYLE",
+  "expanded" : false,
+  "type" : "group"
+} ]

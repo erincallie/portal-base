@@ -1,0 +1,127 @@
+{% set module_name = "fancy-video" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  render_video,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow 
+%}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__wrap">
+    {% if module.video.use_file %}
+      {% if module.video.videoplayer.player_id %}
+        {% set max_width = module.video.videoplayer.size_type == 'auto_custom_max' ? module.video.videoplayer.max_width : module.video.videoplayer.width %}
+        {% set max_height = module.video.videoplayer.size_type == 'auto_custom_max' ? module.video.videoplayer.max_height : module.video.videoplayer.height %}
+        {% video_player "embed_player"
+          player_id={{ module.video.videoplayer.player_id }}
+          type={{ module.video.videoplayer.player_type || 'scriptV4' }}
+          full_width={{ module.video.videoplayer.size_type == 'auto_full_width' }},
+          conversion_asset={{ module.video.videoplayer.conversion_asset|tojson|safe }}
+          autoplay={{ module.video.videoplayer.autoplay }}
+          hidden_controls={{ module.video.videoplayer.hide_controls }}
+          loop={{ module.video.videoplayer.loop_video }}
+          muted={{ module.video.videoplayer.mute_by_default }}
+        %}
+      {% endif %}
+    {% else %}
+      {{ render_video(module.video.video_url.url.href) }}
+    {% endif %}
+  </div>
+  {% if module.custom_thumbnail == "true" %}
+  <div class="{{ module_name }}__thumbnail-wrap">
+    <div class="{{ module_name }}__thumbnail">
+      {% if module.thumbnail.thumbnail_image.src %}
+        {% set sizeAttrs = 'width="{{ module.thumbnail.thumbnail_image.width }}" height="{{ module.thumbnail.thumbnail_image.height }}"' %}
+        {% if module.thumbnail.thumbnail_image.size_type == 'auto' %}
+          {% set sizeAttrs = 'width="{{ module.thumbnail.thumbnail_image.width }}" height="{{ module.thumbnail.thumbnail_image.height }}" style="max-width: 100%; height: auto;"' %}
+        {% elif module.thumbnail.thumbnail_image.size_type == 'auto_custom_max' %}
+          {% set sizeAttrs = 'width="{{ module.thumbnail.thumbnail_image.max_width }}" height="{{ module.thumbnail.thumbnail_image.max_height }}" style="max-width: 100%; height: auto;"' %}
+        {% endif %}
+         {% set loadingAttr = module.thumbnail.thumbnail_image.loading != 'disabled' ? 'loading="{{ module.thumbnail.thumbnail_image.loading }}"' : '' %}
+        <img src="{{ module.thumbnail.thumbnail_image.src }}" alt="{{ module.thumbnail.thumbnail_image.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+      {% endif %}
+    </div>
+    <div class="{{ module_name }}__overlay"></div>
+    <div class="{{ module_name }}__play">
+      {% if module.thumbnail.custom_play_button == "true" %}
+        {% if module.thumbnail.play_button.src %}
+          {% set sizeAttrs = 'width="{{ module.thumbnail.play_button.width }}" height="{{ module.thumbnail.play_button.height }}"' %}
+          {% if module.thumbnail.play_button.size_type == 'auto' %}
+            {% set sizeAttrs = 'width="{{ module.thumbnail.play_button.width }}" height="{{ module.thumbnail.play_button.height }}" style="max-width: 100%; height: auto;"' %}
+          {% elif module.thumbnail.play_button.size_type == 'auto_custom_max' %}
+            {% set sizeAttrs = 'width="{{ module.thumbnail.play_button.max_width }}" height="{{ module.thumbnail.play_button.max_height }}" style="max-width: 100%; height: auto;"' %}
+          {% endif %}
+           {% set loadingAttr = module.thumbnail.play_button.loading != 'disabled' ? 'loading="{{ module.thumbnail.play_button.loading }}"' : '' %}
+          <img src="{{ module.thumbnail.play_button.src }}" alt="{{ module.thumbnail.play_button.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+        {% endif %}
+      {% else %}
+        {{ icons("play") }}
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% require_css %}
+<style>
+
+  #{{ name }} {
+    {{ module.style.spacing.css }}
+    {{ module.style.border.css }}
+    {% set border_radius = module.style.border_radius + "px" %}
+    {{ borderRadius(border_radius) }}
+    overflow: hidden; 
+  }
+  
+  #{{ name }} .{{ module_name }}__wrap {
+    display: flex;
+  }
+  
+    #{{ name }} .{{ module_name }}__play svg {
+      width: {{ module.style.play_icon.size or "50" }}px;
+      height: {{ module.style.play_icon.size or "50" }}px;
+    }
+  
+    #{{ name }} .{{ module_name }}__play svg path {
+      fill: {{ module.style.play_icon.icon_color.css }};
+      cursor: pointer;
+    }
+  
+    #{{ name }} .{{ module_name }}__play svg:hover path {
+      fill: {{ module.style.play_icon.icon_hover_color.css }};
+    }
+  
+    #{{ name }} .{{ module_name }}__overlay {
+      background-image: {{ module.style.thumbnail_overlay.gradient.css }};
+      background: {{ module.style.thumbnail_overlay.background_color.css }};
+    }
+ 
+
+</style>
+{% end_require_css %}
+
+{% require_js %}
+<script>
+$(function() {
+  
+  const init_thumbnail = function() {
+    let play_button = $(".fancy-video__play svg");
+    play_button.on("click", function() {
+      let thumbnail = $(this).closest(".fancy-video__thumbnail-wrap"),
+          video = $(this).closest(".fancy-video").find("iframe"),
+          video_src = video.attr("src"),
+          autoplay_video = video_src + "&autoplay=1";
+      thumbnail.hide();
+      video.attr("src", autoplay_video);
+    });
+  };
+  
+  init_thumbnail();
+});
+</script>
+{% end_require_js %}

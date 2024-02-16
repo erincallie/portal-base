@@ -1,0 +1,33 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Landing Page
+  screenshotPath: ../images/template-previews/lp.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--landing-page"
+%}
+
+    {% include_dnd_partial path="../sections/hero-banner.html" context={ } %}
+
+    {% include_dnd_partial path="../sections/title-section.html" context={ } %}
+
+    {% include_dnd_partial path="../sections/stat-section.html" context={ } %}
+
+    {% include_dnd_partial path="../sections/logos.html" context={ } %}
+
+    {% include_dnd_partial path="../sections/testimonials-slider.html" context={ } %}
+
+    {% include_dnd_partial path="../sections/title-section.html" context={ } %}
+
+    {% include_dnd_partial path="../sections/accordion.html" context={ } %}
+
+    {% include_dnd_partial path="../sections/centered-banner.html" context={ } %}
+  
+
+{% end_dnd_area %}
+{% endblock body %}

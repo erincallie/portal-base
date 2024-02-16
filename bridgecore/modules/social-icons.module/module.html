@@ -1,0 +1,64 @@
+<div class="social-container">
+  <div class="social-inner">
+    {% for item in module.icons %}
+      {% set href = item.link.url.href %}
+      {% if item.link.url.type is equalto "EMAIL_ADDRESS" %}
+        {% set href = "mailto:" + href %}
+      {% endif %}
+      <a class="social-link-wrapper" 
+        href="{{ href }}"
+        {% if item.link.open_in_new_tab %}target="_blank"{% endif %}
+        {% if item.link.rel %}rel="{{ item.link.rel }}"{% endif %}
+      >
+        {% if item.icon_type == "hubspot" %}
+          {% icon name="{{ item.icon.name }}"
+            style="{{ item.icon.style }}"
+            height="{{ module.style.icon_height }}"
+          %}
+        {% else %}
+          <img class="svg" src="{{ item.custom_image.src }}"
+            alt="{{ item.custom_image.alt }}"
+            height="{{ module.style.icon_height }}"
+          >
+        {% endif %}
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% require_css %}
+  <style>
+    .social-container {
+      {% if module.style.alignment.horizontal_align == "LEFT" %}
+        justify-content: flex-start;
+      {% else if module.style.alignment.horizontal_align == "CENTER" %}
+        justify-content: center;
+      {% else %}
+        justify-content: flex-end;
+      {% endif %}
+    }
+
+    .social-inner {
+      grid-template-columns: repeat({{ module.icons|length }}, 1fr);
+      grid-gap: {{ module.style.margin }}px;
+    }
+
+    .social-container svg {
+      fill: rgba({{ module.style.icon_fill_color.color|convert_rgb }}, {{ module.style.icon_fill_color.opacity|multiply(.01) }}) !important;
+    }
+
+    .social-link-wrapper:hover svg {
+      fill: rgba({{ module.style.icon_hover_color.color|convert_rgb }}, {{ module.style.icon_hover_color.opacity|multiply(.01) }}) !important;
+    } 
+
+    .social-link-wrapper {
+      background-color: rgba({{ module.style.icon_background_color.color|convert_rgb }}, {{ module.style.icon_background_color.opacity|multiply(.01) }}) !important;
+      width: {{ module.style.icon_height|multiply(1.65) }}px;
+      height: {{ module.style.icon_height|multiply(1.65) }}px;
+    }
+
+    .social-link-wrapper:hover {
+      background-color: rgba({{ module.style.icon_background_hover_color.color|convert_rgb }}, {{ module.style.icon_background_hover_color.opacity|multiply(.01) }}) !important;
+    }
+  </style>
+{% end_require_css %}

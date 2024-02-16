@@ -1,0 +1,52 @@
+.flex-card__featured {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  max-width: 100%;
+  height: auto;
+}
+
+.flex-card__featured > img {
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.flex-card__icon {
+  position: absolute;
+  top: calc(100% - 30px);
+  left: calc(50% - 30px);
+  aspect-ratio: 1 / 1;
+  width: 60px;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0px 6.650102138519287px 5.32008171081543px rgba(53, 53, 53, 0.03)) drop-shadow(0px 12.521552085876465px 10.017241477966309px rgba(53, 53, 53, 0.04)) drop-shadow(0px 22.3363094329834px 17.869047164916992px rgba(53, 53, 53, 0.04)) drop-shadow(0px 41.777610778808594px 33.422088623046875px rgba(53, 53, 53, 0.05)) drop-shadow(0px 100px 80px rgba(53, 53, 53, 0.07)) drop-shadow(0px 6.650102138519287px 5.32008171081543px rgba(53, 53, 53, 0.03)) drop-shadow(0px 12.521552085876465px 10.017241477966309px rgba(53, 53, 53, 0.04)) drop-shadow(0px 22.3363094329834px 17.869047164916992px rgba(53, 53, 53, 0.04));
+}
+
+.flex-cards.cards--icons .flex-card__wrap {
+  margin-bottom: 20px;
+}
+
+.flex-card__icon img {
+  width: 50%;
+  height: 50%;
+}
+
+.flex-card__wrap {
+  position: relative;
+}
+
+.flex-card__content {
+  text-align: center;
+  padding: 30px 30px 50px 30px;
+}
+
+.flex-card__content-link {
+  margin-top: 20px;
+}
+
+.flex-card__content-link a {
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+}

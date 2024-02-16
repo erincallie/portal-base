@@ -1,0 +1,35 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Home
+  screenshotPath: ../images/template-previews/bc-home.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--home"
+%}
+
+  {% include_dnd_partial path="../sections/video-hero.html" context={} %}
+
+  {% include_dnd_partial path="../sections/title-section.html" context={} %}
+
+  {% include_dnd_partial path="../sections/flex-cards.html" context={} %}
+
+  {% include_dnd_partial path="../sections/icon-blocks-section.html" context={} %}
+
+  {% include_dnd_partial path="../sections/image-section.html" context={} %}
+
+  {% include_dnd_partial path="../sections/stat-section.html" context={} %}
+
+  {% include_dnd_partial path="../sections/testimonials-slider.html" context={} %}
+
+  {% include_dnd_partial path="../sections/title-section.html" context={} %}
+
+  {% include_dnd_partial path="../sections/blog-section.html" %}
+
+{% end_dnd_area %}
+{% endblock body %}

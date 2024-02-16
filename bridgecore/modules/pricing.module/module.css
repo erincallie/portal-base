@@ -1,0 +1,9 @@
+.pricing-card a {
+  display: block;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 40px 0;
+}

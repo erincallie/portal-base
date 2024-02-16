@@ -1,0 +1,116 @@
+{% set module_name = "dynamic-listing" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_card,
+  render_search,
+  render_filter,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set object_type = module.object %}
+{% set global_data = widget_data.data %}
+
+{% set primary_company = data_query.data.CRM.contact.associations.company_collection__primary.items|first|attr("hs_object_id") %}
+
+{% set associated_objects = [
+    { "myhomeprofiles": data_query.data.CRM.contact.associations.p_myhomeprofiles_collection__contacts_to_homes.items, "ids": [] },
+    { "myhomevendors": data_query.data.CRM.contact.associations.company_collection__preferred_service_provider_to_contact.items, "ids": [] },
+    { "bids": data_query.data.CRM.contact.associations.p_bids_collection__contacts_to_bids.items, "ids": [] }
+] %}
+
+{% for item in associated_objects %}
+  {% set id = item.hs_object_id %}
+  {% do associated_objects[object_type].ids.append(id) %}
+{% endfor %}
+
+{% set these_ids = associated_objects[object_type].ids %}
+{% set all_objects = all_data|selectattr("id", "==", object_type)|first|attr("data")|selectattr("hs_object_id", "in", these_ids) %}
+
+{% call global_config(global_data, object_type, all_objects, all_data) %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  {% if module.options.filter == "true" %}
+    <div class="{{ module_name }}__sidebar-inner">
+      <h3>Filter</h3>
+      {% for filter_prop in these_filter_properties %}
+        {% set label = filter_prop.label %}
+        {% set prop_name = filter_prop.name %}
+        {% if label %}
+          {% do these_filter_props.append(prop_name) if prop_name %}
+          <div class="{{ module_name }}__filter-groups">
+            {% call render_filter_group(label) %}
+              {% set these_options = these_object_filters|selectattr("property","==",prop_name)|first|attr("options") %}
+              {% for option in these_options %}
+                {{ render_filter(prop_name, option) }}
+              {% endfor %}
+            {% endcall %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if module.options.search == "true" %}
+  <div class="{{ module_name }}__controls">
+    <div class="{{ module_name }}__search">
+      {% set placeholder = "Search " + object_type %}
+      {% set button_text = "Search" %}
+      {% set search_id = name + "__search" %}
+      {{ render_search(placeholder, button_text) }}
+    </div>
+  </div>
+  {% endif %}
+  <div class="{{ module_name }}__row">
+    {% for object in all_objects %}
+      {{ render_card(object, object_type) }}
+    {% endfor %}
+  </div>
+</div>
+
+{% endcall %}
+
+{% require_css %}
+<style>
+
+  
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+
+  $(function() {
+    
+    var fieldset_triggers = $("fieldset > label");
+    fieldset_triggers.on("click", function() {
+      if ($(this).parent().is(".active")) {
+        $(this).parent().addClass("active");
+      } else {
+        $(this).parent().removeClass("active");
+      }
+    });
+
+    var filters = {},
+        container = $(`#{{ name }} .isotope-container`),
+        containerTop = $(`#{{ name }}`).offset().top,
+        filterDisplay = $('#filter-display');
+    
+    var responsiveIsotope = [ [480, 4] , [720, {{ module.options.limit_per_page || 9 }}] ];
+    var itemsPerPageDefault = {{ module.options.limit_per_page || 9 }};
+
+    {#{ isotope_js() }#}
+   
+    
+  });
+
+</script>
+{% end_require_js %}

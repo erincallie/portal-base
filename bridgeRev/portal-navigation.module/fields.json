@@ -1,0 +1,152 @@
+[ {
+  "id" : "23b0b279-539d-ccbc-aeb4-b4f6497d7083",
+  "name" : "navigation_items",
+  "display_width" : null,
+  "label" : "Navigation Items",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "906f4417-3f83-24d3-81f3-8a2cfeede372",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "906f4417-3f83-24d3-81f3-8a2cfeede372",
+    "name" : "navigation_label",
+    "display_width" : null,
+    "label" : "Navigation Label",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "3faf8933-94fe-48a0-b94e-4faf34fe0c95",
+    "name" : "secondary_items",
+    "display_width" : null,
+    "label" : "Secondary Items",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : "906f4417-3f83-24d3-81f3-8a2cfeede372",
+      "default" : null
+    },
+    "children" : [ {
+      "id" : "82f88d93-4ff0-965f-e26f-128d7622f8ad",
+      "name" : "navigation_label",
+      "display_width" : null,
+      "label" : "Navigation Label",
+      "required" : false,
+      "locked" : false,
+      "validation_regex" : "",
+      "allow_new_line" : false,
+      "show_emoji_picker" : false,
+      "type" : "text"
+    }, {
+      "id" : "0e63d286-fbb7-b58d-c043-e86368330eb1",
+      "name" : "link",
+      "display_width" : null,
+      "label" : "Link",
+      "required" : false,
+      "locked" : false,
+      "supported_types" : [ "EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG", "CALL_TO_ACTION", "PHONE_NUMBER", "WHATSAPP_NUMBER", "PAYMENT" ],
+      "show_advanced_rel_options" : false,
+      "type" : "link",
+      "default" : {
+        "url" : {
+          "content_id" : null,
+          "href" : "",
+          "type" : "CONTENT"
+        },
+        "open_in_new_tab" : false,
+        "no_follow" : false
+      }
+    }, {
+      "id" : "bfc19599-4256-1ce4-b6db-ef3f94111948",
+      "name" : "icon",
+      "display_width" : null,
+      "label" : "Icon",
+      "required" : false,
+      "locked" : false,
+      "responsive" : true,
+      "resizable" : true,
+      "show_loading" : false,
+      "type" : "image",
+      "default" : {
+        "size_type" : "auto",
+        "src" : "",
+        "alt" : null,
+        "loading" : "lazy"
+      }
+    } ],
+    "tab" : "CONTENT",
+    "expanded" : false,
+    "type" : "group",
+    "default" : [ ]
+  }, {
+    "id" : "01e3440b-7dba-4c26-9bfc-23745ca7a945",
+    "name" : "link",
+    "display_width" : null,
+    "label" : "Link",
+    "required" : false,
+    "locked" : false,
+    "supported_types" : [ "EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG", "CALL_TO_ACTION", "PHONE_NUMBER", "WHATSAPP_NUMBER", "PAYMENT" ],
+    "show_advanced_rel_options" : false,
+    "type" : "link",
+    "default" : {
+      "url" : {
+        "content_id" : null,
+        "href" : "",
+        "type" : "CONTENT"
+      },
+      "open_in_new_tab" : false,
+      "no_follow" : false
+    }
+  }, {
+    "id" : "95391b72-d8b6-c70f-fe64-42ad45e51846",
+    "name" : "icon",
+    "display_width" : null,
+    "label" : "Icon",
+    "required" : false,
+    "locked" : false,
+    "responsive" : true,
+    "resizable" : true,
+    "show_loading" : false,
+    "type" : "image",
+    "default" : {
+      "size_type" : "auto",
+      "src" : "",
+      "alt" : null,
+      "loading" : "lazy"
+    }
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+}, {
+  "id" : "e87f8ac3-b800-e2d4-9db3-bee5ec9eb0e0",
+  "name" : "logo",
+  "display_width" : null,
+  "label" : "Logo",
+  "required" : false,
+  "locked" : false,
+  "responsive" : true,
+  "resizable" : true,
+  "show_loading" : false,
+  "type" : "image",
+  "default" : {
+    "size_type" : "auto",
+    "src" : "https://40959747.fs1.hubspotusercontent-na1.net/hubfs/40959747/0001-5079335311621231561.png_width=175&height=98&name=0001-5079335311621231561.png",
+    "alt" : "MyHomeQB Logo",
+    "loading" : "lazy",
+    "width" : 175,
+    "height" : 98,
+    "max_width" : 175,
+    "max_height" : 98
+  }
+} ]

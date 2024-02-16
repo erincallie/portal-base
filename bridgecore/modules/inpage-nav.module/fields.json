@@ -1,0 +1,181 @@
+[ {
+  "id" : "9531fd6b-dfda-4469-fbc1-af7c854b44cb",
+  "name" : "style",
+  "display_width" : null,
+  "label" : "Style",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "0106deca-aa8d-8bbd-b4b2-049af31bf6df",
+    "name" : "background_color",
+    "display_width" : null,
+    "label" : "Background Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : "#0085BB",
+      "opacity" : 100
+    }
+  }, {
+    "id" : "8836f5c1-1717-9484-b6f9-da2bced49871",
+    "name" : "default_font",
+    "display_width" : null,
+    "label" : "Default Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : {
+      "color" : "#FFFFFF"
+    }
+  }, {
+    "id" : "8e8b2cda-72c0-2ee7-1a99-649894b65588",
+    "name" : "hover_font",
+    "display_width" : null,
+    "label" : "Hover Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : {
+      "font" : null,
+      "font_set" : "DEFAULT",
+      "styles" : null,
+      "size" : null,
+      "size_unit" : null,
+      "color" : null,
+      "variant" : null,
+      "fallback" : null,
+      "style" : null
+    }
+  }, {
+    "id" : "f59282ca-3917-d210-20aa-f6451274a424",
+    "name" : "spacing",
+    "display_width" : null,
+    "label" : "Spacing",
+    "required" : false,
+    "locked" : false,
+    "type" : "spacing",
+    "default" : {
+      "padding" : {
+        "top" : {
+          "value" : 30,
+          "units" : "px"
+        },
+        "bottom" : {
+          "value" : 30,
+          "units" : "px"
+        },
+        "left" : {
+          "value" : 30,
+          "units" : "px"
+        },
+        "right" : {
+          "value" : 30,
+          "units" : "px"
+        }
+      }
+    }
+  }, {
+    "id" : "c816bb17-42d9-7637-a362-7cff0c9519d2",
+    "name" : "sticky",
+    "display_width" : null,
+    "label" : "Sticky",
+    "required" : false,
+    "locked" : false,
+    "display" : "toggle",
+    "type" : "boolean",
+    "default" : false
+  }, {
+    "id" : "2da1fdb6-77a7-720d-64a8-2811bf67e9bb",
+    "name" : "top_offset",
+    "display_width" : null,
+    "label" : "Top Offset",
+    "required" : false,
+    "locked" : false,
+    "display" : "text",
+    "step" : 1,
+    "suffix" : "px",
+    "type" : "number"
+  }, {
+    "id" : "46952744-6eee-c063-1e34-e3447315e8c1",
+    "name" : "top_offset_mobile",
+    "display_width" : null,
+    "label" : "Top Offset Mobile",
+    "required" : false,
+    "locked" : false,
+    "display" : "text",
+    "step" : 1,
+    "suffix" : "px",
+    "type" : "number",
+    "default" : 75
+  } ],
+  "tab" : "STYLE",
+  "expanded" : false,
+  "type" : "group",
+  "default" : {
+    "spacing" : {
+      "padding" : {
+        "top" : {
+          "value" : 30,
+          "units" : "px"
+        },
+        "bottom" : {
+          "value" : 30,
+          "units" : "px"
+        },
+        "left" : {
+          "value" : 30,
+          "units" : "px"
+        },
+        "right" : {
+          "value" : 30,
+          "units" : "px"
+        }
+      }
+    },
+    "sticky" : false,
+    "top_offset_mobile" : 75
+  }
+}, {
+  "id" : "6190763f-9207-cccb-d306-0a9194dd4a02",
+  "name" : "nav_items",
+  "display_width" : null,
+  "label" : "Nav Items",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "93e3800b-6adf-8d8b-6ab7-54945ae66f9c",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "93e3800b-6adf-8d8b-6ab7-54945ae66f9c",
+    "name" : "nav_label",
+    "display_width" : null,
+    "label" : "Nav Label",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "d6ca1423-1378-143e-f98a-d7d87ae36d3f",
+    "name" : "nav_target",
+    "display_width" : null,
+    "label" : "Nav Target",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

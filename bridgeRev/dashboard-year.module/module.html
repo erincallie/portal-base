@@ -1,0 +1,122 @@
+{% set module_name = "dashboard-year" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set today = today() %}
+{% set this_year = today|format_datetime("YYYY")|int - 1 if today %}
+{% set seasons = {
+    "Spring": [ "March", "April", "May" ],
+    "Summer": [ "June", "July", "August" ], 
+    "Fall": [ "September", "October", "November" ], 
+    "Winter": [ "December", "January", "February" ]
+    }
+  %}
+{% set season_numbers = ["January","February","March","April","May","June","July","August","September","October","November","December"] %}
+
+{% set all_profiles = all_data|selectattr("id", "==", "myhomeprofiles")|first|attr("data") %}
+{% set all_todo_ids = [] %}
+{% for profile in all_profiles %}
+  {% set associated_todos = profile.associated_todos|split(",") %}
+  {% for todo in associated_todos %}
+    {% do all_todo_ids.append(todo) %}
+  {% endfor %}
+{% endfor %}
+
+{% set todo_props_to_get = widget_data.global_data.crm_objects|selectattr("object_id", "string_containing", "myhometodos")|first|attr("functions")|selectattr("action", "==", "data")|first|attr("properties") %}
+{% set all_todo_objects = crm_objects("myhometodos", all_todo_ids, todo_props_to_get).results %}
+
+{% set this_month = today|format_datetime("MMMM") if today %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row">
+      {% for i in range(0, 3) %}
+        {% set year = this_year|int + i %}
+        <div id="year__{{ year }}" class="{{ module_name }}__section year__{{ year }} hide-inactive{{ " active" if (year == this_year and this_month in seasons["Winter"]) or (this_month not in seasons["Winter"] and year == this_year + 1) }}">
+          <div class="{{ module_name }}__inner">
+            <div class="{{ module_name }}__year">
+              <div class="year__title">
+                <a data-target="#year__{{ year - 1 }}" class="year-prev">{{ icons("angle-left") }}</a>
+                <span>{{ year }} - {{ year + 1 }}</span>
+                <a data-target="#year__{{ year + 1 }}" class="year-next">{{ icons("angle-left") }}</a>
+              </div>
+            </div>
+            <div class="{{ module_name }}__season-nav">
+              {% for season, months in seasons.items() %}
+                <a class="{{ module_name }}__seasons{{ " active" if (this_month in months and year == this_year) or (year != this_year and this_month not in months and loop.first) }}{{ " year__" + year if loop.first or loop.last }}{{ " back" if loop.last }}{{ " next" if loop.first }}" data-target=".{{ slugify(season)|trim }}">
+                  <span class="season__title">
+                    <span>{{ season }}</span>
+                  </span>
+                </a>
+              {% endfor %}
+            </div>
+            <div class="{{ module_name }}__todos">
+              {% for season, months in seasons.items() %}
+                <div id="{{ slugify(season)|trim }}" class="{{ module_name }}__seasons {{ slugify(season)|trim }} hide-inactive{{ " active" if this_month in months }}{{ " year__" + year if loop.first or loop.last }}{{ " back" if loop.last }}{{ " next" if loop.first }}">
+                  {% for month in months %}
+                    <div class="season__month month {{ " active" if month == this_month and year == this_year }}">
+                      <div class="month__title">{{ month }}</div>
+                      <div class="month__items">
+                        {% set month_todos = [] %}
+                        {% for todo in all_todo_objects %}
+                          {% set todo_year = todo.to_do_date|split("/")|last %}
+                          {% set todo_month_index = todo.to_do_date|split("/")|first %}
+                          {% set todo_month = season_numbers[todo_month_index-1] %}
+                          {% set this_active_year = this_year if todo_month in ["January", "February"] else this_year + 1 %}
+                          {% if todo_month == month and this_active_year|replace("20", "") == todo_year %}
+                            {% do month_todos.append(todo) %}
+                          {% endif %}
+                        {% endfor %}
+                        {% if month_todos %}
+                          <div class="month__todos">
+                            {% for todo in month_todos %}
+                              <div class="month-todo">
+                                <div class="month-todo__inner">
+                                  <div class="month-todo__title">
+                                    {{ todo.myhometodoitem }} ({{ todo.to_do_date }})
+                                  </div>
+                                  <div class="month-todo__stage">
+                                    {% for option in module.stages %}
+                                      {% if option.stage_value == todo.hs_pipeline_stage %}
+                                        {{ option.stage_name }}
+                                      {% endif %}
+                                    {% endfor %}
+                                  </div>
+                                </div>
+                              </div>
+                            {% endfor %}
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+
+  
+</style>
+{% end_require_css %}

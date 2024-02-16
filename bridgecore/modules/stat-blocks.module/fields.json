@@ -1,0 +1,126 @@
+[ {
+  "id" : "48725534-c903-1d70-a62c-db43314f02e1",
+  "name" : "style",
+  "display_width" : null,
+  "label" : "Style",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "6e5221b9-8a24-e0d7-5a85-25c703670f0d",
+    "name" : "stat_font",
+    "display_width" : null,
+    "label" : "Stat Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : {
+      "size" : 2.5,
+      "size_unit" : "rem"
+    }
+  }, {
+    "id" : "44aa6e2b-002c-0e47-3f53-3059bf8f94be",
+    "name" : "heading_font",
+    "display_width" : null,
+    "label" : "Heading Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : { }
+  }, {
+    "id" : "3c95d682-254f-e658-e43f-52f346ec6a3c",
+    "name" : "content_font",
+    "display_width" : null,
+    "label" : "Content Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : { }
+  } ],
+  "tab" : "STYLE",
+  "expanded" : false,
+  "type" : "group",
+  "default" : {
+    "stat_font" : {
+      "size" : 2.5,
+      "size_unit" : "rem"
+    },
+    "heading_font" : { },
+    "content_font" : { }
+  }
+}, {
+  "id" : "51cf8df2-3af2-e2da-ca42-3d9dfc35a26f",
+  "name" : "stat_blocks",
+  "display_width" : null,
+  "label" : "Stat Blocks",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "99da9def-5ba5-232f-1690-e6d0bb241e8a",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "99da9def-5ba5-232f-1690-e6d0bb241e8a",
+    "name" : "number",
+    "display_width" : null,
+    "label" : "Number",
+    "required" : false,
+    "locked" : false,
+    "display" : "text",
+    "step" : 1,
+    "type" : "number"
+  }, {
+    "id" : "d6fa157d-e68a-5806-57a5-5a257d11bd53",
+    "name" : "suffix",
+    "display_width" : null,
+    "label" : "Suffix",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "33a1cfa5-7786-be1b-e9a6-cc0f9af4c5ee",
+    "name" : "prefix",
+    "display_width" : null,
+    "label" : "Prefix",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "f4096a49-eecf-3c74-bfa9-1a860d98d62d",
+    "name" : "background_color",
+    "display_width" : null,
+    "label" : "Background Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : null,
+      "opacity" : null,
+      "rgba" : null,
+      "rgb" : null,
+      "hex" : null
+    }
+  }, {
+    "id" : "833a3fe5-7dd0-53be-3fce-38f18dac62d2",
+    "name" : "content",
+    "display_width" : null,
+    "label" : "Content",
+    "required" : false,
+    "locked" : false,
+    "type" : "richtext"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

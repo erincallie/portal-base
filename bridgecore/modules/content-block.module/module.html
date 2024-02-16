@@ -1,0 +1,148 @@
+{% set module_name = "content-block" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  icon_accents,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set wrap_tag = "a" if module.card.content.link_type == "card" else "div" %}
+
+  <{{ wrap_tag }} id="{{ name }}" class="{{ module_name }} cards--{{ module.card_style }}" {% if module.card.content.link_type == "card" %}href="{{ module.card.content.link.url.href }}"{% endif %}>
+    <div class="{{ module_name }}_container">
+      <div class="{{ module_name }}__row">
+        {% set item = module.card %}
+        <div class="{{ module_name }}__card content-card">
+          <div class="{{ module_name }}__inner">
+            {% if item.icon.image.src and module.card_style != "pdf" %}
+              <div class="{{ module_name }}__wrap">
+                {% if item.icon.add_accent == "true" %}
+                  {{ icon_accents(item.icon.select_accent) }}
+                {% endif %}
+                {% if item.icon.image.src and module.card_style != "pdf" %}
+                  <div class="{{ module_name }}__icon{% if item.icon.modify_icon == "true" %} icon--{{ item.icon.select_filter }}{% endif %}">
+                    {% set sizeAttrs = 'width="{{ item.icon.image.width }}" height="{{ item.icon.image.height }}"' %}
+                    {% if item.icon.image.size_type == 'auto' %}
+                      {% set sizeAttrs = 'width="{{ item.icon.image.width }}" height="{{ item.icon.image.height }}" style="max-width: 100%; height: auto;"' %}
+                    {% elif item.featured_image.image.size_type == 'auto_custom_max' %}
+                      {% set sizeAttrs = 'width="{{ item.icon.image.max_width }}" height="{{ item.icon.image.max_height }}" style="max-width: 100%; height: auto;"' %}
+                    {% endif %}
+                    {% set loadingAttr = item.icon.image.loading != 'disabled' ? 'loading="{{ item.icon.image.loading }}"' : '' %}
+                    <img src="{{ item.icon.image.src }}" alt="{{ item.icon.image.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+            <div class="{{ module_name }}__content">
+              {% if item.content.small_title and module.card_style != "pdf" %}
+                <div class="{{ module_name }}__title--small">
+                  <p>{{ item.content.small_title }}</p>
+                </div>
+              {% endif %}
+              <div class="{{ module_name }}__title">
+                <{{ item.content.title_tag }}>{{ item.content.title }}</{{ item.content.title_tag }}>
+              </div>
+              {% if item.content.content and module.card_style != "pdf" %}
+                <div class="{{ module_name }}__content-wrap">
+                  {{ item.content.content }}
+                </div>
+              {% endif %}
+              {% if item.content.link.url.href and item.content.button_text and item.content.link_type != "card" %}
+                <div class="{{ module_name }}__content-link">
+                  {% set href = item.content.link.url.href %}
+                  {% if item.content.link.url.type is equalto "EMAIL_ADDRESS" %}
+                  {% set href = "mailto:" + href %}
+                  {% endif %}
+                  <a href="{{ href }}" class="{% if item.content.link_type == "button" %}button button--{{ item.content.button_style }}{{ " button--ghost" if item.content.ghost_button == "true" }}{% endif %}" 
+                     {% if item.content.link.open_in_new_tab %}target="_blank"{% endif %}
+                     {% if item.content.link.rel %}rel="{{ item.content.link.rel }}"{% endif %}
+                     >
+                    {{ item.content.button_text }}
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </{{ wrap_tag }}>
+
+{% require_css %}
+<style>
+  
+  #{{ name }} {
+    display: block;
+    {{ transition("all .5s ease-in-out") }}
+    background: {{ module.style.default.background_color.css }};
+    {{ module.style.default.border.css }}
+    {% set border_radius = module.style.general.border_radius + "px" %}
+    {{ borderRadius(border_radius) }}
+    {{ module.style.general.spacing.css }}
+    text-align: {{ module.style.general.text_alignment.text_align  }};
+  }
+      
+  a#{{ name }} {
+    {{ transition("all .5s ease-in-out") }}
+  }
+  
+  #{{ name }}:hover {
+    background: {{ module.style.hover.background_color.css }};
+    {{ module.style.hover.border.css }}
+  }
+      
+  a#{{ name }}:hover {
+    {{ transform("scale(1.008)") }}
+    {{ boxShadow("var(--light-shadow)") }}
+  }
+  
+  #{{ name }} .content-block__wrap svg path {
+    fill: {{ module.style.accent.background_color.css }};
+    {% if module.style.accent.gradient %}
+      fill: {{ module.style.accent.gradient.css }};
+    {% endif %}
+  }
+  
+  #{{ name }} .content-block__title * {
+    margin: 0;
+    line-height: 1;
+    {{ module.style.fonts.title_font.css }}
+  }
+  
+  #{{ name }} .content-block__content-wrap {
+    {{ module.style.fonts.content_font.css }}
+    margin-top: 1rem;
+  }
+  
+  #{{ name }} .content-block__title--small p {
+    {{ module.style.fonts.subtitle_font.css }}
+  }
+      
+  #{{ name }} .flex-cards__row > *:hover .flex-card__icon {
+    filter: none;
+  }
+  
+  @media screen and (max-width: 767px) {
+    #{{ name }}.cards--pdf .content-block__content > * + * {
+      margin-top: 1rem;
+    }
+  }
+  
+  @media screen and (min-width: 768px) {
+    #{{ name }}.cards--pdf .content-block__content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #{{ name }}.cards--pdf .content-block__content > * {
+      width: 100%;
+    }
+  }
+
+</style>
+{% end_require_css %}

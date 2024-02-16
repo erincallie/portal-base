@@ -1,0 +1,55 @@
+{% set module_name = "accordion" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="{{ name }}" class="{{ module_name }} {{ module_name }}--{{ module.layout_style }}">
+  <div class="{{ module_name }}_container">
+    <div class="{{ module_name }}__row">
+      {% for item in module.items %}
+        <div class="{{ module_name }}__item {{ module_name }}-item{{ " active" if loop.first }}">
+          <div class="{{ module_name }}-item__inner">
+            <div class="{{ module_name }}-item__title">
+              <h3>
+                <span class="{{ module_name }}-item__heading">
+                  {% if module.layout_style == "numbered" %}<span>{{ loop.index }}.</span>{% endif %}
+                  <span>{{ item.title }}</span>
+                </span>
+                <span class="{{ module_name }}-item__icons">
+                  <span class="{{ module_name }}-item__icon icon--open">{{ icons("minus") }}</span>
+                  <span class="{{ module_name }}-item__icon icon--close">{{ icons("plus") }}</span>
+                </span>
+              </h3>
+            </div>
+            <div class="{{ module_name }}-item__content">
+              <div class="{{ module_name }}-item__content-wrap">
+                {{ item.content }}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+  #{{ name }} .{{ module_name }}-item__title h3 {
+    {{ module.style.title_font.css }}
+  }
+  
+  #{{ name }} .{{ module_name }}-item__content-wrap,
+  #{{ name }} .{{ module_name }}-item__content-wrap * {
+    {{ module.style.content_font.css }}
+  }
+
+</style>
+{% end_require_css %}

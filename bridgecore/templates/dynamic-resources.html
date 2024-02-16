@@ -1,0 +1,154 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Resources
+  screenshotPath: ../images/template-previews/bridgecore-resources.png
+-->
+
+{% extends "./layouts/base.html" %}
+
+{% module "dynamic_data" path="../modules/dynamic-data", label="Dynamic Settings" export_to_template_context=true %}
+
+{% set testing = widget_data.dynamic_data.testing_mode %}
+{% set hubdb_table_id = widget_data.dynamic_data.choose_table %}
+{% set testing_page_level = widget_data.dynamic_data.page_level|int %}
+
+{% set table_name = hubdb_table(hubdb_table_id)|attr("name")|replace("s", "") %}
+{% set all_data = widget_data.dynamic_data.items() %}
+{% set row_id = [] %}
+{% for key, val in all_data %}
+  {% if key is string_containing table_name %}
+    {% do row_id.append(val.id) %}
+  {% endif %}
+{% endfor %}
+
+{% if testing %}
+  {% set table_id = hubdb_table_id %}
+  {% set row = hubdb_table_row(table_id, row_id[0])  %}
+  {% set page_level = testing_page_level %}
+{% else %}
+  {% set table_id = dynamic_page_hubdb_table_id %}
+  {% set row = dynamic_page_hubdb_row %}
+  {% set page_level = dynamic_page_route_level %}
+{% endif %}
+
+{% set rows = hubdb_table_rows( table_id ) %}
+
+  {% block body %}
+
+    {% if page_level == 0 %}
+      {% dnd_area "listing_dnd_area"
+        label="Listing Area",
+        class="body-container body-container--resources-listing"
+      %}
+
+        {% dnd_section
+          padding={
+            "default" : {
+              "bottom" : "0px",
+              "left" : "0px",
+              "right" : "0px",
+              "top" : "0px"
+            }
+          },
+          full_width=true
+        %}
+          {% dnd_column
+            offset=0,
+            width=12,
+            padding={
+              "default" : {
+                "bottom" : "0px",
+                "left" : "0px",
+                "right" : "0px",
+                "top" : "0px"
+              }
+            }
+          %}
+            {% dnd_row %}
+              {% dnd_module
+                path="../modules/hero",
+                offset=0,
+                width=12,
+                background_options={
+                  "add_curve" : false,
+                  "overlay" : false,
+                  "parallax_effect" : false,
+                  "parallax_strength" : 0.05
+                },
+                content={
+                  "buttons" : [ ],
+                  "content" : "Lorem ipsum dolor sit amet.",
+                  "title" : "Resources"
+                },
+                styles={
+                  "background_styles" : {
+                    "image" : {
+                      "background_position" : "MIDDLE_LEFT",
+                      "background_size" : "cover",
+                      "css" : "background-image: url('https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/blurred-bg.jpg'); background-size: cover; background-position: left center;",
+                      "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/blurred-bg.jpg"
+                    }
+                  },
+                  "module_styles" : {
+                    "max_content_width" : 940,
+                    "spacing" : {
+                      "css" : "padding-top: 120px; padding-right: 30px; padding-bottom: 120px; padding-left: 30px;",
+                      "padding" : {
+                        "bottom" : {
+                          "units" : "px",
+                          "value" : 60
+                        },
+                        "left" : {
+                          "units" : "px",
+                          "value" : 30
+                        },
+                        "right" : {
+                          "units" : "px",
+                          "value" : 30
+                        },
+                        "top" : {
+                          "units" : "px",
+                          "value" : 80
+                        }
+                      }
+                    }
+                  }
+                }
+              %}
+              {% end_dnd_module %}
+            {% end_dnd_row %}
+          {% end_dnd_column %}
+        {% end_dnd_section %}
+
+        {% include_dnd_partial path="../sections/resources-section.html" context={ } %}
+
+        {% include_dnd_partial path="../sections/centered-subscribe.html" context={ } %}
+
+      {% end_dnd_area %}
+
+    {% elif page_level == 1 %}
+
+      {% set resource = row %}
+
+      {% set title = resource.hs_name or resource.columns.hs_name or resource.name %}
+      {% set tags = resource.tags or resource.columns.tags %}
+      {% set category = resource.type.label or resource.columns.type.label %}
+      {% set description = resource.description or resource.columns.description %}
+      {% set content = resource.content or resource.columns.content %}
+
+      {% dnd_area "post_dnd_area"
+        label="Post Area",
+        class="body-container body-container--resources-post"
+      %}
+
+        {% include_dnd_partial path="../sections/resource-header.html" context={ } %}
+
+        {% include_dnd_partial path="../sections/title-section.html" context={ } %}
+
+        {% include_dnd_partial path="../sections/centered-banner.html" %}
+      
+      {% end_dnd_area %}
+    {% endif %}
+
+  {% endblock %}

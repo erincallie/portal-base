@@ -1,0 +1,202 @@
+[ {
+  "id" : "71082328-3d85-2034-9e0c-ecb50bee091c",
+  "name" : "graphs",
+  "display_width" : null,
+  "label" : "Graphs",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "9b300810-04e7-1dc4-f226-90c762112cec",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "9b300810-04e7-1dc4-f226-90c762112cec",
+    "name" : "title",
+    "display_width" : null,
+    "label" : "Title",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "7c2d80e3-bb16-587e-f346-17e7d582eaff",
+    "name" : "type",
+    "display_width" : null,
+    "label" : "Type",
+    "required" : false,
+    "locked" : false,
+    "display" : "select",
+    "choices" : [ [ "bar", "Bar" ], [ "bubble", "Bubble" ], [ "polarArea", "Polar" ] ],
+    "multiple" : false,
+    "reordering_enabled" : true,
+    "preset" : null,
+    "type" : "choice",
+    "default" : ""
+  }, {
+    "id" : "7df3ef68-2f91-01bf-48c1-85d084b041d7",
+    "name" : "data",
+    "display_width" : null,
+    "label" : "Data",
+    "required" : false,
+    "locked" : false,
+    "children" : [ {
+      "id" : "0f03abbd-871d-f8b8-9671-b283babb90db",
+      "name" : "labels",
+      "display_width" : null,
+      "label" : "Labels",
+      "required" : false,
+      "locked" : false,
+      "occurrence" : {
+        "min" : null,
+        "max" : null,
+        "sorting_label_field" : null,
+        "default" : null
+      },
+      "validation_regex" : "",
+      "allow_new_line" : false,
+      "show_emoji_picker" : false,
+      "type" : "text"
+    }, {
+      "id" : "642355c3-2ac1-676e-499e-32adae9ab67c",
+      "name" : "datasets",
+      "display_width" : null,
+      "label" : "Datasets",
+      "required" : false,
+      "locked" : false,
+      "occurrence" : {
+        "min" : null,
+        "max" : null,
+        "sorting_label_field" : "db42b532-74f3-0118-24ae-da829b409f6f",
+        "default" : null
+      },
+      "children" : [ {
+        "id" : "db42b532-74f3-0118-24ae-da829b409f6f",
+        "name" : "dataset_title",
+        "display_width" : null,
+        "label" : "Dataset Title",
+        "required" : false,
+        "locked" : false,
+        "validation_regex" : "",
+        "allow_new_line" : false,
+        "show_emoji_picker" : false,
+        "type" : "text"
+      }, {
+        "id" : "527a7b3a-0ef6-b7cd-83e8-5b2d0e5a7dde",
+        "name" : "numbers",
+        "display_width" : null,
+        "label" : "Numbers",
+        "required" : false,
+        "locked" : false,
+        "occurrence" : {
+          "min" : null,
+          "max" : null,
+          "sorting_label_field" : null,
+          "default" : null
+        },
+        "visibility" : {
+          "controlling_field" : null,
+          "controlling_field_path" : "graphs.type",
+          "controlling_value_regex" : "bubble",
+          "property" : null,
+          "operator" : "NOT_EQUAL",
+          "access" : null
+        },
+        "display" : "text",
+        "step" : 1,
+        "type" : "number"
+      }, {
+        "id" : "be12a7f9-3d76-31af-8caa-9acfbeb0cdc5",
+        "name" : "bubble_numbers",
+        "display_width" : null,
+        "label" : "Bubble Numbers",
+        "required" : false,
+        "locked" : false,
+        "occurrence" : {
+          "min" : null,
+          "max" : null,
+          "sorting_label_field" : "4a0a1584-395c-f83d-640c-90fe3d514fed",
+          "default" : null
+        },
+        "visibility" : {
+          "controlling_field" : null,
+          "controlling_field_path" : "graphs.type",
+          "controlling_value_regex" : "bubble",
+          "property" : null,
+          "operator" : "EQUAL",
+          "access" : null
+        },
+        "children" : [ {
+          "id" : "4a0a1584-395c-f83d-640c-90fe3d514fed",
+          "name" : "x",
+          "display_width" : null,
+          "label" : "X",
+          "required" : false,
+          "locked" : false,
+          "display" : "text",
+          "step" : 1,
+          "type" : "number"
+        }, {
+          "id" : "cc2649b4-bda6-d4c9-5e5c-46a4ca03cbc0",
+          "name" : "y",
+          "display_width" : null,
+          "label" : "Y",
+          "required" : false,
+          "locked" : false,
+          "display" : "text",
+          "step" : 1,
+          "type" : "number"
+        }, {
+          "id" : "f6ee1dc4-365c-7174-cfe3-04f662fe76a9",
+          "name" : "r",
+          "display_width" : null,
+          "label" : "R",
+          "required" : false,
+          "locked" : false,
+          "display" : "text",
+          "step" : 1,
+          "type" : "number"
+        } ],
+        "tab" : "CONTENT",
+        "expanded" : false,
+        "type" : "group",
+        "default" : [ ]
+      }, {
+        "id" : "8825dcd6-7be8-bd6b-1f31-5c204b8bb8d9",
+        "name" : "colors",
+        "display_width" : null,
+        "label" : "Colors",
+        "required" : false,
+        "locked" : false,
+        "occurrence" : {
+          "min" : null,
+          "max" : null,
+          "sorting_label_field" : null,
+          "default" : null
+        },
+        "type" : "color",
+        "default" : {
+          "color" : null,
+          "opacity" : null
+        }
+      } ],
+      "tab" : "CONTENT",
+      "expanded" : false,
+      "type" : "group",
+      "default" : [ ]
+    } ],
+    "tab" : "CONTENT",
+    "expanded" : false,
+    "type" : "group",
+    "default" : {
+      "datasets" : [ ]
+    }
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

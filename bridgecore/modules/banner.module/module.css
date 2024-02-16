@@ -1,0 +1,71 @@
+.fancy-banner {
+  position: relative; 
+  overflow: hidden;
+}
+
+.fancy-banner__background,
+.hs-video-wrapper {
+  position: absolute !important;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: auto;
+  min-width:100%;
+  height: 100vh !important;
+  z-index: 1;
+}
+
+.fancy-banner__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.fancy-banner__container {
+  position: relative;
+  z-index: 9;
+}
+
+.fancy-banner__container {
+  padding-top: 120px;
+  padding-bottom: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  z-index: 999;
+}
+
+.fancy-banner__buttons {
+  margin-top: 40px; 
+}
+
+.fancy-banner__wave {
+  position: absolute;
+  bottom: -2px;
+  z-index: 99;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.dnd-section.z-forward {
+  position: relative;
+  z-index: 9999;
+}
+
+.fancy-banner__buttons a {
+  display: inline-block;
+}
+
+.dnd-section > .row-depth-1:last-child {
+  overflow: hidden !important;
+}
+
+.dnd-section > .row-depth-1:last-child .fancy-banner {
+  overflow: visible !important;
+}

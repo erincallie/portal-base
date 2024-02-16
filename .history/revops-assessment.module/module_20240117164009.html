@@ -1,0 +1,274 @@
+{% set module_name = "revops-assessment" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set all_question_rows = hubdb_table_rows("7610746", "&limit=100") %}
+{% set all_answer_rows = hubdb_table_rows("7610763", "&limit=200") %}
+{% set all_category_rows = hubdb_table_rows("7629934", "&limit=200") %}
+{% set this_id = module.custom_id or name %}
+
+{% macro render_question(question) %}
+  {% set dq = [] %}
+  {% set da = [] %}
+  {% set question_id = question.question.id %}
+  {% set question_row = all_question_rows|selectattr("hs_id", "==", question_id)|first %}
+  {% set question_answers = question_row.answers %}
+  {% set q_attributes = {
+                        "data-id": question_id,
+                        "data-qd": question_row,
+                        "data-answer": "false"
+                      } %} 
+<div data-test='{{ question_row }}' class="{{ module_name }}__question {{ module_name }}-question{{ " hide" if dq != [] }}" {{ q_attributes|xmlattr }}>
+  <div class="{{ module_name }}-question__inner">
+    <div class="{{ module_name }}-question__question">
+      {{ question_row.name }}
+    </div>
+    <div class="{{ module_name }}-question__answers">
+      {% for answer in question_answers %}
+        {% set answer_id = answer.hs_id %}
+        {% set answer_row = all_answer_rows|selectattr("hs_id","==",answer_id)|first %}
+        {% set a_attributes = { "data-score": answer_row["score_value__1"], "data-id": answer.hs_id } %}
+        <div class="{{ module_name }}-question__answer {{ module_name }}-answer" {{ a_attributes|xmlattr }} tab-index="0">
+          <label for="{{ answer.hs_id }}">
+            <input type="checkbox" name="{{ answer.hs_id }}">
+            <span>{{ answer.name }}</span>
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+<div id="{{ this_id }}" class="{{ module_name }} lity-hide">
+  <div class="{{ module_name }}_container">
+    <div class="{{ module_name }}__steps owl-carousel owl-theme">
+      {% for step in module.steps %}
+        <div class="{{ module_name }}__step">
+          <div class="step__inner">
+            <div class="step__header">
+              {% set end = step.title|split(" ")|last %}
+              {% set beginning = step.title|replace(end, "") %}
+              <h2>{{ beginning }}<span>{{ end }}</span></h2>
+              <div class="step__header-content">{{ step.content }}</div>
+            </div>
+            <div class="step__main owl-carousel">
+              {% for question in step.questions %}
+                <div class="step__question">
+                  {{ render_question(question) }}
+                </div>
+              {% endfor %}
+            </div>
+            {% if loop.last %}
+            <div class="step__action">
+              <a id="get_results" class="button button--secondary">Get Results</a>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="bouncing-loader">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+  #{{ this_id }} {
+    position: relative; 
+  }
+  
+  #{{ this_id }} .step__main > * + * {
+    margin-top: 30px;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-question__answers {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-question__answers > *:not(:last-child) {
+    margin-right: 0;
+    margin-bottom: .5rem;
+  }
+
+  #{{ this_id }} .{{ module_name }}-question__answers label span {
+    display: inline-block;
+    padding: 1rem 2rem;
+    cursor: pointer;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-question__answers label input {
+    display: none;
+  }
+  
+  #{{ this_id }} .{{ module_name }}-question__answers label {
+    border: 1px solid var(--tertiary-color);
+    display: inline-block;
+  }
+  
+  .{{ module_name }}-question__question {
+    font-family: Playfair Display,serif;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  #{{ this_id }} .step__inner .step__header {
+    margin-bottom: 20px;
+  }
+  
+  #{{ this_id }} .step__inner .step__header h2 {
+    margin-bottom: 4rem;
+    color: white;
+    filter:brightness(1.3)drop-shadow(0px 0px 5px rgba(0,0,0,.5));
+    font-style: italic;
+  }
+  
+  #{{ this_id }} .step__inner .step__header h2 span {
+    background: hsla(41, 83%, 65%, 1);
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent;
+    font-style: normal;
+    background: linear-gradient(225deg, hsla(41, 83%, 65%, 1) 0%, hsla(21, 75%, 56%, 1) 64%);
+    background: -moz-linear-gradient(225deg, hsla(41, 83%, 65%, 1) 0%, hsla(21, 75%, 56%, 1) 64%);
+    background: -webkit-linear-gradient(225deg, hsla(41, 83%, 65%, 1) 0%, hsla(21, 75%, 56%, 1) 64%);
+  }
+  
+  #{{ this_id }} .{{ module_name }}-answer.selected {
+    background-color: var(--secondary-color);
+    color: white;
+  }
+  
+  #{{ this_id }} {
+    background-color: #f1f0ec;
+    padding: 30px;
+  }
+  
+  #{{ this_id }}:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: hsla(194, 40%, 25%, 1);
+    background: linear-gradient(225deg, hsla(194, 40%, 25%, 1) 41%, hsla(268, 16%, 35%, 1) 100%);
+    background: -moz-linear-gradient(225deg, hsla(194, 40%, 25%, 1) 41%, hsla(268, 16%, 35%, 1) 100%);
+    background: -webkit-linear-gradient(225deg, hsla(194, 40%, 25%, 1) 41%, hsla(268, 16%, 35%, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#274F5B", endColorstr="#574A66", GradientType=1 );
+  }
+  
+  .lity-container {
+    position: relative;
+  }
+  
+  .revops-assessment {
+    max-width: 1000px;
+    max-height: 80vh !important;
+    overflow: scroll;
+  }
+  
+  .lity-close {
+    position: absolute !important;
+    color: var(--dark-color);
+    text-shadow: none;
+  }
+  
+  #{{ this_id }} .{{ module_name }}__steps > .owl-dots {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    height: fit-content;
+  }
+  
+  #{{ this_id }} .{{ module_name }}__steps > .owl-nav {
+    margin-top: 40px;
+  }
+  
+  #{{ this_id }} .step__inner .owl-dots {
+    position: absolute;
+    right: 0;
+    top: 200px;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background: #f1f0ec;
+    padding: 1rem;
+  }
+  
+  #{{ this_id }} .step__inner .owl-dots .owl-dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+  }
+  
+  #{{ this_id }} .step__inner .owl-dots .owl-dot + * {
+    margin-top: 2rem;
+  }
+  
+  .lity-container:has(.{{ module_name }}) .lity-close {
+    color: white;
+    margin: 30px;
+  }
+  
+  @keyframes bouncing-loader {
+    to {
+      opacity: 0.1;
+      transform: translate3d(0, -1rem, 0);
+    }
+  }
+  .bouncing-loader {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #274f5b;
+    z-index: 99;
+    opacity: 1;
+    transition: all .5s ease-in-out;
+  }
+  .bouncing-loader > div {
+    width: 1rem;
+    height: 1rem;
+    margin: 3rem 0.2rem;
+    background: #e37539;
+    border-radius: 50%;
+    animation: bouncing-loader 0.6s infinite alternate;
+  }
+  .bouncing-loader > div:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .bouncing-loader > div:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+  
+  .slider-loaded .bouncing-loader {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+</style>
+{% end_require_css %}

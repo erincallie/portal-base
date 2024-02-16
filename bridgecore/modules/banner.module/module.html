@@ -1,0 +1,172 @@
+{% set module_name = "fancy-banner" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  waves,
+  build_button,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__background">
+  </div>
+  <div class="{{ module_name }}__overlay"></div>
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row">
+      <div class="{{ module_name }}__wrap">
+        {% if module.content.title %}
+          <div class="{{ module_name }}__title">
+            <h2>
+              {{ module.content.title }}
+            </h2>
+          </div>
+        {% endif %}
+        <div class="{{ module_name }}__content">
+          {{ module.content.content }}
+          {% if module.content.cta_type == "button" %}
+          <div class="{{ module_name }}__buttons custom-button">
+            <div class="custom-button__inner">
+              {% for item in module.content.buttons %}
+              {% set href = item.link.url.href %}
+              {% if item.link.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+              {% endif %}
+              <a href="{{ href }}" class="button button--{{ item.style }}{{ " button--ghost" if item.ghost_button == "true" }}"
+                 {% if item.link.open_in_new_tab %}target="_blank"{% endif %}
+                 {% if item.link.rel %}rel="{{ item.link.rel }}"{% endif %}
+                 >
+                {{ item.button_text }}
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+          {% elif module.content.cta_type == "form" %}
+          {% form
+                form_to_use="{{ module.content.form_options.form_object.form_id }}"
+                response_response_type="{{ module.content.form_options.form_object.response_type }}"
+                response_message="{{ module.content.form_options.form_object.message }}"
+                response_redirect_id="{{ module.content.form_options.form_object.redirect_id }}"
+                response_redirect_url="{{module.content.form_options.form_object.redirect_url}}"
+                gotowebinar_webinar_key="{{ module.content.form_options.form_object.gotowebinar_webinar_key }}"
+              %}
+          {% else %}
+          <div class="{{ module_name }}__cta">
+            {% cta guid="{{ module.content.cta_object }}" %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+
+  #{{ name }} {
+    {% set border_radius = module.styles.module_styles.border_radius + "px" %}
+    {{ borderRadius(border_radius) }}
+  }
+  
+  #{{ name }} .{{ module_name }}__background {
+    {% if module.styles.background_styles.color %}background:{{ module.styles.background_styles.color.css }};{% endif %}
+    {% if module.styles.background_styles.gradient %}background-image:{{ module.styles.background_styles.gradient.css }};{% endif %}
+    {% if module.styles.background_styles.image %}{{ module.styles.background_styles.image.css }}{% endif %}
+  }
+  {% if module.background_options.overlay == "true" %}
+    #{{ name }} .{{ module_name }}__overlay {
+      background:{{ module.styles.overlay_styles.color.css }};
+      background-image:{{ module.styles.overlay_styles.gradient.css }};
+      {% if module.styles.overlay_styles.image %}{{ module.styles.overlay_styles.image.css }}{% endif %}
+    }
+  {% endif %}
+  
+  #{{ name }} .{{ module_name }}__container {
+    {{ module.styles.module_styles.spacing.css }}
+  }
+  
+  {% set button_object = "#" + name + " input[type='submit']" %}
+  {% set button_style = module.content.form_options.button_style + "_outline" if module.content.form_options.ghost_button == "true" else module.content.form_options.button_style %}
+  {{ build_button(button_object, button_style) }}
+  
+  #{{ name }} .{{ module_name }}__container {
+    {% if module.styles.module_styles.max_content_width %}max-width:{{ module.styles.module_styles.max_content_width }}px;margin: 0 auto !important;{% endif %}
+    {% if module.styles.module_styles.alignment.horizontal_alignment %}
+      {% if module.styles.module_styles.alignment.horizontal_alignment == "LEFT" %}
+        margin-left: 0;
+        margin-right: auto;
+      {% elif module.styles.module_styles.alignment.horizontal_alignment == "CENTER" %}
+        margin-left: auto;
+        margin-right: auto;
+      {% elif module.styles.module_styles.alignment.horizontal_alignment == "RIGHT" %}
+        margin-left: auto;
+        margin-right: 0;
+      {% endif %}
+    {% endif %}
+  }
+  
+  #{{ name }} * {
+    text-align: {{ module.styles.module_styles.text_alignment.text_align }};
+  }
+  
+  #{{ name }} .{{ module_name }}__container h2 {
+    {% if module.styles.module_styles.header_font %}{{ module.styles.module_styles.header_font.css }}{% endif %}
+  }
+  
+  #{{ name }} .{{ module_name }}__container .{{ module_name }}__content,
+  #{{ name }} .{{ module_name }}__container .{{ module_name }}__content > * {
+    {% if module.styles.module_styles.header_font %}{{ module.styles.module_styles.content_font.css }}{% endif %}
+  }
+  
+  form[data-form-id*='f39e6351-78d9-45a3-b8d6-3e5dc12b9ea7'] > *:first-child input {
+    {{ borderRadius("30px 0px 0px 30px") }}
+  }
+  
+  form[data-form-id*='f39e6351-78d9-45a3-b8d6-3e5dc12b9ea7'] input[type='submit'] {
+    {{ borderRadius("0px 30px 30px 0px") }}
+    margin-top: 3px;
+  }
+ 
+
+</style>
+{% end_require_css %}
+
+{% require_js %}
+<script>
+$(function() {
+ 
+  {% if module.background_options.parallax_effect == "true" %}
+
+  const init_parallax = function(target, strength) {
+    let initial_offset = "center -" + (1 * strength) + "px";
+    $(target).attr("style", "background-position:" + initial_offset + " !important;background-repeat:repeat-y !important;");
+    $(window).on("scroll", function() {
+      let offset = "center -" + ($(window).scrollTop() * strength) + "px";
+      $(target).attr("style", "background-position:" + offset + " !important;background-repeat:repeat-y !important;");
+    });
+  };
+
+  init_parallax(`#{{ name }}`, {{ module.background_options.parallax_strength }});
+
+  {% endif %}
+  
+  {% if module.background_options.add_curve == "true" %}
+  
+  const init_fix_overlap = function() {
+    let hero = $(".{{ module_name }}"),
+        closest_section = hero.closest(".dnd-section"),
+        next_section = closest_section.next();
+    next_section.addClass("z-forward");
+  };
+  init_fix_overlap();
+  
+  {% endif %}
+  
+});
+</script>
+{% end_require_js %}

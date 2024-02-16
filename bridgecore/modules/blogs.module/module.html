@@ -1,0 +1,173 @@
+{% set module_name = "blog" %}
+{% import "../../templates/partials/utils/config.html" as config %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_search,
+  render_card,
+  render_filter_group,
+  render_filter,
+  render_blog,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% call config.global_config(widget_data) %}
+
+{% set all_blogs = blog_recent_posts(module.blog) %}
+{% if module.card_style == "featured" %}
+  {% set this_blog_id = module.featured_blog.name %}
+  {% set this_blog = all_blogs|selectattr("name", "==", this_blog_id)|first %}
+{% else %}
+  {% if module.source == "select" %}
+    {% set these_blogs = module.blogs %}
+  {% elif module.source == "filter" %}
+    {% set filter_query = [] %}
+    {% for tag in module.blog_tags %}
+      {% set this_slug = tag.slug %}
+      {% do filter_query.append(this_slug) %}
+    {% endfor %}
+    {% set these_blogs = blog_recent_tag_posts(module.blog, filter_query, module.limit) %}
+  {% else %}
+    {% set these_blogs = all_blogs %}
+  {% endif %}
+{% endif %}
+
+<div id="{{ name }}" class="{{ module_name }}" data-page="1">
+  <div class="{{ module_name }}__container">
+    {% if module.listing_options.allow_filter == "true" or module.listing_options.allow_search == "true" %}
+    <div class="listing__filters">
+      {% if module.listing_options.filter_by_tags == "true" or module.listing_options.filter_by_author == "true" %}
+      <div class="listing__filter-groups">
+        {% if module.listing_options.filter_by_tags == "true" %}
+          {% set all_tags = module.listing_options.selected_tags %}
+          {% call render_filter_group("Tags") %}
+            {% for tag in all_tags %}
+              {% set slug = tag.slug %}
+              {{ render_filter(slug, tag) }}
+            {% endfor %}
+          {% endcall %}
+        {% endif %}
+        {% if module.listing_options.filter_by_author == "true" %}
+          {% set blog_authors = module.listing_options.selected_authors %}
+          {% call render_filter_group("Authors") %}
+            {% for author in blog_authors %}
+              {% set slug = slugify(author) %}
+              {{ render_filter(slug, author) }}
+            {% endfor %}
+          {% endcall %}
+        {% endif %}
+      </div>
+      {% endif %}
+      {% if module.listing_options.allow_search %}
+        <div class="listing__search">
+          {% set placeholder = module.search_options.placeholder_text %}
+          {% set button_text = module.search_options.button_text %}
+          {% set search_id = name + "__search" %}
+          {{ render_search(placeholder, button_text, search_id) }}
+        </div>
+      {% endif %}
+    </div>
+    {% endif %}
+    <div class="{{ module_name }}__row{{ " isotope-container" if module.limit > module.listing_options.per_page_limit }}{{ " equal-height" if module.listing_options.equal_height_blocks == "true" }}" data-page="1">
+      {% if module.source != "select" %}
+        {% for blog in these_blogs %}
+          {% if loop.index <= module.limit %}
+            {{ render_card("blog", blog, ["topic_list", "blog_author"], ["name"], false) }}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% for blog in these_blogs %}
+          {{ render_card("blog", blog) }}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+  {% if module.card_style == "cards" %}
+    {% set object = "#" + name + " ." + module_name + "__row:not(.isotope-container)" %}
+    {{ flex_grid(object, 768, module.styles.columns, module.styles.vertical_spacing, module.styles.horizontal_spacing) }}
+    #{{ name }} .blog-card__content-link a {
+      {{ module.styles.link_font.css }}
+    }
+    #{{ name }} .blog-card__content-link a:hover {
+      {{ module.styles.link_hover_color.css }}
+    }
+  {% else %}
+    {% set button_object = "#" + name + " .blog-card__content-link a" %}
+    {% set button_style = module.styles.button_style + "_outline" if module.styles.ghost_button == "true" else module.styles.button_style %}
+    {{ build_button(button_object, button_style) }}
+  {% endif %}
+  
+  {% set search_button_object = "#" + name + " .listing-search button" %}
+  {% set search_button_style = module.search_options.button_style + "_outline" if module.search_options.ghost_button == "true" else module.search_options.button_style %}
+  {{ build_button(search_button_object, search_button_style) }}
+  
+  #{{ name }} .blog-card__title h3 {
+    {{ module.styles.heading_font.css }}
+  }
+  #{{ name }} .blog-card__content-content {
+    {{ module.styles.content_font.css }}
+  }
+  
+  .listing__filters-wrap {
+    {{ transition("all 1s ease-in-out") }}
+  }
+  
+  .listing__filters-trigger a {
+    {{ borderRadius("24px") }}
+  }
+  
+  @media screen and (min-width: 768px) {
+
+    #{{ name }} .isotope-container > * {
+      width: calc({{ (1/module.styles.columns*100)|int }}% - {{ (module.styles.horizontal_spacing * (module.styles.columns-1))/(module.styles.columns-1)|int }}px);
+    }
+
+    #{{ name }} .isotope-container > * + * {
+      margin-left: {{ module.styles.horizontal_spacing }}px;
+    }
+
+    #{{ name }} .isotope-container > *:nth-child({{ module.styles.columns }}n + 1 of .isotope-visible) {
+      margin-left: 0px;
+    }
+
+    #{{ name }} .isotope-container > .isotope-visible:nth-child(n + {{ module.styles.columns + 1 }} of .isotope-visible) {
+      margin-top: {{ module.styles.vertical_spacing }}px;
+    }
+
+  }
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+  $(function() {
+
+    var filters = {},
+        container = $(`#{{ name }} .isotope-container`),
+        containerTop = $(`#{{ name }}`).offset().top,
+        filterDisplay = $('#filter-display'),
+        grid_gap = {{ module.styles.horizontal_spacing }};
+    
+    var responsiveIsotope = [ [480, 4] , [720, {{ module.listing_options.per_page_limit || 9 }}] ];
+    var itemsPerPageDefault = {{ module.listing_options.per_page_limit || 9 }};
+
+    {{ isotope_js() }}
+    
+  });
+</script>
+{% end_require_js %}
+
+{% endcall %}

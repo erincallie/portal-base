@@ -1,0 +1,151 @@
+{% set module_name = "testimonials" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  {% if module.layout_style == "slider" %}
+    <div class="{{ module_name }}__slider {{ module_name }}">
+      <div class="slider_container">
+        <div class="slider__row owl-carousel owl-theme">
+          {% for item in module.slides %}
+          <div class="slider__item slider-item">
+            <div class="slider-item__inner">
+              <div class="slider-item__content">
+                {{ icons("dot-square") }}
+                <div class="slider-item__content-content">
+                  "{{ item.content }}"
+                </div>
+              </div>
+              <div class="slider-item__person">
+                <span>{{ item.person }}</span>{% if item.company_name %}<span>{{ item.company_name }}</span>{% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  {% else %}
+  <div class="{{ module_name }}__card quote-item">
+    <div class="quote-item__inner">
+      {% if module.quote.image.src %}
+        <div class="quote-item__image">
+          {% set sizeAttrs = 'width="{{ module.quote.image.width }}" height="{{ module.quote.image.height }}"' %}
+          {% if module.quote.image.size_type == 'auto' %}
+            {% set sizeAttrs = 'width="{{ module.quote.image.width }}" height="{{ module.quote.image.height }}" style="max-width: 100%; height: auto;"' %}
+          {% elif module.quote.image.size_type == 'auto_custom_max' %}
+            {% set sizeAttrs = 'width="{{ module.quote.image.max_width }}" height="{{ module.quote.image.max_height }}" style="max-width: 100%; height: auto;"' %}
+          {% endif %}
+           {% set loadingAttr = module.quote.image.loading != 'disabled' ? 'loading="{{ module.quote.image.loading }}"' : '' %}
+          <img src="{{ module.quote.image.src }}" alt="{{ module.quote.image.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+        </div>
+      {% endif %}
+      <div class="quote-item__wrap">
+        <div class="quote-item__content">
+          "{{ module.quote.content }}"
+        </div>
+        <div class="quote-item__person">
+          <span>{{ module.quote.person }}</span>{% if module.quote.company.company_name %}<span>{{ module.quote.company.company_name }}</span>{% endif %}
+        </div>
+        <div class="quote-item__company">
+          {% if module.quote.company.logo.src %}
+            {% set sizeAttrs = 'width="{{ module.quote.company.logo.width }}" height="{{ module.quote.company.logo.height }}"' %}
+            {% if module.quote.company.logo.size_type == 'auto' %}
+              {% set sizeAttrs = 'width="{{ module.quote.company.logo.width }}" height="{{ module.quote.company.logo.height }}" style="max-width: 100%; height: auto;"' %}
+            {% elif module.quote.company.logo.size_type == 'auto_custom_max' %} 
+              {% set sizeAttrs = 'width="{{ module.quote.company.logo.max_width }}" height="{{ module.quote.company.logo.max_height }}" style="max-width: 100%; height: auto;"' %}
+            {% endif %}
+             {% set loadingAttr = module.quote.company.logo.loading != 'disabled' ? 'loading="{{ module.quote.company.logo.loading }}"' : '' %}
+            <img src="{{ module.quote.company.logo.src }}" alt="{{ module.quote.company.company_name or module.quote.company.logo.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+{% require_css %}
+<style>
+   
+  #{{ name }} .quote-item {
+    {{ module.style.border.css }}
+    {% set border_radius = module.style.border_radius + "px" %}
+    {{ borderRadius(border_radius) }}
+    overflow: hidden; 
+    background: {{ module.style.background_color.css }}; 
+  }
+  
+  #{{ name }} .quote-item__wrap {
+    {{ module.style.spacing.css }}
+    width: 100%;
+  }
+  
+  #{{ name }} .quote-item__content,
+  #{{ name }} .slider-item__content {
+    {{ module.style.quote_font.css }}
+    position: relative;
+  }
+  
+  #{{ name }} .quote-item__person,
+  #{{ name }} .slider-item__person {
+    {{ module.style.person_font.css }}
+  }
+  
+  #{{ name }} .quote-item__company,
+  #{{ name }} .slider-item__company {
+    {{ module.style.company_name_font.css }}
+  }
+  
+  {% if module.style.logo_style == "white" %}
+    #{{ name }} .quote-item__company img {
+      filter: brightness(0)invert(1);
+    }
+  {% elif module.style.logo_style == "black" %}
+    #{{ name }} .quote-item__company img {
+      filter: brightness(0);
+    }
+  {% elif module.style.logo_style == "grayscale" %}
+    #{{ name }} .quote-item__company img {
+      filter: grayscale(1);
+    }
+  {% endif %}
+  
+  #{{ name }} .owl-theme .owl-dots .owl-dot span {
+    background-color: var(--primary-color);
+    opacity: .5;
+  }
+  
+  #{{ name }} .owl-theme .owl-dots .owl-dot.active span {
+    background-color: var(--primary-color);
+    opacity: 1;
+  }
+
+</style>
+{% end_require_css %}
+
+{% require_js %}
+<script>
+(function() {
+  const init_slider = function() {
+    $(`#{{ name }} .owl-carousel`).owlCarousel({
+      loop:true,
+      margin:10,
+      items:1,
+      autoplay:{{ true if module.slider_options.autoplay == "true" else false }},
+      nav:{{ true if module.slider_options.show_nav == "true" else false }},
+      dots:{{ true if module.slider_options.show_dots == "true" else false }}
+    });
+  };
+  init_slider();
+})();
+</script>
+{% end_require_js %}

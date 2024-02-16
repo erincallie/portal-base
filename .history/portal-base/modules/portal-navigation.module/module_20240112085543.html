@@ -1,0 +1,400 @@
+{% set module_name = "portal-nav" %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% macro render_nav_link(item, show_secondary) %}
+{% set href = item.link.url.href %}
+{% set path = href|split("/")|last %}
+{% set label_lower = item.navigation_label|lower %}
+{% if item.link.url.type is equalto "EMAIL_ADDRESS" %}
+  {% set href = "mailto:" + href %}
+{% endif %}
+{% set child_paths = [] %}
+{% for secondary in item.secondary_items %}
+  {% set this_path = secondary.link.url.href|split("/")|last|split("?")|first %}
+  {% do child_paths.append(this_path) %}
+{% endfor %}
+{% set primary_is_active = true if (request.path|split("/")|last in child_paths or request.path is string_containing path) else false %}
+{% set secondary_is_active = true if (href and request.path is string_containing path) else false %}
+{% set is_primary = item.secondary_items %}
+{% set is_active = true if (primary_is_active and is_primary) or (!is_primary and secondary_is_active) else false %}
+<li class="nav-item{{ " active" if is_active }}" data-request-path="{{ request.path }}" data-child-paths="{{ child_paths|join(", ") if is_primary }}" data-primary-active="{{ primary_is_active }}" data-secondary-active="{{ secondary_is_active }}">
+  <a class="nav-item__link" href="{{ href }}" {% if item.link.open_in_new_tab %}target="_blank"{% endif %} {% if item.link.rel %}rel="{{ item.link.rel }}"{% endif %}>
+    <span class="nav-item__icon">
+      {% if item.icon.src %}
+        {% set sizeAttrs = 'width="{{ item.icon.width }}" height="{{ item.icon.height }}"' %}
+        {% if item.icon.size_type == 'auto' %}
+          {% set sizeAttrs = 'width="{{ item.icon.width }}" height="{{ item.icon.height }}" style="max-width: 100%; height: auto;"' %}
+        {% elif item.icon.size_type == 'auto_custom_max' %}
+          {% set sizeAttrs = 'width="{{ item.icon.max_width }}" height="{{ item.icon.max_height }}" style="max-width: 100%; height: auto;"' %}
+        {% endif %}
+         {% set loadingAttr = item.icon.loading != 'disabled' ? 'loading="{{ item.icon.loading }}"' : '' %}
+        <img src="{{ item.icon.src }}" alt="{{ item.icon.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+      {% endif %}
+    </span>
+    <span class="nav-item__content">
+      <span class="nav-item__label">{{ item.navigation_label }}</span>
+    </span>
+  </a>
+  {% if show_secondary and item.secondary_items %}
+    <ul>
+      {% for secondary in item.secondary_items %}
+        {{ render_nav_link(secondary, true) }}
+      {% endfor %}
+    </ul>
+  {% endif %}
+</li>
+{% endmacro %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__row">
+    <div class="{{ module_name }}__primary primary-nav">
+      <div class="{{ module_name }}__logo">
+        {% if module.logo.src %}
+          {% set sizeAttrs = 'width="{{ module.logo.width }}" height="{{ module.logo.height }}"' %}
+          {% if module.logo.size_type == 'auto' %}
+            {% set sizeAttrs = 'width="{{ module.logo.width }}" height="{{ module.logo.height }}" style="max-width: 100%; height: auto;"' %}
+          {% elif module.logo.size_type == 'auto_custom_max' %}
+            {% set sizeAttrs = 'width="{{ module.logo.max_width }}" height="{{ module.logo.max_height }}" style="max-width: 100%; height: auto;"' %}
+          {% endif %}
+           {% set loadingAttr = module.logo.loading != 'disabled' ? 'loading="{{ module.logo.loading }}"' : '' %}
+          <img src="{{ module.logo.src }}" alt="{{ module.logo.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+        {% endif %}
+      </div>
+      <div class="primary-nav__inner">
+        <div class="primary-nav__menu">
+          <ul>
+            {% for item in module.navigation_items %}
+              {{ render_nav_link(item, false) }}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>  
+    </div>
+    <div class="{{ module_name }}__secondary secondary-nav">
+      <div class="{{ module_name }}__close">
+        {{ icons("close") }}
+      </div>
+      <div class="secondary-nav__inner">
+        <div class="secondary-nav__menu">
+          <ul>
+            {% for item in module.navigation_items %}
+              {{ render_nav_link(item, true) }}
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+  :root {
+    --dark-blue: #0c2340;
+    --light-blue: #425b76;
+    --teal: #04a38e;
+    --brown: #bf5700;
+    --dark: #333333;
+    --light: #abacac;
+    --white: #f8f8f8;
+  }
+   
+  #{{ name }} {
+    min-height: 100vh;
+    position: fixed;
+    z-index: 9999999999;
+  }
+  
+  #{{ name }} .{{ module_name }}__row {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: stretch;
+    z-index: 9999999999;
+  }
+  
+  #{{ name }} ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  #{{ name }} ul a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  #{{ name }} .primary-nav [class*='__inner'] {
+    padding: 0 20px;
+    margin-top: 100px;
+  }
+  
+  #{{ name }} .secondary-nav [class*='__inner'] {
+    padding: 0;
+    margin-top: 100px;
+  }
+  
+  #{{ name }} ul > li {
+    padding: 1rem;
+    transition: all .5s ease-in-out;
+  }
+  
+  #{{ name }} .primary-nav ul > li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #{{ name }} .secondary-nav ul > li a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  #{{ name }} ul li .nav-item__icon {
+    position: relative;
+    height: 1rem;
+    width: auto;
+  }
+  
+  #{{ name }} ul li .nav-item__icon > img {
+    width: 100%;
+    height: 100% !important;
+    object-fit: contain;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > a {
+    display: none;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li > a {
+    padding: 10px 20px;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li > a span + span {
+    margin-left: 1rem;
+  }
+  
+  #{{ name }} .primary-nav {
+    background: var(--light-blue);
+    height: 100%;
+    transition: all .5s ease-in;
+    position: relative;
+    z-index: 99999;
+  }
+  
+  .portal-navigation.active #{{ name }} .primary-nav {
+    filter: drop-shadow(2px 4px 10px rgba(0,0,0,.2));
+  }
+  
+  #{{ name }} .primary-nav ul > li + * {
+    margin-top: 30px;
+  }
+  
+  #{{ name }} .primary-nav ul li a span + * {
+    margin-top: .5rem;
+  }
+
+  #{{ name }} .secondary-nav *:not(a) {
+    padding: 0;
+  }
+
+  #{{ name }} .secondary-nav {
+    background: #f8f8f8;
+    height: 100%;
+    overflow: hidden;
+    width: 400px;
+  }
+  
+  #{{ name }} .primary-nav ul li a {
+    filter: brightness(0)invert(1);
+  }
+  
+  #{{ name }} .primary-nav ul li.active {
+    background-color: rgba(255,255,255,.2);
+    border-radius: .5rem;
+    filter: drop-shadow(2px 12px 22px rgba(0,0,0,.3))
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li > a {
+    padding: 20px 40px;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li {
+    position: relative;
+    z-index: 9;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li:before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: transparent;
+    transition: all .5s ease-in;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li * {
+    position: relative;
+    z-index: 9;
+    white-space: nowrap;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li.active:before {
+    background-color: var(--dark-blue);
+    opacity: .8;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li:hover:not(.active):before {
+    background-color: var(--dark-blue);
+    opacity: .2;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li > ul > li.active * {
+    filter: brightness(0)invert(1);
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li:not(.active) {
+    display: none;
+  }
+  
+  .portal-navigation .primary-nav a,
+  .portal-navigation .secondary-nav {
+     transition: all .5s ease-in-out;
+  }
+  
+  .portal-navigation .secondary-nav {
+    max-width: 400px;
+    visibility: visible;
+  }
+  
+  .portal-navigation:not(.active) .primary-nav .nav-item__content {
+    max-width: 100%;
+    visibility: visible;
+    transition: all .25s ease-in-out;
+  }
+  
+  .portal-navigation:not(.active) .secondary-nav,
+  .portal-navigation:not(.active) .primary-nav .nav-item__content {
+    max-width: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+  
+  .portal-navigation:not(.active) .primary-nav a {
+    max-height: 1rem;
+  }
+  
+  #{{ name }} .secondary-nav__menu > ul > li {
+    position: relative;
+    transform: translate(-100%);
+    transition: all 1.5s ease-in;
+  }
+  
+  .portal-navigation.active #{{ name }} .secondary-nav__menu > ul > li {
+    transform: translate(0%);
+  }
+  
+  .portal-navigation:not(.active) #{{ name }} .primary-nav ul > li a {
+    flex-direction: row;
+    transition: all .5s ease-in-out;
+  }
+  
+  .portal-navigation:not(.active) #{{ name }} .primary-nav ul > li:hover a {
+    transform: scale(1.1);
+  }
+  
+  #{{ name }} .{{ module_name }}__close {
+    position: absolute;
+    top: 30px;
+    right: 20px;
+  }
+  
+  #{{ name }} .{{ module_name }}__close button {
+    appearance: none;
+    background: transparent;
+  }
+  
+  #{{ name }} .{{ module_name }}__logo {
+    position: fixed;
+    top: 30px;
+    left: 1rem;
+    width: 60px;
+    height: auto;
+  }
+
+  #{{ name }} .{{ module_name }}__logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  @media screen and (min-width: 768px) {
+    .portal-navigation .secondary-nav {
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+  
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+  
+  $(function() {
+    
+    let init_nav_clicks = function() {
+      let primary_nav_items = $(".portal-navigation .primary-nav ul a"),
+          secondary_nav_wraps = $(".portal-navigation .secondary-nav__menu > ul > li"),
+          close_button = $(".portal-nav__close button");
+      primary_nav_items.on("click", function(e) {
+        e.preventDefault();
+        let item = $(this).parent(),
+            index = item.index();
+        $(".portal-navigation").addClass("active");
+        secondary_nav_wraps.eq(index).addClass("active").siblings().removeClass("active");
+        item.addClass("active").siblings().removeClass("active");
+      });
+      close_button.on("click", function() {
+        $(".portal-navigation").removeClass("active");
+      });
+    };
+
+    init_nav_clicks();
+
+      $(document).click(function(event) {
+        if (!$(event.target).closest('.portal-nav__row').length && $(".portal-navigation").is(".active")) {
+          $(".portal-navigation").removeClass("active");
+        }
+      });
+
+  });
+  
+</script>
+{% end_require_js %}

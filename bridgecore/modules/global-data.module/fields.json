@@ -1,0 +1,175 @@
+[ {
+  "id" : "e26727b3-1675-f196-46a5-6358d73d6762",
+  "name" : "social_icons",
+  "display_width" : null,
+  "label" : "Social Icons",
+  "required" : false,
+  "locked" : true,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "fc62bc01-30e1-6e48-3791-74815cde7a3f",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "fc62bc01-30e1-6e48-3791-74815cde7a3f",
+    "name" : "network",
+    "display_width" : null,
+    "label" : "Network",
+    "required" : false,
+    "locked" : false,
+    "display" : "select",
+    "choices" : [ [ "x", "X" ], [ "facebook", "Facebook" ], [ "linkedin", "LinkedIn" ] ],
+    "multiple" : false,
+    "reordering_enabled" : true,
+    "preset" : null,
+    "type" : "choice"
+  }, {
+    "id" : "33ecc86e-f654-5e2d-14a7-211409f5f26e",
+    "name" : "icon",
+    "display_width" : null,
+    "label" : "Icon",
+    "required" : false,
+    "locked" : false,
+    "responsive" : true,
+    "resizable" : true,
+    "show_loading" : false,
+    "type" : "image",
+    "default" : {
+      "size_type" : "auto",
+      "src" : "",
+      "alt" : null,
+      "loading" : "lazy"
+    }
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+}, {
+  "id" : "a4072f46-8784-c252-7310-5a76c9c4d87e",
+  "name" : "hubdb_filters",
+  "display_width" : null,
+  "label" : "HubDB Filters",
+  "required" : false,
+  "locked" : true,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "bb006735-5278-7f02-a858-6d8ca0285076",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "bb006735-5278-7f02-a858-6d8ca0285076",
+    "name" : "hubdb_table",
+    "display_width" : null,
+    "label" : "HubDB Table",
+    "required" : false,
+    "locked" : false,
+    "type" : "hubdbtable"
+  }, {
+    "id" : "57413827-781f-907f-e3d1-4212d0049e03",
+    "name" : "row_filters",
+    "display_width" : null,
+    "label" : "Row Filters",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : "32368944-9e87-0cea-6999-5e1c4e437f4a",
+      "default" : null
+    },
+    "children" : [ {
+      "id" : "32368944-9e87-0cea-6999-5e1c4e437f4a",
+      "name" : "filter_label",
+      "display_width" : null,
+      "label" : "Filter Label",
+      "required" : false,
+      "locked" : false,
+      "validation_regex" : "",
+      "allow_new_line" : false,
+      "show_emoji_picker" : false,
+      "type" : "text"
+    }, {
+      "id" : "b4c99bd8-086b-c4f7-2b06-aefb2d097a82",
+      "name" : "column_name",
+      "display_width" : null,
+      "label" : "Column Name",
+      "required" : false,
+      "locked" : false,
+      "validation_regex" : "",
+      "allow_new_line" : false,
+      "show_emoji_picker" : false,
+      "type" : "text"
+    } ],
+    "tab" : "CONTENT",
+    "expanded" : false,
+    "type" : "group",
+    "default" : [ ]
+  }, {
+    "id" : "23794324-8737-73d0-760d-feb754db0939",
+    "name" : "searchable_columns",
+    "display_width" : null,
+    "label" : "Searchable Columns",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : null,
+      "default" : null
+    },
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+}, {
+  "id" : "ccc7a60f-c8d9-bd67-e6b4-0db43a020e59",
+  "name" : "blog_filters",
+  "display_width" : null,
+  "label" : "Blog Filters",
+  "required" : false,
+  "locked" : true,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "e9e2e753-ca91-9937-ad2b-205604c1f716",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "e9e2e753-ca91-9937-ad2b-205604c1f716",
+    "name" : "blog_id",
+    "display_width" : null,
+    "label" : "Blog",
+    "required" : false,
+    "locked" : false,
+    "type" : "blog"
+  }, {
+    "id" : "f93b6ea2-9464-819f-4a84-3ee2da49c0b5",
+    "name" : "searchable_properties",
+    "display_width" : null,
+    "label" : "Searchable Properties",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : null,
+      "default" : null
+    },
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

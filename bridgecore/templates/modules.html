@@ -1,0 +1,1997 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Module Library
+  screenshotPath: ../images/template-previews/bridgecore-modules.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--modules"
+%}
+
+{% dnd_section 
+    full_width=false,
+    max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=6,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/accordion",
+        offset=0,
+        width=12,
+        items=[ {
+          "content" : "Some information that gets revealed on click.",
+          "title" : "An accordion item title."
+        }, {
+          "content" : "Some information that gets revealed on click.",
+          "title" : "An accordion item title."
+        }, {
+          "content" : "Some information that gets revealed on click.",
+          "title" : "An accordion item title."
+        } ]
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+  {% dnd_column
+    offset=6,
+    width=6,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/accordion",
+        offset=0,
+        width=12,
+        items=[ {
+          "content" : "Some information that gets revealed on click.",
+          "title" : "An accordion item title."
+        }, {
+          "content" : "Some information that gets revealed on click.",
+          "title" : "An accordion item title."
+        }, {
+          "content" : "Some information that gets revealed on click.",
+          "title" : "An accordion item title."
+        } ],
+        layout_style="numbered"
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section
+  padding={
+    "default" : {
+      "bottom" : "0px",
+      "left" : "0px",
+      "right" : "0px",
+      "top" : "0px"
+    }
+  },
+  full_width=true
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/banner",
+        offset=0,
+        width=12,
+        background_options={
+          "overlay" : true,
+          "parallax_effect" : true
+        },
+        content={
+          "buttons" : [ {
+            "button_text" : "Primary Button",
+            "ghost_button" : false,
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "style" : "primary"
+          } ],
+          "content" : "Some additional banner content.",
+          "cta_type" : "button",
+          "form_options" : {
+            "button_style" : "dark",
+            "form_object" : {
+              "form_id" : "",
+              "form_type" : "HUBSPOT",
+              "message" : "Thanks for submitting the form.",
+              "response_type" : "inline"
+            },
+            "ghost_button" : false
+          },
+          "title" : "A Banner Title"
+        },
+        styles={
+          "background_styles" : {
+            "image" : {
+              "background_position" : "MIDDLE_CENTER",
+              "background_size" : "cover",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/featured-image.png"
+            }
+          },
+          "module_styles" : {
+            "content_font" : {
+              "color" : "#FFFFFF",
+              "font_set" : "DEFAULT"
+            },
+            "header_font" : {
+              "color" : "#FFFFFF",
+              "font_set" : "DEFAULT"
+            },
+            "spacing" : {
+              "padding" : {
+                "bottom" : {
+                  "units" : "px",
+                  "value" : 80
+                },
+                "left" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "right" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "top" : {
+                  "units" : "px",
+                  "value" : 80
+                }
+              }
+            }
+          },
+          "overlay_styles" : {
+            "gradient" : {
+              "colors" : [ {
+                "color" : {
+                  "a" : 0.8,
+                  "b" : 115,
+                  "g" : 115,
+                  "r" : 41
+                }
+              }, {
+                "color" : {
+                  "a" : 0.4,
+                  "b" : 115,
+                  "g" : 115,
+                  "r" : 41
+                }
+              } ],
+              "side_or_corner" : {
+                "verticalSide" : "BOTTOM"
+              }
+            }
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/blogs",
+        offset=0,
+        width=12,
+        blog="default",
+        card_style="cards",
+        limit=2,
+        styles={
+          "link_font" : {
+            "color" : "#ff8552",
+            "styles" : {
+              "font-style" : "normal",
+              "font-weight" : "bold",
+              "text-decoration" : "none"
+            }
+          },
+          "link_hover_color" : {
+            "color" : "#297373",
+            "opacity" : 100
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/flex-cards",
+        offset=0,
+        width=12,
+        cards=[ {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : { },
+            "image" : {
+              "alt" : "card-2",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/card-2.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : { },
+            "image" : {
+              "loading" : "lazy",
+              "size_type" : "auto",
+              "src" : ""
+            }
+          }
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : { },
+            "image" : {
+              "alt" : "card-1",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/card-1.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : { },
+            "image" : {
+              "loading" : "lazy",
+              "size_type" : "auto",
+              "src" : ""
+            }
+          }
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : { },
+            "image" : {
+              "alt" : "card-3",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/card-3.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : { },
+            "image" : {
+              "loading" : "lazy",
+              "size_type" : "auto",
+              "src" : ""
+            }
+          }
+        } ],
+        style={
+          "alignment" : {
+            "vertical_align" : "TOP"
+          },
+          "column_number" : 3,
+          "full_width_section" : true,
+          "horizontal_spacing" : 30
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/flex-cards",
+        offset=0,
+        width=12,
+        card_style="icons",
+        cards=[ {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : { },
+            "image" : {
+              "alt" : "card-1",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/card-1.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Bullseye (3)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 100,
+              "max_width" : 100,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Bullseye%20(3).png",
+              "width" : 3000
+            }
+          }
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : { },
+            "image" : {
+              "alt" : "card-2",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/card-2.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Bullseye (3)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 100,
+              "max_width" : 100,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Bullseye%20(3).png",
+              "width" : 3000
+            }
+          }
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : { },
+            "image" : {
+              "alt" : "card-3",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/card-3.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Bullseye (3)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 100,
+              "max_width" : 100,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Bullseye%20(3).png",
+              "width" : 3000
+            }
+          }
+        } ],
+        style={
+          "alignment" : {
+            "vertical_align" : "TOP"
+          },
+          "column_number" : 3,
+          "full_width_section" : true,
+          "horizontal_spacing" : 30
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/flex-cards",
+        offset=0,
+        width=12,
+        card_style="color_block",
+        cards=[ {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : {
+              "color" : "#85FFC7",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "blog-3",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/blog-3.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Bullseye (3)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 100,
+              "max_width" : 100,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Bullseye%20(3).png",
+              "width" : 3000
+            }
+          }
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : {
+              "color" : "#85FFC7",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "blog-2",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/blog-2.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Bullseye (3)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 100,
+              "max_width" : 100,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Bullseye%20(3).png",
+              "width" : 3000
+            }
+          }
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Some card content to tell the user more.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "link_text" : "Learn More",
+            "link_type" : "button",
+            "title" : "A Card Title"
+          },
+          "featured_image" : {
+            "border_color" : {
+              "color" : "#85FFC7",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "card-1",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/card-1.webp",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Bullseye (3)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 100,
+              "max_width" : 100,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Bullseye%20(3).png",
+              "width" : 3000
+            }
+          }
+        } ],
+        style={
+          "alignment" : {
+            "vertical_align" : "TOP"
+          },
+          "column_number" : 3,
+          "full_width_section" : true,
+          "horizontal_spacing" : 30
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/content-block",
+        offset=0,
+        width=12,
+        card={
+          "content" : {
+            "button_style" : "secondary",
+            "button_text" : "Secondary Button",
+            "content" : "Some rich text content for the content card.",
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "small_title" : "Module Library",
+            "title" : "Content Card",
+            "title_tag" : "h2"
+          }
+        },
+        style={
+          "general" : {
+            "text_alignment" : {
+              "text_align" : "CENTER"
+            }
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/countdown",
+        offset=0,
+        width=12,
+        target_date_time=1726664400000
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section %}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/countdown",
+        offset=0,
+        width=12,
+        countdown_style="blocks",
+        style={
+          "background_color" : {
+            "color" : "#E6E6E6",
+            "opacity" : 100
+          }
+        },
+        target_date_time=1726664400000
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row
+      padding={
+        "default" : {
+          "bottom" : "40px"
+        }
+      }
+    %}
+      {% dnd_column
+        offset=0,
+        width=6,
+        padding={
+          "default" : {
+            "bottom" : "0px",
+            "left" : "0px",
+            "right" : "0px",
+            "top" : "0px"
+          }
+        }
+      %}
+        {% dnd_row %}
+          {% dnd_module
+            path="../modules/custom-button",
+            offset=0,
+            width=12,
+            buttons=[ {
+              "button_text" : "Primary Button",
+              "cta_type" : "link",
+              "ghost_button" : false,
+              "link" : {
+                "no_follow" : false,
+                "open_in_new_tab" : false,
+                "url" : {
+                  "href" : "#",
+                  "type" : "EXTERNAL"
+                }
+              },
+              "style" : "primary"
+            }, {
+              "button_text" : "Primary Ghost",
+              "cta_type" : "link",
+              "ghost_button" : true,
+              "link" : {
+                "no_follow" : false,
+                "open_in_new_tab" : false,
+                "url" : {
+                  "href" : "#",
+                  "type" : "EXTERNAL"
+                }
+              },
+              "style" : "primary"
+            } ],
+            styles={
+              "alignment" : {
+                "horizontal_align" : "CENTER"
+              }
+            }
+          %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column
+        offset=6,
+        width=6,
+        padding={
+          "default" : {
+            "bottom" : "0px",
+            "left" : "0px",
+            "right" : "0px",
+            "top" : "0px"
+          }
+        }
+      %}
+        {% dnd_row %}
+          {% dnd_module
+            path="../modules/custom-button",
+            offset=0,
+            width=12,
+            buttons=[ {
+              "button_text" : "Secondary Button",
+              "cta_type" : "link",
+              "ghost_button" : false,
+              "link" : {
+                "no_follow" : false,
+                "open_in_new_tab" : false,
+                "url" : {
+                  "href" : "#",
+                  "type" : "EXTERNAL"
+                }
+              },
+              "style" : "secondary"
+            }, {
+              "button_text" : "Secondary Ghost",
+              "cta_type" : "link",
+              "ghost_button" : true,
+              "link" : {
+                "no_follow" : false,
+                "open_in_new_tab" : false,
+                "url" : {
+                  "href" : "#",
+                  "type" : "EXTERNAL"
+                }
+              },
+              "style" : "secondary"
+            } ],
+            styles={
+              "alignment" : {
+                "horizontal_align" : "CENTER"
+              }
+            }
+          %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_row %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/custom-button",
+        offset=0,
+        width=12,
+        buttons=[ {
+          "button_text" : "Dark Button",
+          "cta_type" : "link",
+          "ghost_button" : false,
+          "link" : {
+            "no_follow" : false,
+            "open_in_new_tab" : false,
+            "url" : {
+              "href" : "#",
+              "type" : "EXTERNAL"
+            }
+          },
+          "style" : "dark"
+        }, {
+          "button_text" : "Dark Ghost",
+          "cta_type" : "link",
+          "ghost_button" : true,
+          "link" : {
+            "no_follow" : false,
+            "open_in_new_tab" : false,
+            "url" : {
+              "href" : "#",
+              "type" : "EXTERNAL"
+            }
+          },
+          "style" : "dark"
+        } ],
+        styles={
+          "alignment" : {
+            "horizontal_align" : "CENTER",
+            "vertical_align" : "MIDDLE"
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section
+  background_color="rgba(41, 115, 115, 1)",
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/custom-button",
+        offset=0,
+        width=6,
+        buttons=[ {
+          "button_text" : "Tertiary Button",
+          "cta_type" : "link",
+          "ghost_button" : false,
+          "link" : {
+            "no_follow" : false,
+            "open_in_new_tab" : false,
+            "url" : {
+              "href" : "#",
+              "type" : "EXTERNAL"
+            }
+          },
+          "style" : "tertiary"
+        }, {
+          "button_text" : "Tertiary Ghost",
+          "cta_type" : "link",
+          "ghost_button" : true,
+          "link" : {
+            "no_follow" : false,
+            "open_in_new_tab" : false,
+            "url" : {
+              "href" : "#",
+              "type" : "EXTERNAL"
+            }
+          },
+          "style" : "tertiary"
+        } ],
+        styles={
+          "alignment" : {
+            "horizontal_align" : "CENTER"
+          }
+        }
+      %}
+      {% end_dnd_module %}
+      {% dnd_module
+        path="../modules/custom-button",
+        offset=6,
+        width=6,
+        buttons=[ {
+          "button_text" : "Light Button",
+          "cta_type" : "link",
+          "ghost_button" : false,
+          "link" : {
+            "no_follow" : false,
+            "open_in_new_tab" : false,
+            "url" : {
+              "href" : "#",
+              "type" : "EXTERNAL"
+            }
+          },
+          "style" : "light"
+        }, {
+          "button_text" : "Light Ghost",
+          "cta_type" : "link",
+          "ghost_button" : true,
+          "link" : {
+            "no_follow" : false,
+            "open_in_new_tab" : false,
+            "url" : {
+              "href" : "#",
+              "type" : "EXTERNAL"
+            }
+          },
+          "style" : "light"
+        } ],
+        styles={
+          "alignment" : {
+            "horizontal_align" : "CENTER"
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=5,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/fancy-image",
+        offset=0,
+        width=12,
+        image={
+          "alt" : "featured-image",
+          "height" : 1024,
+          "loading" : "lazy",
+          "max_height" : 1024,
+          "max_width" : 1024,
+          "size_type" : "auto",
+          "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/featured-image.png",
+          "width" : 1024
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+  {% dnd_column
+    offset=5,
+    width=7,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/fancy-image",
+        offset=0,
+        width=12,
+        image={
+          "alt" : "featured-image",
+          "height" : 1024,
+          "loading" : "lazy",
+          "max_height" : 1024,
+          "max_width" : 1024,
+          "size_type" : "auto",
+          "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/featured-image.png",
+          "width" : 1024
+        },
+        image_style="slider",
+        images=[ {
+          "image" : {
+            "alt" : "gears",
+            "height" : 1024,
+            "loading" : "lazy",
+            "max_height" : 1024,
+            "max_width" : 1024,
+            "size_type" : "auto",
+            "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/gears.png",
+            "width" : 1024
+          }
+        }, {
+          "image" : {
+            "alt" : "storytelling",
+            "height" : 1024,
+            "loading" : "lazy",
+            "max_height" : 1024,
+            "max_width" : 1024,
+            "size_type" : "auto",
+            "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/storytelling.png",
+            "width" : 1024
+          }
+        }, {
+          "image" : {
+            "alt" : "unlock-crm",
+            "height" : 1024,
+            "loading" : "lazy",
+            "max_height" : 1024,
+            "max_width" : 1024,
+            "size_type" : "auto",
+            "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/unlock-crm.png",
+            "width" : 1024
+          }
+        } ]
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section
+  padding={
+    "default" : {
+      "bottom" : "0px",
+      "left" : "0px",
+      "right" : "0px",
+      "top" : "0px"
+    }
+  },
+  full_width=true
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/hero",
+        offset=0,
+        width=12,
+        background_options={
+          "background_style" : "video",
+          "background_video" : {
+            "use_file" : true,
+            "videoplayer" : {
+              "height" : 2160,
+              "player_id" : 151773190981,
+              "player_type" : "hsvideo2",
+              "width" : 3840
+            }
+          },
+          "overlay" : true
+        },
+        content={
+          "buttons" : [ {
+            "button_text" : "Click Here",
+            "ghost_button" : false,
+            "link" : {
+              "no_follow" : false,
+              "open_in_new_tab" : false,
+              "url" : {
+                "href" : "#",
+                "type" : "EXTERNAL"
+              }
+            },
+            "style" : "secondary"
+          } ],
+          "content" : "Some video hero content text.",
+          "title" : "Video Hero Section"
+        },
+        styles={
+          "module_styles" : {
+            "spacing" : {
+              "padding" : {
+                "bottom" : {
+                  "units" : "px",
+                  "value" : 80
+                },
+                "left" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "right" : {
+                  "units" : "px",
+                  "value" : 30
+                },
+                "top" : {
+                  "units" : "px",
+                  "value" : 80
+                }
+              }
+            }
+          },
+          "overlay_styles" : {
+            "color" : {
+              "color" : "#ff8552",
+              "opacity" : 90
+            }
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section
+  background_color="rgba(126, 147, 167, 0.1)",
+  full_width=false,
+  max_width=1240,
+  padding={
+    "default" : {
+      "bottom" : "40px",
+      "top" : "40px"
+    }
+  }
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/logo-section",
+        offset=0,
+        width=12,
+        logos=[ {
+          "alt" : "fake-logo-1",
+          "height" : 768,
+          "loading" : "lazy",
+          "max_height" : 768,
+          "max_width" : 768,
+          "size_type" : "auto",
+          "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/fake-logo-1.png",
+          "width" : 768
+        }, {
+          "alt" : "fake-logo (3)",
+          "height" : 768,
+          "loading" : "lazy",
+          "max_height" : 768,
+          "max_width" : 768,
+          "size_type" : "auto",
+          "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/fake-logo%20(3).png",
+          "width" : 768
+        }, {
+          "alt" : "fake-logo (1)",
+          "height" : 768,
+          "loading" : "lazy",
+          "max_height" : 768,
+          "max_width" : 768,
+          "size_type" : "auto",
+          "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/fake-logo%20(1).png",
+          "width" : 768
+        }, {
+          "alt" : "fake-logo (2)",
+          "height" : 768,
+          "loading" : "lazy",
+          "max_height" : 768,
+          "max_width" : 768,
+          "size_type" : "auto",
+          "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/fake-logo%20(2).png",
+          "width" : 768
+        }, {
+          "alt" : "fake-logo",
+          "height" : 768,
+          "loading" : "lazy",
+          "max_height" : 768,
+          "max_width" : 768,
+          "size_type" : "auto",
+          "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/fake-logo.png",
+          "width" : 768
+        } ],
+        responsive_settings={
+          "desktop_items" : 5,
+          "mobile_items" : 1,
+          "tablet_items" : 3
+        },
+        slider_options={
+          "autoplay" : true,
+          "loop" : true,
+          "show_dots" : false
+        },
+        style={
+          "image_style" : "grayscale"
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section
+  padding={
+    "default" : {
+      "bottom" : "0px",
+      "left" : "0px",
+      "right" : "0px",
+      "top" : "0px"
+    }
+  },
+  full_width=true
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/map",
+        offset=0,
+        width=12
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/pricing",
+        offset=0,
+        width=12,
+        cards=[ {
+          "cta_text" : "Buy Now",
+          "description" : "A little bit about this product.",
+          "features" : [ "Feature one", "Feature two", "Feature three" ],
+          "price" : "$80",
+          "product" : "Product Title",
+          "rate" : "hourly",
+          "title" : "Something You Need",
+          "waitlist" : false
+        }, {
+          "cta_text" : "Buy Now",
+          "description" : "A little bit about this product.",
+          "features" : [ "Feature one", "Feature two", "Feature three" ],
+          "price" : "$99",
+          "product" : "Another Title",
+          "rate" : "hourly",
+          "title" : "Something Else to Consider",
+          "waitlist" : false
+        }, {
+          "cta_text" : "Buy Now",
+          "description" : "A little bit about this product.",
+          "features" : [ "Feature one", "Feature two", "Feature three" ],
+          "price" : "$80",
+          "product" : "Product Title",
+          "rate" : "hourly",
+          "title" : "Something You Need",
+          "waitlist" : false
+        } ]
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/progress-bar",
+        offset=0,
+        width=12,
+        progress_percent=20,
+        style={
+          "bar_color" : {
+            "color" : "#85FFC7",
+            "opacity" : 100
+          },
+          "progress_color" : {
+            "color" : "#297373",
+            "opacity" : 100
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/progress-bar",
+        offset=0,
+        width=12,
+        calculate=true,
+        display_number_type="number",
+        goal_amount=500,
+        goal_label="Goal",
+        progress_percent=20,
+        raised_amount=250,
+        raised_label="Raised",
+        style={
+          "bar_color" : {
+            "color" : "#85FFC7",
+            "opacity" : 100
+          },
+          "progress_color" : {
+            "color" : "#297373",
+            "opacity" : 100
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/resources",
+        offset=0,
+        width=12,
+        limit=3,
+        listing_options={
+          "allow_filter" : false
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/stat-blocks",
+        offset=0,
+        width=12,
+        stat_blocks=[ {
+          "background_color" : {
+            "color" : "#E6E6E6",
+            "opacity" : 0
+          },
+          "content" : "About this stat.",
+          "number" : 8,
+          "prefix" : "$"
+        }, {
+          "background_color" : {
+            "color" : "#E6E6E6",
+            "opacity" : 0
+          },
+          "content" : "About this stat.",
+          "number" : 80,
+          "prefix" : "",
+          "suffix" : "%"
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 0
+          },
+          "content" : "About this stat.",
+          "number" : 99,
+          "prefix" : ""
+        } ]
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/team",
+        offset=0,
+        width=12,
+        limit=3,
+        source="default"
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=740
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/testimonials",
+        offset=0,
+        width=12,
+        layout_style="card",
+        quote={
+          "company" : {
+            "company_name" : "BridgeRev",
+            "logo" : {
+              "alt" : "bridgerev logo orange icon white text",
+              "height" : 98,
+              "loading" : "lazy",
+              "max_height" : 98,
+              "max_width" : 170,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/bridgerev%20logo%20orange%20icon%20white%20text.png",
+              "width" : 170
+            }
+          },
+          "content" : "This is one of my favorite things I've ever built.",
+          "image" : {
+            "alt" : "profile-upload-Jan-01-2024-06-27-30-7396-PM",
+            "height" : 1422,
+            "loading" : "lazy",
+            "max_height" : 1422,
+            "max_width" : 800,
+            "size_type" : "auto",
+            "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/uploads/profile-upload-Jan-01-2024-06-27-30-7396-PM.jpeg",
+            "width" : 800
+          },
+          "person" : "Erin Wiggers"
+        },
+        style={
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "border_radius" : 20,
+          "logo_style" : "grayscale",
+          "person_font" : {
+            "color" : "#ff8552"
+          },
+          "quote_font" : {
+            "color" : "#110B11",
+            "size" : 28
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/testimonials",
+        offset=0,
+        width=12,
+        layout_style="slider",
+        quote={
+          "company" : {
+            "company_name" : "BridgeRev",
+            "logo" : {
+              "alt" : "bridgerev logo orange icon white text",
+              "height" : 98,
+              "loading" : "lazy",
+              "max_height" : 98,
+              "max_width" : 170,
+              "size_type" : "auto",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/bridgerev%20logo%20orange%20icon%20white%20text.png",
+              "width" : 170
+            }
+          },
+          "content" : "This is one of my favorite things I've ever built.",
+          "image" : {
+            "alt" : "profile-upload-Jan-01-2024-06-27-30-7396-PM",
+            "height" : 1422,
+            "loading" : "lazy",
+            "max_height" : 1422,
+            "max_width" : 800,
+            "size_type" : "auto",
+            "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/uploads/profile-upload-Jan-01-2024-06-27-30-7396-PM.jpeg",
+            "width" : 800
+          },
+          "person" : "Erin Wiggers"
+        },
+        slider_options={
+          "autoplay" : true,
+          "show_dots" : true,
+          "show_nav" : true
+        },
+        slides=[ {
+          "company_name" : "BridgeRev",
+          "content" : "This theme is so dope!",
+          "person" : "Erin Wiggers"
+        }, {
+          "company_name" : "BridgeRev",
+          "content" : "BridgeRev's theme is the best one in the marketplace.",
+          "person" : "Max Bevan"
+        } ],
+        style={
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "border_radius" : 20,
+          "logo_style" : "grayscale",
+          "person_font" : {
+            "color" : "#ff8552"
+          },
+          "quote_font" : {
+            "color" : "#110B11",
+            "size" : 28
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/timeline",
+        offset=0,
+        width=12,
+        items=[ {
+          "content" : "Here's what was going on during this time.",
+          "title" : "BridgeCore begins development",
+          "year" : 2023
+        }, {
+          "content" : "Here's what happened this year when we launched.",
+          "title" : "BridgeCore goes live!",
+          "year" : 2024
+        } ]
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+{% dnd_section 
+  full_width=false,
+  max_width=740
+%}
+  {% dnd_column
+    offset=0,
+    width=12
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/video",
+        offset=0,
+        width=12,
+        custom_thumbnail=true,
+        style={
+          "border_radius" : 20,
+          "play_icon" : {
+            "icon_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 70
+            },
+            "icon_hover_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            }
+          }
+        },
+        thumbnail={
+          "custom_play_icon" : false,
+          "thumbnail_image" : {
+            "alt" : "bridgecore-cover",
+            "height" : 1116,
+            "loading" : "lazy",
+            "max_height" : 1116,
+            "max_width" : 1674,
+            "size_type" : "auto",
+            "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/bridgecore-cover.jpg",
+            "width" : 1674
+          }
+        },
+        video={
+          "use_file" : true,
+          "video_url" : {
+            "no_follow" : false,
+            "open_in_new_tab" : false,
+            "url" : {
+              "href" : "#",
+              "type" : "EXTERNAL"
+            }
+          },
+          "videoplayer" : {
+            "height" : 360,
+            "player_id" : 151772345948,
+            "player_type" : "hsvideo2",
+            "width" : 640
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}
+
+
+  
+{% end_dnd_area %}
+{% endblock body %}

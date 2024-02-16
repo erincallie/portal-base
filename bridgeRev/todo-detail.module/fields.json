@@ -1,0 +1,82 @@
+[ {
+  "id" : "8d2e5824-87c1-dd3f-c0dc-c0106d4b8007",
+  "name" : "section",
+  "display_width" : null,
+  "label" : "Section",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : 1,
+    "max" : null,
+    "sorting_label_field" : "6fd317a6-32f2-4f7d-02af-6e9efce74193",
+    "default" : 1
+  },
+  "children" : [ {
+    "id" : "6fd317a6-32f2-4f7d-02af-6e9efce74193",
+    "name" : "title",
+    "display_width" : null,
+    "label" : "Title",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text",
+    "default" : "Title"
+  }, {
+    "id" : "caf75e28-6d7c-6587-5caa-978e38d89740",
+    "name" : "content",
+    "display_width" : null,
+    "label" : "Content",
+    "required" : false,
+    "locked" : false,
+    "type" : "richtext",
+    "default" : "<p>Default text area</p>"
+  }, {
+    "id" : "3d7fce99-b375-48c7-fff9-a430c705a5db",
+    "name" : "properties",
+    "display_width" : null,
+    "label" : "Properties",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : 1,
+      "max" : null,
+      "sorting_label_field" : "75c44f76-043d-8f5c-1ff3-a838a84f4d4d",
+      "default" : 1
+    },
+    "children" : [ {
+      "id" : "75c44f76-043d-8f5c-1ff3-a838a84f4d4d",
+      "name" : "to_do_property",
+      "display_width" : null,
+      "label" : "To Do Property",
+      "required" : false,
+      "locked" : false,
+      "object_type" : "p_myhometodos",
+      "type" : "crmobjectproperty",
+      "default" : {
+        "property" : "to_do_notes"
+      }
+    } ],
+    "tab" : "CONTENT",
+    "expanded" : false,
+    "type" : "group",
+    "default" : [ {
+      "to_do_property" : {
+        "property" : "to_do_notes"
+      }
+    } ]
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ {
+    "title" : "Title",
+    "content" : "<p>Default text area</p>",
+    "properties" : [ {
+      "to_do_property" : {
+        "property" : "to_do_notes"
+      }
+    } ]
+  } ]
+} ]

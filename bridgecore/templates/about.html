@@ -1,0 +1,16 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: About
+  screenshotPath: ../images/template-previews/bc-about.png
+-->
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+{% dnd_area "dnd_area"
+  label="Main section",
+  class="body-container body-container--about"
+%}
+
+{% end_dnd_area %}
+{% endblock body %}

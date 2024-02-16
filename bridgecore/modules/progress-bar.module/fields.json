@@ -1,0 +1,237 @@
+[ {
+  "id" : "d6aaccb6-6622-a80b-f3e5-52b445d8110f",
+  "name" : "style",
+  "display_width" : null,
+  "label" : "Style",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "62aaaf3d-819f-2beb-6715-e6c117638e79",
+    "name" : "spacing",
+    "display_width" : null,
+    "label" : "Spacing",
+    "required" : false,
+    "locked" : false,
+    "type" : "spacing",
+    "default" : { }
+  }, {
+    "id" : "13a2473a-adee-2447-6365-5f27a359f332",
+    "name" : "border",
+    "display_width" : null,
+    "label" : "Border",
+    "required" : false,
+    "locked" : false,
+    "allow_custom_border_sides" : false,
+    "type" : "border",
+    "default" : { }
+  }, {
+    "id" : "04d3920f-c014-0821-4197-044c00e90f4a",
+    "name" : "border_radius",
+    "display_width" : null,
+    "label" : "Border Radius",
+    "required" : false,
+    "locked" : false,
+    "display" : "text",
+    "step" : 1,
+    "suffix" : "px",
+    "type" : "number",
+    "default" : 24
+  }, {
+    "id" : "cc147164-15c6-c4be-f055-e39f6c6b5c7c",
+    "name" : "bar_color",
+    "display_width" : null,
+    "label" : "Bar Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : null,
+      "opacity" : null
+    }
+  }, {
+    "id" : "3fff5b9d-692a-104e-cac0-540220fb8ebc",
+    "name" : "progress_color",
+    "display_width" : null,
+    "label" : "Progress Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : null,
+      "opacity" : null
+    }
+  }, {
+    "id" : "b923af8b-9871-085c-6e02-7ef8db35ebc5",
+    "name" : "raised_amount_font",
+    "display_width" : null,
+    "label" : "Raised Amount Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : { }
+  }, {
+    "id" : "1bc3d9b8-4b73-ecee-6ba8-0dac6fe88687",
+    "name" : "goal_amount_font",
+    "display_width" : null,
+    "label" : "Goal Amount Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : { }
+  }, {
+    "id" : "e5c30c9e-26a4-16b2-16db-1c2af0d4f738",
+    "name" : "label_font",
+    "display_width" : null,
+    "label" : "Label Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : { }
+  } ],
+  "tab" : "STYLE",
+  "expanded" : false,
+  "type" : "group",
+  "default" : {
+    "spacing" : { },
+    "border" : { },
+    "border_radius" : 24,
+    "bar_color" : {
+      "color" : null,
+      "opacity" : null
+    },
+    "progress_color" : {
+      "color" : null,
+      "opacity" : null
+    },
+    "raised_amount_font" : { },
+    "goal_amount_font" : { },
+    "label_font" : { }
+  }
+}, {
+  "id" : "d0f14e3c-f09e-d8bd-c5bb-d40bf347347f",
+  "name" : "display_number_type",
+  "display_width" : null,
+  "label" : "Display Number Type",
+  "required" : false,
+  "locked" : false,
+  "display" : "select",
+  "choices" : [ [ "money", "Money" ], [ "number", "Number" ] ],
+  "multiple" : false,
+  "reordering_enabled" : true,
+  "preset" : null,
+  "type" : "choice",
+  "default" : "money"
+}, {
+  "id" : "86604831-f8db-b6e3-dcdd-44097ab4de2b",
+  "name" : "progress_percent",
+  "display_width" : null,
+  "label" : "Progress Percent",
+  "required" : false,
+  "locked" : false,
+  "visibility" : {
+    "controlling_field" : null,
+    "controlling_field_path" : "calculate",
+    "controlling_value_regex" : "true",
+    "property" : null,
+    "operator" : "NOT_EQUAL",
+    "access" : null
+  },
+  "display" : "slider",
+  "min" : 0,
+  "max" : 100,
+  "step" : 1,
+  "suffix" : "%",
+  "type" : "number",
+  "default" : 0
+}, {
+  "id" : "4ff712b0-1b06-113f-0a69-35c480417a19",
+  "name" : "calculate",
+  "display_width" : null,
+  "label" : "Calculate",
+  "required" : false,
+  "locked" : false,
+  "display" : "toggle",
+  "type" : "boolean",
+  "default" : false
+}, {
+  "id" : "c29afce4-e7cb-dde9-dd1c-d0f34e7539bb",
+  "name" : "goal_label",
+  "display_width" : null,
+  "label" : "Goal Label",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "visibility" : {
+    "controlling_field" : null,
+    "controlling_field_path" : "calculate",
+    "controlling_value_regex" : "true",
+    "property" : null,
+    "operator" : "EQUAL",
+    "access" : null
+  },
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text"
+}, {
+  "id" : "399194e6-1359-fa20-bc65-9b9d9069ed2b",
+  "name" : "goal_amount",
+  "display_width" : null,
+  "label" : "Goal Amount",
+  "required" : false,
+  "locked" : false,
+  "visibility" : {
+    "controlling_field" : null,
+    "controlling_field_path" : "calculate",
+    "controlling_value_regex" : "true",
+    "property" : null,
+    "operator" : "EQUAL",
+    "access" : null
+  },
+  "display" : "text",
+  "step" : 1,
+  "prefix" : "",
+  "suffix" : "",
+  "type" : "number"
+}, {
+  "id" : "34ea0e8d-1c96-6420-6a15-792e1b081dd1",
+  "name" : "raised_label",
+  "display_width" : null,
+  "label" : "Raised Label",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "visibility" : {
+    "controlling_field" : null,
+    "controlling_field_path" : "calculate",
+    "controlling_value_regex" : "true",
+    "property" : null,
+    "operator" : "EQUAL",
+    "access" : null
+  },
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text"
+}, {
+  "id" : "cf74df47-03f0-a8d2-2e41-64400c730406",
+  "name" : "raised_amount",
+  "display_width" : null,
+  "label" : "Raised Amount",
+  "required" : false,
+  "locked" : false,
+  "visibility" : {
+    "controlling_field" : null,
+    "controlling_field_path" : "calculate",
+    "controlling_value_regex" : "true",
+    "property" : null,
+    "operator" : "EQUAL",
+    "access" : null
+  },
+  "display" : "text",
+  "step" : 1,
+  "prefix" : "",
+  "suffix" : "",
+  "type" : "number"
+} ]

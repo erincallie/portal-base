@@ -1,0 +1,233 @@
+/* Colors */
+
+{% set primary_color = theme.global_colors.primary_color.color  %}
+{% set secondary_color = theme.global_colors.secondary_color.color %}
+{% set tertiary_color = theme.global_colors.tertiary_color.color %}
+{% set light_color = theme.global_colors.light_color.color %}
+{% set dark_color = theme.global_colors.dark_color.color %}
+
+body {
+  --primary-color: {{ primary_color }};
+  --secondary-color:  {{ secondary_color }};
+  --tertiary-color:  {{ tertiary_color }};
+  --light-color:  {{ light_color }};
+  --dark-color:  {{ dark_color }};
+  --light-shadow: 0px 0px 10px -6px rgba(0, 0, 0, 0.10);
+  --dark-shadow: 0px 0px 20px -6px rgba(0,0,0,.2);
+}
+
+{% set button_styles = {
+  'primary': {
+    'color': theme.button_styles.primary_button.default.text_color.color,
+    'background-color': theme.button_styles.primary_button.default.background_color.color,
+    'border-color': theme.button_styles.primary_button.default.border_color.color
+  },
+  'primary-hover': {
+    'color': theme.button_styles.primary_button.hovered.text_color.color,
+    'background-color': theme.button_styles.primary_button.hovered.background_color.color,
+    'border-color': theme.button_styles.primary_button.hovered.border_color.color
+  },
+  'secondary': {
+    'color': theme.button_styles.secondary_button.default.text_color.color,
+    'background-color': theme.button_styles.secondary_button.default.background_color.color,
+    'border-color': theme.button_styles.secondary_button.default.border_color.color
+  },
+  'secondary-hover': {
+    'color': theme.button_styles.secondary_button.hovered.text_color.color,
+    'background-color': theme.button_styles.secondary_button.hovered.background_color.color,
+    'border-color': theme.button_styles.secondary_button.hovered.border_color.color
+  },
+  'tertiary': {
+    'color': theme.button_styles.tertiary_button.default.text_color.color,
+    'background-color': theme.button_styles.tertiary_button.default.background_color.color,
+    'border-color': theme.button_styles.tertiary_button.default.border_color.color
+  },
+  'tertiary-hover': {
+    'color': theme.button_styles.tertiary_button.hovered.text_color.color,
+    'background-color': theme.button_styles.tertiary_button.hovered.background_color.color,
+    'border-color': theme.button_styles.tertiary_button.hovered.border_color.color
+  },
+  'light': {
+    'color': theme.button_styles.light_button.default.text_color.color,
+    'background-color': theme.button_styles.light_button.default.background_color.color,
+    'border-color': theme.button_styles.light_button.default.border_color.color
+  },
+  'light-hover': {
+    'color': theme.button_styles.light_button.hovered.text_color.color,
+    'background-color': theme.button_styles.light_button.hovered.background_color.color,
+    'border-color': theme.button_styles.light_button.hovered.border_color.color
+  },
+   'dark': {
+      'color': theme.button_styles.dark_button.default.text_color.color,
+      'background-color': theme.button_styles.dark_button.default.background_color.color,
+      'border-color': theme.button_styles.dark_button.default.border_color.color
+    },
+    'dark-hover': {
+      'color': theme.button_styles.dark_button.hovered.text_color.color,
+      'background-color': theme.button_styles.dark_button.hovered.background_color.color,
+      'border-color': theme.button_styles.dark_button.hovered.border_color.color
+    }
+} %}
+
+.button:not(.no-button), .hs-button:not(.no-button), .cta_button:not(.no-button) {
+  {% if theme.button_styles.general.uppercase == "true" %}text-transform: uppercase;{% endif %}
+  {% if theme.button_styles.general.letter_spacing != "0" %}letter-spacing: {{ theme.button_styles.general.letter_spacing }}px;{% endif %}
+  {% if theme.button_styles.general.button_font %}{{ theme.button_styles.general.button_font.css }}{% endif %}
+}
+
+{% macro get_button(target, button_option, button_style) %}
+  {% if button_style.split("_")|last == "outline" %}
+    {% set base = button_styles[button_style.split("_")|first] %}
+    {{ target }} .button.button--{{ button_option }},
+    {{ target }} .hs-button.button--{{ button_option }},
+    {{ target }} .cta_button.button--{{ button_option }} {
+      background-color: transparent !important;
+      color: {{ base["border-color"] }};
+      border-color: {{ base["border-color"] }};
+    }
+    {{ target }} .button.button--{{ button_option }}:hover,
+    {{ target }} .hs-button.button--{{ button_option }}:hover,
+    {{ target }} .cta_button.button--{{ button_option }}:hover {
+      color: {{ base["color"] }};
+      border-color: {{ base["border-color"] }};
+      background-color: {{ base["border-color"] }} !important;
+    }
+  {% else %}
+    {% set base = button_styles[button_style] %}
+    {% set hover = button_styles[button_style + "-hover"] %}
+    {{ target }} .button.button--{{ button_option }},
+    {{ target }} .hs-button.button--{{ button_option }},
+    {{ target }} .cta_button.button--{{ button_option }} {
+      background-color: {{ base["background-color"] }} !important;
+      color: {{ base["color"] }};
+      border-color: {{ base["border-color"] }};
+    }
+    {{ target }} .button.button--{{ button_option }}:hover,
+    {{ target }} .hs-button.button--{{ button_option }}:hover,
+    {{ target }} .cta_button.button--{{ button_option }}:hover {
+      background-color: {{ hover["background-color"] }} !important;
+      color: {{ hover["color"] }};
+      border-color: {{ hover["border-color"] }};
+    }
+  {% endif %}
+{% endmacro %}
+
+.button.button--{{ button_option }}:hover,
+.hs-button.button--{{ button_option }}:hover,
+.cta_button.button--{{ button_option }}:hover {
+  background-color: {{ hover["background-color"] }} !important;
+  color: {{ hover["color"] }};
+  border-color: {{ hover["border-color"] }};
+}
+.funraise-button.button--{{ button_option }}:hover {
+  background-color: {{ hover["background-color"] }} !important;
+  color: {{ hover["color"] }} !important;
+  border-color: {{ hover["border-color"] }} !important;
+}
+
+{% macro build_button(target, button_style) %}
+  {% if button_style.split("_")|last == "outline" %}
+    {% set base = button_styles[button_style.split("_")|first] %}
+    {{ target }} {
+      background-color: transparent !important;
+      color: {{ base["border-color"] }};
+      border-color: {{ base["border-color"] }};
+    }
+    {{ target }}:hover {
+      color: {{ base["color"] }};
+      border-color: {{ base["border-color"] }};
+      background-color: {{ base["border-color"] }} !important;
+    }
+  {% else %}
+    {% set base = button_styles[button_style] %}
+    {% set hover = button_styles[button_style + "-hover"] %}
+    {{ target }} {
+      background-color: {{ base["background-color"] }} !important;
+      color: {{ base["color"] }};
+      border-color: {{ base["border-color"] }};
+    }
+    {{ target }}:hover {
+      background-color: {{ hover["background-color"] }} !important;
+      color: {{ hover["color"] }};
+      border-color: {{ hover["border-color"] }};
+    }
+  {% endif %}
+{% endmacro %}
+
+{{ build_button("form input[type='submit']", theme.forms.submit_button_style) }}
+
+  {% for key, val in button_styles.items() %}
+    {% set style = key.split('-', 2)[0] %}
+    {% set options = val %}
+    {% if key.split('-', 2)[1] == 'hover' %}
+      .button.button--{{ style }}:hover,
+      .hs-button.button--{{ style }}:hover,
+      .cta_button.button--{{ style }}:hover {
+        {% for property, value in options.items() %}
+          {{ property }}: {{ value }};
+        {% endfor %}
+      }
+      .funraise-button.button--{{ style }}:hover {
+        {% for property, value in options.items() %}
+          {{ property }}: {{ value }} !important;
+        {% endfor %}
+      }
+      .button.button--{{ style }}.button--ghost:hover,
+      .hs-button.button--{{ style }}.button--ghost:hover,
+      .cta_button.button--{{ style }}.button--ghost:hover {
+        {% for property, value in options.items() %}
+          {% if property == 'border-color' %}
+            border-color: {{ value }};
+            background-color: {{ value }} !important;
+          {% endif %}
+          {% if property == 'color' %}
+            color: {{ value }};
+          {% endif %}
+        {% endfor %} 
+      }
+      .funraise-button.button--{{ style }}.button--ghost:hover {
+        {% for property, value in options.items() %}
+          {% if property == 'border-color' %}
+            border-color: {{ value }} !important;
+            background-color: {{ value }} !important;
+          {% endif %}
+          {% if property == 'color' %}
+            color: {{ value }} !important;
+          {% endif %}
+        {% endfor %} 
+      }
+    {% else %}
+      .button.button--{{ style }},
+      .hs-button.button--{{ style }},
+      .cta_button.button--{{ style }} {
+        {% for property, value in options.items() %}
+          {{ property }}: {{ value }};
+        {% endfor %}
+      }
+      .funraise-button.button--{{ style }} {
+        {% for property, value in options.items() %}
+          {{ property }}: {{ value }} !important;
+        {% endfor %}
+      }
+      .button.button--{{ style }}.button--ghost,
+      .hs-button.button--{{ style }}.button--ghost,
+      .cta_button.button--{{ style }}.button--ghost {
+          background-color: transparent !important;
+          {% for property, value in options.items() %}
+            {% if property == 'background-color' %}
+              color: {{ value }};
+              border-color: {{ value }};
+            {% endif %}
+          {% endfor %}
+      }
+      .funraise-button.button--{{ style }}.button--ghost {
+          background-color: transparent !important;
+          {% for property, value in options.items() %}
+            {% if property == 'background-color' %}
+              color: {{ value }} !important;
+              border-color: {{ value }} !important;
+            {% endif %}
+          {% endfor %}
+      }
+    {% endif %}
+  {% endfor %}

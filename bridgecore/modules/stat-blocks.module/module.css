@@ -1,0 +1,5 @@
+@media screen and (max-width: 767px) {
+  .stat-block__inner {
+    text-align: center;
+  }
+}

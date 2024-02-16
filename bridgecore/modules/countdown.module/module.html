@@ -1,0 +1,187 @@
+{% set module_name = "countdown" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set target_date = module.target_date_time|format_datetime('MM/dd/YYYY hh:mm a') %}
+
+<div id="{{ name }}" class="{{ module_name }} {{ module_name }}--{{ module.countdown_style }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row">
+      <div id="{{ name }}__countdown"></div>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+   
+  #{{ name }}__countdown {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #{{ name }}__countdown .block-wrap {
+    text-align: center;
+  }
+  
+  .{{ module_name }}--default #{{ name }}__countdown .block-wrap {
+    width: 4rem;
+  }
+  
+  #{{ name }}__countdown > * {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+      
+  #{{ name }}__countdown > * > *:last-child {
+    margin-top: 20px;
+    {{ module.style.label_font.css }}
+  }
+  
+  #{{ name }}__countdown > * > *:first-child > * {
+    {{ module.style.number_font.css }}
+  }
+  
+  .{{ module_name }}--blocks #{{ name }}__countdown .number-block {
+    display: inline-block;
+    padding: 1rem;
+    background-color: {{ module.style.background_color.css }};
+    {% set border_radius = module.style.border_radius/2 + "px" %}
+    {{ borderRadius(border_radius) }}
+  }
+  
+  .{{ module_name }}--blocks #{{ name }}__countdown .number-block + * {
+    margin-left: 10px;
+  }
+  
+  .{{ module_name }}--default #{{ name }}__countdown .number-wrap {
+    position: relative; 
+  }
+  
+  .{{ module_name }}--default #{{ name }}__countdown .block-wrap + .block-wrap .number-wrap:before,
+  .{{ module_name }}--default #{{ name }}__countdown .block-wrap + .block-wrap .number-wrap:after {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--dark-color);
+  }
+  
+  .{{ module_name }}--default #{{ name }}__countdown .block-wrap + .block-wrap .number-wrap:before {
+    top: calc(50% - 10px);
+  }
+  
+  .{{ module_name }}--default #{{ name }}__countdown .block-wrap + .block-wrap .number-wrap:after {
+    top: calc(50% + 6px);
+  }
+  
+  @media screen and (min-width: 900px) {
+    .{{ module_name }}--blocks #{{ name }}__countdown .number-block {
+      padding: 2rem;
+    }
+    .{{ module_name }}--blocks #{{ name }}__countdown .number-block {
+      {% set border_radius = module.style.border_radius + "px" %}
+      {{ borderRadius(border_radius) }}
+    }
+  }
+  
+  .{{ module_name }}--default #{{ name }}__countdown .block-wrap + * {
+    margin-left: 50px;
+  }
+  .{{ module_name }}--blocks #{{ name }}__countdown .block-wrap + * {
+    margin-left: 30px;
+  }
+
+</style>
+{% end_require_css %}
+
+{% require_js %}
+<script>
+  $(function() {
+    const init_countdown = function() {
+      CountDownTimer(`{{ target_date }}`, `{{ name }}__countdown`);
+      function CountDownTimer(dt, id) {
+        var end = new Date(dt);
+
+        var _second = 1000;
+        var _minute = _second * 60;
+        var _hour = _minute * 60;
+        var _day = _hour * 24;
+        var timer;
+
+        function showRemaining() {
+          var now = new Date();
+          var distance = end - now;
+          if (distance < 0) {
+
+            clearInterval(timer);
+            document.getElementById(id).innerHTML = 'EXPIRED!';
+
+            return;
+          }
+          var days = (Math.floor(distance / _day)).toString();
+          var hours = (Math.floor((distance % _day) / _hour)).toString();
+          var minutes = (Math.floor((distance % _hour) / _minute)).toString();
+          var seconds = (Math.floor((distance % _minute) / _second)).toString();
+          
+          let days_el = "";
+          let hours_el = "";
+          let mins_el = "";
+          let secs_el = "";
+          
+          for ( let i=0; i < days.length; i++ ) {
+            if (days.length < 2) {
+              days_el += `<span class="number-block">0</span>`
+            }
+            days_el += `<span class="number-block">${days[i]}</span>`
+          }
+          for ( let i=0; i < hours.length; i++ ) {
+            if (hours.length < 2) {
+              hours_el += `<span class="number-block">0</span>`
+            }
+            hours_el += `<span class="number-block">${hours[i]}</span>`
+          }
+          for ( let i=0; i < minutes.length; i++ ) {
+            if (minutes.length < 2) {
+              mins_el += `<span class="number-block">0</span>`
+            }
+            mins_el += `<span class="number-block">${minutes[i]}</span>`
+          }
+          for ( let i=0; i < seconds.length; i++ ) {
+            if (seconds.length < 2) {
+              secs_el += `<span class="number-block">0</span>`
+            }
+            secs_el += `<span class="number-block">${seconds[i]}</span>`
+          }
+          
+          let days_html = `<span class="block-wrap"><span class='number-wrap'>${days_el}</span><span class="text-block">days</span></span>`;
+          let hours_html = `<span class="block-wrap"><span class='number-wrap'>${hours_el}</span><span class="text-block">hours</span></span>`;
+          let mins_html = `<span class="block-wrap"><span class='number-wrap'>${mins_el}</span><span class="text-block">minutes</span></span>`;
+          let secs_html = `<span class="block-wrap"><span class='number-wrap'>${secs_el}</span><span class="text-block">seconds</span></span>`;
+
+          document.getElementById(id).innerHTML = days_html;
+          document.getElementById(id).innerHTML += hours_html;
+          document.getElementById(id).innerHTML += mins_html;
+          document.getElementById(id).innerHTML += secs_html;
+        }
+        timer = setInterval(showRemaining, 1000);
+        //showRemaining();
+      }
+    };
+    init_countdown();
+  });
+</script>
+{% end_require_js %}

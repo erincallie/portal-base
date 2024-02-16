@@ -1,0 +1,50 @@
+<div id="{{ name }}" class="inpage-nav {{ "sticky" if module.style.sticky == "true" }}">
+  <div class="inpage-nav__container">
+    <div class="inpage-nav__row">
+      <nav>
+        <ul>
+          {% for item in module.nav_items %}
+            <li>
+              {% set attr_name = "data-target" if item.nav_target is string_containing "." or item.nav_target is string_containing "*" else "href" %}
+              {% set full_attr = attr_name + "='" + item.nav_target + "'" %}
+              <a {{ full_attr }}>{{ item.nav_label }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+  #{{ name }} {
+    background: {{ module.style.background_color.css }};
+    {{ module.style.spacing.css }}
+  }
+  
+  #{{ name }} ul li a {
+    {{ module.style.default_font.css }}
+  }
+  
+  #{{ name }} ul li:hover a {
+    {{ module.style.hover_font.css }}
+  }
+  
+  .dnd-section.sticky-section {
+    position: sticky;
+    top: {{ module.style.top_offset or "100" }}px;
+    z-index: 99999;
+  }
+  
+  @media screen and (max-width: 1100px) {
+    .dnd-section.sticky-section {
+      position: sticky;
+      top: {{ module.style.top_offset_mobile or "70" }}px;
+      z-index: 99999;
+    }
+  }
+
+</style>
+{% end_require_css %}

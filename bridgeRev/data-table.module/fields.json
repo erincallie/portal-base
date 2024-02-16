@@ -1,0 +1,136 @@
+[ {
+  "id" : "c6deeea1-306a-cf2c-ae7a-ae418e2c9d37",
+  "name" : "dynamic_lists",
+  "display_width" : null,
+  "label" : "Dynamic Lists",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "253bcba7-c3be-fe3f-a1c3-dc97c4292d59",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "253bcba7-c3be-fe3f-a1c3-dc97c4292d59",
+    "name" : "object_type",
+    "display_width" : null,
+    "label" : "Object Type",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "ca473ae8-de9f-ae0b-32c3-b35d37e20567",
+    "name" : "list_id",
+    "display_width" : null,
+    "label" : "List ID",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "231dfe12-b4ec-953f-75d8-5d74f75feb2b",
+    "name" : "title",
+    "display_width" : null,
+    "label" : "Title",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "646d7806-b760-f3f3-e629-d66b92acbaac",
+    "name" : "table_headings",
+    "display_width" : null,
+    "label" : "Table Headings",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : "5e7893fd-39d7-3774-537c-ef3e243674f1",
+      "default" : null
+    },
+    "children" : [ {
+      "id" : "5e7893fd-39d7-3774-537c-ef3e243674f1",
+      "name" : "heading_text",
+      "display_width" : null,
+      "label" : "Heading Text",
+      "required" : false,
+      "locked" : false,
+      "validation_regex" : "",
+      "allow_new_line" : false,
+      "show_emoji_picker" : false,
+      "type" : "text"
+    }, {
+      "id" : "fc76633f-9b0e-af9f-b20a-bedb2db6f8c5",
+      "name" : "property_name",
+      "display_width" : null,
+      "label" : "Property Name",
+      "required" : false,
+      "locked" : false,
+      "validation_regex" : "",
+      "allow_new_line" : false,
+      "show_emoji_picker" : false,
+      "type" : "text"
+    } ],
+    "tab" : "CONTENT",
+    "expanded" : false,
+    "type" : "group",
+    "default" : [ ]
+  }, {
+    "id" : "bcfe239d-eeba-a740-75e9-2dc9dfd55897",
+    "name" : "link_text",
+    "display_width" : null,
+    "label" : "Link Text",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "cecbc030-5f0a-1779-c418-31283258b25e",
+    "name" : "link",
+    "display_width" : null,
+    "label" : "Link",
+    "required" : false,
+    "locked" : false,
+    "supported_types" : [ "EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG", "CALL_TO_ACTION", "PHONE_NUMBER", "WHATSAPP_NUMBER", "PAYMENT" ],
+    "show_advanced_rel_options" : false,
+    "type" : "link",
+    "default" : {
+      "url" : {
+        "content_id" : null,
+        "type" : "EXTERNAL",
+        "href" : ""
+      },
+      "open_in_new_tab" : false,
+      "no_follow" : false
+    }
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+}, {
+  "id" : "c3a7ba84-fc3d-1bab-19c9-9a265f7b6c2c",
+  "name" : "source",
+  "display_width" : null,
+  "label" : "Source",
+  "required" : false,
+  "locked" : false,
+  "display" : "select",
+  "choices" : [ [ "page", "Page" ], [ "graphql", "GraphQL" ] ],
+  "multiple" : false,
+  "reordering_enabled" : true,
+  "preset" : null,
+  "type" : "choice",
+  "default" : "page"
+} ]

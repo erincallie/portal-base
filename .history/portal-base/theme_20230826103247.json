@@ -1,0 +1,23 @@
+{
+  "label" : "MyHomeQB",
+  "preview_path" : "./templates/home.html",
+  "screenshot_path" : "./images/template-previews/home.png",
+  "enable_domain_stylesheets" : false,
+  "is_available_for_new_content" : true,
+  "extends" : "@marketplace/kalungicom/atlas-theme",
+  "responsive_breakpoints" : [ {
+    "mediaQuery" : "@media screen and (max-width:767px)",
+    "messages" : { },
+    "name" : "mobile",
+    "previewWidth" : {
+      "units" : "px",
+      "value" : 520
+    }
+  } ],
+  "version" : "7",
+  "author" : {
+    "name" : "",
+    "email" : ""
+  },
+  "hide_all_default_modules" : false
+}

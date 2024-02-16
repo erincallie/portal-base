@@ -1,0 +1,159 @@
+{% set module_name = "flex-cards" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="{{ name }}" class="{{ module_name }} cards--{{ module.card_style }}">
+  <div class="{% if module.style.full_width_section != "true" %}{{ module_name }}__container{% else %}{{ module_name }}_container{% endif %}">
+    <div class="{{ module_name }}__row {{ " equal-height" if module.style.equal_height_cards == "true" }}">
+      {% for item in module.cards %}
+        <div class="{{ module_name }}__card flex-card card--{{ loop.index }} item">
+          <div class="flex-card__inner">
+            <div class="flex-card__wrap">
+              <div class="flex-card__featured">
+              {% if item.featured_image.image.src %}
+                {% set sizeAttrs = 'width="{{ item.featured_image.image.width }}" height="{{ item.featured_image.image.height }}"' %}
+                {% if item.featured_image.image.size_type == 'auto' %}
+                  {% set sizeAttrs = 'width="{{ item.featured_image.image.width }}" height="{{ item.featured_image.image.height }}" style="max-width: 100%; height: auto;"' %}
+                {% elif item.featured_image.image.size_type == 'auto_custom_max' %}
+                  {% set sizeAttrs = 'width="{{ item.featured_image.image.max_width }}" height="{{ item.featured_image.image.max_height }}" style="max-width: 100%; height: auto;"' %}
+                {% endif %}
+                {% set loadingAttr = item.featured_image.image.loading != 'disabled' ? 'loading="{{ item.featured_image.image.loading }}"' : '' %}
+                <img src="{{ item.featured_image.image.src }}" alt="{{ item.featured_image.image.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+              {% endif %}
+            </div>
+            {% if module.card_style == "icons" %}
+              <div class="flex-card__icon">
+                {% if item.icon.image.src %}
+                  {% set sizeAttrs = 'width="{{ item.icon.image.width }}" height="{{ item.icon.image.height }}"' %}
+                  {% if item.icon.image.size_type == 'auto' %}
+                    {% set sizeAttrs = 'width="{{ item.icon.image.width }}" height="{{ item.icon.image.height }}" style="max-width: 100%; height: auto;"' %}
+                  {% elif item.featured_image.image.size_type == 'auto_custom_max' %}
+                    {% set sizeAttrs = 'width="{{ item.icon.image.max_width }}" height="{{ item.icon.image.max_height }}" style="max-width: 100%; height: auto;"' %}
+                  {% endif %}
+                  {% set loadingAttr = item.icon.image.loading != 'disabled' ? 'loading="{{ item.icon.image.loading }}"' : '' %}
+                  <img src="{{ item.icon.image.src }}" alt="{{ item.icon.image.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+            <div class="flex-card__content">
+              <div class="flex-card__title">
+                <h3>{{ item.content.title }}</h3>
+              </div>
+              <div class="flex-card__content-wrap">
+                {{ item.content.content }}
+              </div>
+              <div class="flex-card__content-link">
+                {% set href = item.content.link.url.href %}
+                {% if item.content.link.url.type is equalto "EMAIL_ADDRESS" %}
+                {% set href = "mailto:" + href %}
+                {% endif %}
+                <a href="{{ href }}"
+                   {% if item.content.link.open_in_new_tab %}target="_blank"{% endif %}
+                   {% if item.content.link.rel %}rel="{{ item.content.link.rel }}"{% endif %}
+                   >
+                  {{ item.content.link_text || "Learn More" }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+  {% set object = "#" + name + " ." + module_name + "__row" %}
+  
+  {{ flex_grid(object, 768, module.style.column_number, module.style.vertical_spacing, module.style.horizontal_spacing) }}
+  
+  #{{ name }} .flex-cards__row {
+    {% if module.style.alignment.vertical_align == "MIDDLE" %}align-items: center;{% elif module.style.alignment.vertical_align == "BOTTOM" %}align-items: flex-end;{% elif module.style.alignment.vertical_align == "TOP" %}align-items: flex-start;{% endif %}   
+    {% if module.style.alignment.horizontal_align == "CENTER" %}justify-content: center;{% elif module.style.alignment.horizontal_align == "LEFT" %}justify-content: flex-start;{% elif module.style.alignment.horizontal_align == "RIGHT" %}justify-content: flex-end;{% endif %} 
+  }
+  
+  {% if module.style.horizontal_spacing > 0 and module.style.vertical_spacing > 0 %}
+  #{{ name }} .flex-cards__row > * {
+    {{ borderRadius("8px") }}
+    overflow: hidden;
+  } 
+  {% endif %}
+  
+  #{{ name }} .flex-cards__row > *,
+  #{{ name }} .flex-cards__row .flex-card__icon {
+    {{ transition("all .5s ease-in-out") }}
+  }
+  
+  #{{ name }} .flex-cards__row > *:hover {
+    {{ transform("scale(1.008)") }}
+    {{ boxShadow("var(--dark-shadow)") }}
+  }
+  
+  #{{ name }} .flex-cards__row > *:hover .flex-card__icon {
+    filter: none;
+  }
+  
+  @media screen and (max-width: 767px) {
+    #{{ name }} .flex-cards__row > * + * {
+      margin-top: 30px;
+    } 
+  }
+  
+  {% if module.style.equal_height_cards == "true" %}
+    #{{ name }} .flex-cards__row {
+      align-items: stretch !important;
+    }
+    #{{ name }} .flex-card__inner {
+      height: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+    }
+    #{{ name }} .flex-card__content {
+      position: relative;
+      padding-bottom: 80px;
+      height: 100%;
+      width: 100%;
+    }
+    #{{ name }} .flex-card__content-link {
+      position: absolute;
+      bottom: 30px;
+      width: calc(100% - 60px);
+    }
+  {% endif %}
+  
+  {% for item in module.cards %}
+    #{{ name }} .flex-card.card--{{ loop.index }} {
+      background-color: {{ item.background_color.css }};
+    }
+    #{{ name }} .flex-card.card--{{ loop.index }} .flex-card__icon {
+      background-color: {{ item.icon.background_color.css }};
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    #{{ name }}.cards--color_block .flex-card.card--{{ loop.index }} .flex-card__featured:before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 8px;
+      z-index: 9;
+      background-color: {{ item.featured_image.border_color.css }};
+    }
+  {% endfor %}
+
+</style>
+{% end_require_css %}

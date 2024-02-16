@@ -1,0 +1,34 @@
+<!--
+  templateType: blog_listing
+  isAvailableForNewContent: true
+  label: Blog Listing
+  screenshotPath: ../images/template-previews/bc-blog.png
+-->
+{% set template_css = "../../css/templates/blog.css" %}
+{% extends "./layouts/base.html" %}
+
+{% block body %}
+  {% dnd_area "dnd_area"
+    label="Main section",
+    class="body-container body-container--blog-index"
+  %}
+
+    {% include_dnd_partial path="../sections/hero-banner.html" context={ } %}
+
+    {% include_dnd_partial path="../sections/blog-section.html" context={
+      "limit": 200,
+      "listing_options": {
+        "pagination": true,
+        "per_page_limit": 9,
+        "allow_search": true,
+        "allow_filter": true,
+        "filter_by_tags": true,
+        "filter_by_authors": true
+      }
+    } %}
+
+    {% include_dnd_partial path="../sections/centered-subscribe.html" context={ } %}
+
+
+  {% end_dnd_area %}
+{% endblock body %}

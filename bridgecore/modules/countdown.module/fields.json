@@ -1,0 +1,104 @@
+[ {
+  "id" : "d9e11640-424d-def5-c0cb-a46b7390cc87",
+  "name" : "target_date_time",
+  "display_width" : null,
+  "label" : "Target Date & Time",
+  "required" : false,
+  "locked" : false,
+  "step" : 30,
+  "type" : "datetime"
+}, {
+  "id" : "9cc51ce4-e322-a16a-44a9-e03da8328f89",
+  "name" : "style",
+  "display_width" : null,
+  "label" : "Style",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "5b1dca4e-9caa-b514-acf1-a20b7b648dfa",
+    "name" : "number_font",
+    "display_width" : null,
+    "label" : "Number Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : {
+      "size" : 3,
+      "size_unit" : "rem",
+      "styles" : {
+        "text-decoration" : "none",
+        "font-weight" : "bold",
+        "font-style" : "normal"
+      }
+    }
+  }, {
+    "id" : "9fa098e1-2612-a0cb-d7ca-27ed8e9399cf",
+    "name" : "label_font",
+    "display_width" : null,
+    "label" : "Label Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : {
+      "size" : 22
+    }
+  }, {
+    "id" : "76f2d92e-3bd7-a968-b2a1-17e5e4a177dc",
+    "name" : "background_color",
+    "display_width" : null,
+    "label" : "Background Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : null,
+      "opacity" : null,
+      "rgba" : null,
+      "rgb" : null,
+      "hex" : null
+    }
+  }, {
+    "id" : "0576f85c-f512-5055-480e-62c6bfcdd68f",
+    "name" : "border_radius",
+    "display_width" : null,
+    "label" : "Border Radius",
+    "required" : false,
+    "locked" : false,
+    "display" : "text",
+    "step" : 1,
+    "suffix" : "px",
+    "type" : "number",
+    "default" : 24
+  } ],
+  "tab" : "STYLE",
+  "expanded" : false,
+  "type" : "group",
+  "default" : {
+    "number_font" : {
+      "size" : 3,
+      "size_unit" : "rem",
+      "styles" : {
+        "text-decoration" : "none",
+        "font-weight" : "bold",
+        "font-style" : "normal"
+      }
+    },
+    "border_radius" : 6
+  }
+}, {
+  "id" : "45284b14-4b8b-c8ba-3414-0a629feda6de",
+  "name" : "countdown_style",
+  "display_width" : null,
+  "label" : "Countdown Style",
+  "required" : false,
+  "locked" : false,
+  "display" : "select",
+  "choices" : [ [ "default", "Default" ], [ "blocks", "Blocks" ] ],
+  "multiple" : false,
+  "reordering_enabled" : true,
+  "preset" : null,
+  "type" : "choice",
+  "default" : "default"
+} ]

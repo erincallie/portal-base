@@ -1,0 +1,87 @@
+[ {
+  "id" : "3cb98364-f7bf-1321-ef7c-2918c696cdfa",
+  "name" : "layout_style",
+  "display_width" : null,
+  "label" : "Layout Style",
+  "required" : false,
+  "locked" : false,
+  "display" : "select",
+  "choices" : [ [ "default", "Default" ], [ "numbered", "Numbered" ] ],
+  "multiple" : false,
+  "reordering_enabled" : true,
+  "preset" : null,
+  "type" : "choice",
+  "default" : "default"
+}, {
+  "id" : "e378c9e4-b0ad-df3a-b5e5-c46a6a98b9eb",
+  "name" : "style",
+  "display_width" : null,
+  "label" : "Style",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "f314f160-8187-ed7d-f4fe-9d8f0ddcd52f",
+    "name" : "title_font",
+    "display_width" : null,
+    "label" : "Title Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : { }
+  }, {
+    "id" : "a289fb9a-71d3-fc8a-a718-33fffda60b8a",
+    "name" : "content_font",
+    "display_width" : null,
+    "label" : "Content Font",
+    "required" : false,
+    "locked" : false,
+    "load_external_fonts" : true,
+    "type" : "font",
+    "default" : { }
+  } ],
+  "tab" : "STYLE",
+  "expanded" : false,
+  "type" : "group",
+  "default" : {
+    "title_font" : { },
+    "content_font" : { }
+  }
+}, {
+  "id" : "75b0a349-98c6-1e26-4829-63ac6dd5ab62",
+  "name" : "items",
+  "display_width" : null,
+  "label" : "Items",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "18488f7d-842f-8c4f-96fd-9786e5807b9e",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "18488f7d-842f-8c4f-96fd-9786e5807b9e",
+    "name" : "title",
+    "display_width" : null,
+    "label" : "Title",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "7470e0b3-2df6-7898-42ad-d8c2c5d516aa",
+    "name" : "content",
+    "display_width" : null,
+    "label" : "Content",
+    "required" : false,
+    "locked" : false,
+    "type" : "richtext"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

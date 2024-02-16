@@ -1,0 +1,411 @@
+{% set module_name = "account-overview" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set property_names = [] %}
+{% for section in module.sections %}
+  {% for row in section.rows %}
+    {% for property in row.properties %}
+      {% do property_names.append(property) %}
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
+
+{% set this_object = module.object_id %}
+{% set props_to_get = property_names|join(",") %}
+{% set all_property_defs = crm_property_definitions(this_object, props_to_get) if this_object %}
+{% set all_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data") %}
+{% set all_associations = data_query.data.CRM.contact.associations %}
+{% set all_association_props = data_query.data.CRM.contact %}
+{% set associated_objects = [] %}
+{% for key, value in all_associations.items() %}
+  {% if key is string_containing this_object %}
+    {% do associated_objects.append(value.items) %}
+  {% endif %}
+{% endfor %}
+{% set associated_object_ids = [] %}
+{% for key, value in all_association_props.items() %}
+  {% if key is string_containing this_object or (this_object == "contact" and key is string_containing "associated_users")%}
+    {% set item_array = value|split(",") if value is string_containing "," else [value] %}
+    {% for item in item_array %}
+      {% do associated_object_ids.append(item) %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% for object in associated_objects|first %}
+  {% do associated_object_ids.append(object.hs_object_id) %}
+{% endfor %}
+{% set unique_ids = associated_object_ids|unique %}
+{% set associated_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "in", unique_ids) %}
+
+{% set global_data = widget_data.global_data %}
+{% set all_objects = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("hs_object_id", "in", unique_ids) %}
+
+{% call global_config(global_data, this_object, all_objects, all_data) %}
+
+{% set these_actions = module.actions %}
+{% set associated_objects = module.associations %}
+{% set all_objects = [] %}
+{% for associated_object in associated_objects %}
+  {% set associated_property = "associated_" + associated_object.associated_to_object_id %}
+  {% set all_ids = [] %}
+  {% for id in unique_ids %}
+    {% set this_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "==", id)|first %}
+    {% set these_associated_objects = this_data[associated_property]|split(",") %}
+    {% for id in these_associated_objects %}
+      {% do all_ids.append(id) %}
+    {% endfor %}
+  {% endfor %}
+  {% do all_objects.append({ "object": associated_object.associated_to_object_id, "ids": all_ids, "props": associated_object.properties_to_get }) %}
+{% endfor %}
+{% set all_object_data = [] %}
+{% for object in all_objects %}
+  {% set id_array = object.ids %} 
+  {% set prop_string = object.props|join(",") %}
+  {% set this_object = object.object %}
+  {% set these_objects = crm_objects(this_object, id_array, prop_string).results if object.object %}
+  {% do all_object_data.append({ "object": object.object, "data": these_objects }) %}
+{% endfor %}
+
+{% macro render_actions(type, these_actions) %}
+<div class="actions actions--{{ type }}">
+  <div class="actions__inner">
+    {% for action in these_actions %}
+      {% set action_string = action.data_attribute + "='" + action.data_value + "'" %}
+      <a class="button{{ " button--ghost" if !loop.first }}" {{ action_string }}>{{ action.action_label }}</a>
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro render_associated(type, object) %}
+{% if type == "myhomevendors" %}
+<li class="associated-object associated-object--{{ type }}">
+  <span></span>
+  <span class="associated-object__inner">
+    {{ object.vendor_name }}
+  </span>
+</li>
+{% endif %}
+{% endmacro %}
+
+{% macro render_card(this_data) %}
+<div class="{{ module_name }}__item isotope-item" data-id="{{ id }}">
+  {% for category in module.board_options.categories %}
+    {% set category_prop = module.board_options.category_property %}
+    {% set category_values = category.category_values %}
+    {% if this_data[category_prop] in category_values %}
+      <div class="item__tag">
+        <div class="item__tag-inner">
+          {{ category.category_name }}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+  <div class="item__image">
+    {% if module.icon.src %}
+    {% set sizeAttrs = 'width="{{ module.icon.width }}" height="{{ module.icon.height }}"' %}
+    {% if module.icon.size_type == 'auto' %}
+    {% set sizeAttrs = 'width="{{ module.icon.width }}" height="{{ module.icon.height }}" style="max-width: 100%; height: auto;"' %}
+    {% elif module.icon.size_type == 'auto_custom_max' %}
+    {% set sizeAttrs = 'width="{{ module.icon.max_width }}" height="{{ module.icon.max_height }}" style="max-width: 100%; height: auto;"' %}
+    {% endif %}
+    {% set loadingAttr = module.icon.loading != 'disabled' ? 'loading="{{ module.icon.loading }}"' : '' %}
+    <img src="{{ module.icon.src }}" alt="{{ module.icon.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+    {% endif %}
+  </div>
+  <div class="item__content">
+    {% if this_object != "subscription" and (module.options.allow_editing or module.options.allow_deleting) %}
+    <div class="item__actions">
+      <span class="toggle-active">{{ icons("dots") }}</span>
+      <ul>
+        {% if module.options.allow_editing %}
+        <li>
+          <a href="#lity--edit__{{ this_object }}" data-id="{{ this_data.hs_object_id }}">{{ icons("edit") }} Edit</a>
+        </li>
+        {% endif %}
+        {% if module.options.allow_deleting %}
+        <li>
+          <a data-action="remove">{{ icons("plus") }} Remove</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+    {% endif %}
+    {% for section in module.sections %}
+    <div class="section section--{{ slugify(section.title)|trim }}">
+      {% for row in section.rows %}
+      {% for property in row.properties %}
+      {% set this_def = all_property_defs|selectattr("name", "==", property)|first %}
+      {% set this_label = this_def.label %}
+      {% set this_value = this_data[property] %}
+      <div class="{{ module_name }}__property">
+        <div class="{{ module_name }}__property-label">{{ this_label }}</div>
+        <div class="{{ module_name }}__property-value">{{ this_value }}</div>
+      </div>
+      {% endfor %}
+      {% endfor %}
+    </div>
+    {% endfor %}
+    <div class="item__footer">
+      <div class="item__associations">
+        <ul>
+          {% for associated_object in associated_objects %}
+            {% set this_object = associated_object.associated_to_object_id %}
+            {% set associated_property = "associated_" + this_object %}
+            {% set these_ids = this_data[associated_property]|split(",") %}
+            {% set these_objects = all_object_data|selectattr("object", "==", this_object)|first|attr("data")|selectattr("id", "in", these_ids) %}
+            {% for object in these_objects %}
+              {{ render_associated(associated_object.associated_to_object_id, object) }}
+            {% endfor %}
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="item__actions">
+        {{ render_actions(this_object, these_actions) }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    {% if module.add_board_view %}
+    <div class="{{ module_name }}__view-toggle">
+      <a data-target="#view--list" class="active">{{ icons("list") }}</a>
+      <a data-target="#view--board">{{ icons("board") }}</a>
+    </div>
+    {% endif %}
+    {% if module.options.allow_filter or module.options.allow_search %}
+      <div class="{{ module_name }}__section">
+        {% if module.options.allow_filter %}
+          <div class="listing__filters-wrap">
+            <ul class="listing__filters-items">
+              {% call render_filter_group("group") %}
+                {% for this_filter in all_filters %}
+                  {% set slug = slugify(this_filter) %}
+                  {{ render_filter(slug, this_filter, loop.first) }}
+                {% endfor %}
+              {% endcall %}
+            </ul>
+          </div>
+        {% endif %}
+        {% if module.options.allow_search %}
+          <div class="listing__search">
+            {% set placeholder = module.search_options.placeholder %}
+            {% set search_id = name + "__search" %}
+            {{ render_search(placeholder, "", search_id) }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div id="view--list" class="{{ module_name }}__section active">
+      <div class="{{ module_name }}__row isotope-container">
+        {% for id in unique_ids %}
+          {% set this_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "==", id)|first %}
+          {% set has_value = { "value": false } %}
+          {% for section in module.sections %}
+            {% for row in section.rows %}
+              {% for property in row.properties %}
+                {% set this_def = all_property_defs|selectattr("name", "==", property)|first %}
+                {% set this_label = this_def.label %}
+                {% set this_value = this_data[property] %}
+                {% do has_value.update({"value": true }) if this_value %}
+              {% endfor %}
+            {% endfor %}
+          {% endfor %}
+          {% if has_value.value %}
+            {{ render_card(this_data) }}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% if module.add_board_view %}
+    <div id="view--board" class="{{ module_name }}__section">
+      {% for category in module.board_options.categories %}
+        {% set category_prop = module.board_options.category_property %}
+        {% set category_values = category.category_values %}
+        <div class="{{ module_name }}__category">
+          <h2>{{ category.category_name }}</h2>
+          <div class="{{ module_name }}__row isotope-container">
+            {% for id in unique_ids %}
+            {% set this_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "==", id)|first %}
+            {% if this_data[category_prop] in category_values %}
+              {% set has_value = { "value": false } %}
+              {% for section in module.sections %}
+                {% for row in section.rows %}
+                  {% for property in row.properties %}
+                    {% set this_def = all_property_defs|selectattr("name", "==", property)|first %}
+                    {% set this_label = this_def.label %}
+                    {% set this_value = this_data[property] %}
+                    {% do has_value.update({"value": true }) if this_value %}
+                  {% endfor %}
+                {% endfor %}
+              {% endfor %}
+              {% if has_value.value %}
+                {{ render_card(this_data) }}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% require_css %}
+<style>
+
+  :root {
+    --dark-blue: #0c2340;
+    --light-blue: #425b76;
+    --teal: #04a38e;
+    --brown: #bf5700;
+    --dark: #333333;
+    --light: #abacac;
+    --white: #f8f8f8;
+  }
+  
+  {% set object = "#view--board" %}
+  {% set columns = module.board_options.categories|length + 1 %}
+  {{ flex_grid(object, 767, columns, 10, 10) }}
+ 
+  .{{ module_name }}__item {
+    padding: 20px;
+    background-color: white;
+    position: relative;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    /*box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);*/
+  }
+  
+  .{{ module_name }}__item + * {
+    margin-top: 20px;
+  }
+  
+  .{{ module_name }}__property-label {
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  
+  .item__image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 30px;
+    margin-right: 40px;
+    display: flex;
+  }
+  
+  .item__image:has(img):before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%,-50%);
+    background-color: #f7f7f7;
+    z-index: 0;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 9;
+  }
+  
+  .item__actions > span {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+  }
+  
+  .item__actions ul {
+    list-style: none;
+    margin: 0;
+    padding: 1rem;
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 1px 1px 10px rgba(0,0,0,.12);
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: calc(100% - 20px);
+    z-index: 999;
+  }
+  
+  .item__actions ul li {
+    white-space:nowrap;
+    display: block;
+  }
+  
+  .item__actions ul li a {
+    padding: .5rem;
+    display: block;
+  }
+  
+  .item__actions span.active + ul {
+    display: block;
+  }
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+
+  $(function() {
+    
+    var fieldset_triggers = $("fieldset > label");
+    fieldset_triggers.on("click", function() {
+      if ($(this).parent().is(".active")) {
+        $(this).parent().removeClass("active");
+      } else {
+        $(this).parent().addClass("active");
+      }
+    });
+
+    var filters = {},
+        container = $(`#{{ name }} .isotope-container`),
+        containerTop = $(`#{{ name }}`).offset().top,
+        filterDisplay = $('#filter-display');
+    
+    var responsiveIsotope = [ [480, 6] , [720, {{ module.options.limit_per_page || 6 }}] ];
+    var itemsPerPageDefault = {{ module.options.limit_per_page || 6 }};
+
+    {#{ isotope_js() }#}
+    
+  });
+
+</script>
+{% end_require_js %}
+
+{% endcall %}

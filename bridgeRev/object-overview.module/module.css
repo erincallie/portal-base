@@ -1,0 +1,17 @@
+.object-overview__input * {
+  display: block;
+  width: 100%;
+}
+
+.object-overview__row + *,
+.object-overview__property + * {
+  margin-top: .5rem;
+}
+
+.object-overview__input input {
+  border: none;
+  border-bottom: 1px solid;
+  background: transparent;
+  padding: .25rem;
+  font-size: 1.1rem;
+}

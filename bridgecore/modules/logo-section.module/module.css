@@ -1,0 +1,24 @@
+.logo-slider__logo {
+  position: relative;
+}
+
+.logo-slider__logo img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.logo-slider .owl-carousel .owl-stage {
+  align-items: center;
+  display: flex;
+}
+
+.logo-slider.style--grayscale img {
+  filter: grayscale(100%);
+  transition: all .5s ease-in-out;
+}
+
+.logo-slider.style--grayscale .owl-item:hover img {
+  filter: grayscale(0%);
+}

@@ -1,0 +1,95 @@
+[ {
+  "id" : "36cd02b5-1de9-28ee-8b68-5882e36b3dc4",
+  "name" : "crm_objects",
+  "display_width" : null,
+  "label" : "CRM Objects",
+  "required" : false,
+  "locked" : true,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "7713dea4-2083-e268-fa2c-1b5e0aa23b2a",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "7713dea4-2083-e268-fa2c-1b5e0aa23b2a",
+    "name" : "object_id",
+    "display_width" : null,
+    "label" : "Object ID",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "d001fc9b-4d63-7287-67fe-90d9713498a6",
+    "name" : "functions",
+    "display_width" : null,
+    "label" : "Functions",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : null,
+      "default" : null
+    },
+    "children" : [ {
+      "id" : "aaaeea0f-97b1-4b72-bf9f-2429ae2bb249",
+      "name" : "action",
+      "display_width" : null,
+      "label" : "Action",
+      "required" : false,
+      "locked" : false,
+      "display" : "select",
+      "choices" : [ [ "data", "Data" ], [ "filter", "Filter" ], [ "search", "Search" ], [ "sort", "Sort" ] ],
+      "multiple" : false,
+      "reordering_enabled" : true,
+      "preset" : null,
+      "type" : "choice"
+    }, {
+      "id" : "34899ec7-0792-7976-8a64-a954f503fad7",
+      "name" : "properties",
+      "display_width" : null,
+      "label" : "Properties",
+      "required" : false,
+      "locked" : false,
+      "occurrence" : {
+        "min" : null,
+        "max" : null,
+        "sorting_label_field" : null,
+        "default" : null
+      },
+      "validation_regex" : "",
+      "allow_new_line" : false,
+      "show_emoji_picker" : false,
+      "type" : "text"
+    } ],
+    "tab" : "CONTENT",
+    "expanded" : false,
+    "type" : "group",
+    "default" : [ ]
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+}, {
+  "id" : "c605e770-2bae-c65e-ec11-edd32413c78b",
+  "name" : "hubdb_tables",
+  "display_width" : null,
+  "label" : "HubDB Tables",
+  "required" : false,
+  "locked" : true,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : null,
+    "default" : null
+  },
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text"
+} ]

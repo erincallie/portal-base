@@ -1,0 +1,171 @@
+<!--
+  templateType: section
+  label: Flex Cards
+  isAvailableForNewContent: true
+  screenshotPath: ../images/template-previews/sections/cards-section.png
+  description: "Content blocks with optional featured image, icon, and button"
+-->
+{% dnd_section
+  padding={
+    "default" : {
+      "bottom" : "80px",
+      "left" : "30px",
+      "right" : "30px",
+      "top" : "40px"
+    }
+  }
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/flex-cards",
+        offset=0,
+        width=12,
+        card_style="icons",
+        cards=[ {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Easily define and apply consistent branding elements like color schemes, fonts, and layout preferences. This ensures a harmonious and professional look throughout your site, enhancing brand identity and user experience.",
+            "title" : "Global Styles"
+          },
+          "featured_image" : {
+            "border_color" : {
+              "css" : ""
+            },
+            "image" : {
+              "alt" : "web-styles",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/web-styles.png",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Binder clip (2)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 100,
+              "max_width" : 100,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Binder%20clip%20(2).png",
+              "width" : 3000
+            }
+          }
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Not only versatile but also fully optimized for various content types. Whether you're creating a blog, a landing page, or a service section, these templates can be quickly adapted, saving you time while maintaining a high standard of design and functionality.",
+            "title" : "Reusable Templates"
+          },
+          "featured_image" : {
+            "border_color" : {
+              "css" : ""
+            },
+            "image" : {
+              "alt" : "templates",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/templates.png",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Folder open (3)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 2000,
+              "max_width" : 2000,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Folder%20open%20(3).png",
+              "width" : 3000
+            }
+          }
+        }, {
+          "background_color" : {
+            "color" : "#F4F5F5",
+            "opacity" : 100
+          },
+          "content" : {
+            "content" : "Empows you to tweak and tailor your site to perfectly align with your unique brand identity and specific needs. From minor adjustments to major overhauls, the customizability of BridgeCore ensures that your website will always be a true reflection of your vision and objectives.",
+            "title" : "Fully Customizable"
+          },
+          "featured_image" : {
+            "border_color" : {
+              "css" : ""
+            },
+            "image" : {
+              "alt" : "customizable",
+              "height" : 1024,
+              "loading" : "lazy",
+              "max_height" : 1024,
+              "max_width" : 1024,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/customizable.png",
+              "width" : 1024
+            }
+          },
+          "icon" : {
+            "background_color" : {
+              "color" : "#FFFFFF",
+              "opacity" : 100
+            },
+            "image" : {
+              "alt" : "Success (2)",
+              "height" : 3000,
+              "loading" : "lazy",
+              "max_height" : 2000,
+              "max_width" : 2000,
+              "size_type" : "auto_custom_max",
+              "src" : "https://43907098.fs1.hubspotusercontent-na1.net/hubfs/43907098/Success%20(2).png",
+              "width" : 3000
+            }
+          }
+        } ],
+        style={
+          "alignment" : {
+            "vertical_align" : "TOP"
+          },
+          "column_number" : 3,
+          "equal_height_cards" : true,
+          "full_width_section" : true,
+          "horizontal_spacing" : 30,
+          "vertical_spacing" : 30
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}

@@ -1,0 +1,41 @@
+[ {
+  "id" : "00104b4f-0e6a-fe43-4642-9adaf71f1361",
+  "name" : "testing_mode",
+  "display_width" : null,
+  "label" : "Testing Mode",
+  "required" : false,
+  "locked" : false,
+  "display" : "toggle",
+  "type" : "boolean",
+  "default" : false
+}, {
+  "id" : "317d9bbc-53a6-51fb-fa31-2516cf94a602",
+  "name" : "choose_table",
+  "display_width" : null,
+  "label" : "Choose Table",
+  "required" : false,
+  "locked" : false,
+  "visibility" : {
+    "controlling_field" : null,
+    "controlling_field_path" : "testing_mode",
+    "controlling_value_regex" : "true",
+    "property" : null,
+    "operator" : "EQUAL",
+    "access" : null
+  },
+  "type" : "hubdbtable"
+}, {
+  "id" : "2fcd74eb-10b0-3530-04d4-4ac0bce10b7d",
+  "name" : "page_level",
+  "display_width" : null,
+  "label" : "Page Level",
+  "required" : false,
+  "locked" : false,
+  "display" : "select",
+  "choices" : [ [ "1", "Listing" ], [ "2", "Post" ], [ "3", "Child" ] ],
+  "multiple" : false,
+  "reordering_enabled" : true,
+  "preset" : null,
+  "type" : "choice",
+  "default" : "1"
+} ]

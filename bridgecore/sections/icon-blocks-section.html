@@ -1,0 +1,739 @@
+<!--
+  templateType: section
+  label: Icon Blocks Section
+  isAvailableForNewContent: true
+  screenshotPath: ../images/template-previews/sections/icons-blocks.png
+  description: "Content blocks with optional icon with accent and button"
+-->
+{% dnd_section
+  background_color=theme.global_colors.secondary_color.color,
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=12,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/content-block",
+        offset=0,
+        width=12,
+        card={
+          "content" : {
+            "content" : " ",
+            "small_title" : "A Small Title",
+            "title" : "Our Programs",
+            "title_tag" : "h2"
+          }
+        },
+        style={
+          "fonts" : {
+            "content_font" : {
+              "css" : "",
+              "font_set" : "DEFAULT"
+            },
+            "subtitle_font" : {
+              "color" : "#85FFC7",
+              "css" : "",
+              "font_set" : "DEFAULT"
+            },
+            "title_font" : {
+              "color" : "#FFFFFF",
+              "css" : "",
+              "font_set" : "DEFAULT"
+            }
+          },
+          "general" : {
+            "alignment" : {
+              "css" : ""
+            },
+            "text_alignment" : {
+              "css" : "text-align: LEFT",
+              "text_align" : "LEFT"
+            }
+          }
+        }
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+    {% dnd_row %}
+      {% dnd_column
+        offset=0,
+        width=4,
+        padding={
+          "default" : {
+            "bottom" : "0px",
+            "left" : "0px",
+            "right" : "0px",
+            "top" : "0px"
+          }
+        }
+      %}
+        {% dnd_row %}
+          {% dnd_module
+            path="../modules/content-block",
+            offset=0,
+            width=12,
+            card={
+              "content" : {
+                "button_text" : "",
+                "content" : "Lorem ipsum dolor sit amet.",
+                "link" : {
+                  "no_follow" : false,
+                  "open_in_new_tab" : false,
+                  "rel" : "",
+                  "sponsored" : false,
+                  "url" : {
+                    "href" : "",
+                    "type" : "EXTERNAL"
+                  },
+                  "user_generated_content" : false
+                },
+                "title" : "Title of This Icon Card",
+                "title_tag" : "h3"
+              },
+              "icon" : {
+                "add_accent" : true,
+                "background_color" : {
+                  "opacity" : 0
+                },
+                "image" : {
+                  "alt" : "Business Handshake",
+                  "height" : 30,
+                  "loading" : "lazy",
+                  "max_height" : 46,
+                  "max_width" : 46,
+                  "size_type" : "exact",
+                  "src" : "https://40232251.fs1.hubspotusercontent-na1.net/hubfs/40232251/briefcase-light.svg",
+                  "width" : 30
+                },
+                "modify_icon" : false,
+                "select_accent" : "shape_3",
+                "select_filter" : ""
+              }
+            },
+            card_style="icon",
+            style={
+              "accent" : {
+                "background_color" : {
+                  "color" : "#ff8552",
+                  "opacity" : 100
+                }
+              },
+              "default" : {
+                "background_color" : {
+                  "color" : "#FFFFFF",
+                  "opacity" : 10
+                }
+              },
+              "fonts" : {
+                "content_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                },
+                "title_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                }
+              },
+              "general" : {
+                "border_radius" : 24,
+                "spacing" : {
+                  "css" : "padding: 30px;",
+                  "padding" : {
+                    "bottom" : {
+                      "units" : "px",
+                      "value" : 60
+                    },
+                    "left" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "right" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "top" : {
+                      "units" : "px",
+                      "value" : 30
+                    }
+                  }
+                }
+              }
+            }
+          %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column
+        offset=4,
+        width=4,
+        padding={
+          "default" : {
+            "bottom" : "0px",
+            "left" : "0px",
+            "right" : "0px",
+            "top" : "0px"
+          }
+        }
+      %}
+        {% dnd_row %}
+          {% dnd_module
+            path="../modules/content-block",
+            offset=0,
+            width=12,
+            card={
+              "content" : {
+                "button_text" : "",
+                "content" : "Lorem ipsum dolor sit amet.",
+                "link" : {
+                  "no_follow" : false,
+                  "open_in_new_tab" : false,
+                  "rel" : "",
+                  "sponsored" : false,
+                  "url" : {
+                    "href" : "",
+                    "type" : "EXTERNAL"
+                  },
+                  "user_generated_content" : false
+                },
+                "title" : "Title of This Icon Card",
+                "title_tag" : "h3"
+              },
+              "icon" : {
+                "add_accent" : true,
+                "background_color" : {
+                  "opacity" : 0
+                },
+                "image" : {
+                  "alt" : "Business Handshake",
+                  "height" : 30,
+                  "loading" : "lazy",
+                  "max_height" : 46,
+                  "max_width" : 46,
+                  "size_type" : "exact",
+                  "src" : "https://40232251.fs1.hubspotusercontent-na1.net/hubfs/40232251/briefcase-light.svg",
+                  "width" : 30
+                },
+                "modify_icon" : false,
+                "select_accent" : "shape_3",
+                "select_filter" : ""
+              }
+            },
+            card_style="icon",
+            style={
+              "accent" : {
+                "background_color" : {
+                  "color" : "#ff8552",
+                  "opacity" : 100
+                }
+              },
+              "default" : {
+                "background_color" : {
+                  "color" : "#FFFFFF",
+                  "opacity" : 10
+                }
+              },
+              "fonts" : {
+                "content_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                },
+                "title_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                }
+              },
+              "general" : {
+                "border_radius" : 24,
+                "spacing" : {
+                  "css" : "padding: 30px;",
+                  "padding" : {
+                    "bottom" : {
+                      "units" : "px",
+                      "value" : 60
+                    },
+                    "left" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "right" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "top" : {
+                      "units" : "px",
+                      "value" : 30
+                    }
+                  }
+                }
+              }
+            }
+          %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column
+        offset=8,
+        width=4,
+        padding={
+          "default" : {
+            "bottom" : "0px",
+            "left" : "0px",
+            "right" : "0px",
+            "top" : "0px"
+          }
+        }
+      %}
+        {% dnd_row %}
+          {% dnd_module
+            path="../modules/content-block",
+            offset=0,
+            width=12,
+            card={
+              "content" : {
+                "button_text" : "",
+                "content" : "Lorem ipsum dolor sit amet.",
+                "link" : {
+                  "no_follow" : false,
+                  "open_in_new_tab" : false,
+                  "rel" : "",
+                  "sponsored" : false,
+                  "url" : {
+                    "href" : "",
+                    "type" : "EXTERNAL"
+                  },
+                  "user_generated_content" : false
+                },
+                "title" : "Title of This Icon Card",
+                "title_tag" : "h3"
+              },
+              "icon" : {
+                "add_accent" : true,
+                "background_color" : {
+                  "opacity" : 0
+                },
+                "image" : {
+                  "alt" : "Business Handshake",
+                  "height" : 30,
+                  "loading" : "lazy",
+                  "max_height" : 46,
+                  "max_width" : 46,
+                  "size_type" : "exact",
+                  "src" : "https://40232251.fs1.hubspotusercontent-na1.net/hubfs/40232251/briefcase-light.svg",
+                  "width" : 30
+                },
+                "modify_icon" : false,
+                "select_accent" : "shape_3",
+                "select_filter" : ""
+              }
+            },
+            card_style="icon",
+            style={
+              "accent" : {
+                "background_color" : {
+                  "color" : "#ff8552",
+                  "opacity" : 100
+                }
+              },
+              "default" : {
+                "background_color" : {
+                  "color" : "#FFFFFF",
+                  "opacity" : 10
+                }
+              },
+              "fonts" : {
+                "content_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                },
+                "title_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                }
+              },
+              "general" : {
+                "border_radius" : 24,
+                "spacing" : {
+                  "css" : "padding: 30px;",
+                  "padding" : {
+                    "bottom" : {
+                      "units" : "px",
+                      "value" : 60
+                    },
+                    "left" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "right" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "top" : {
+                      "units" : "px",
+                      "value" : 30
+                    }
+                  }
+                }
+              }
+            }
+          %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_row %}
+    {% dnd_row
+      padding={
+        "default" : {
+          "top" : "40px"
+        }
+      }
+    %}
+      {% dnd_column
+        offset=0,
+        width=4,
+        padding={
+          "default" : {
+            "bottom" : "0px",
+            "left" : "0px",
+            "right" : "0px",
+            "top" : "0px"
+          }
+        }
+      %}
+        {% dnd_row %}
+          {% dnd_module
+            path="../modules/content-block",
+            offset=0,
+            width=12,
+            card={
+              "content" : {
+                "button_text" : "",
+                "content" : "Lorem ipsum dolor sit amet.",
+                "link" : {
+                  "no_follow" : false,
+                  "open_in_new_tab" : false,
+                  "rel" : "",
+                  "sponsored" : false,
+                  "url" : {
+                    "href" : "",
+                    "type" : "EXTERNAL"
+                  },
+                  "user_generated_content" : false
+                },
+                "title" : "Title of This Icon Card",
+                "title_tag" : "h3"
+              },
+              "icon" : {
+                "add_accent" : true,
+                "background_color" : {
+                  "opacity" : 0
+                },
+                "image" : {
+                  "alt" : "Business Handshake",
+                  "height" : 30,
+                  "loading" : "lazy",
+                  "max_height" : 46,
+                  "max_width" : 46,
+                  "size_type" : "exact",
+                  "src" : "https://40232251.fs1.hubspotusercontent-na1.net/hubfs/40232251/briefcase-light.svg",
+                  "width" : 30
+                },
+                "modify_icon" : false,
+                "select_accent" : "shape_3",
+                "select_filter" : ""
+              }
+            },
+            card_style="icon",
+            style={
+              "accent" : {
+                "background_color" : {
+                  "color" : "#ff8552",
+                  "opacity" : 100
+                }
+              },
+              "default" : {
+                "background_color" : {
+                  "color" : "#FFFFFF",
+                  "opacity" : 10
+                }
+              },
+              "fonts" : {
+                "content_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                },
+                "title_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                }
+              },
+              "general" : {
+                "border_radius" : 24,
+                "spacing" : {
+                  "css" : "padding: 30px;",
+                  "padding" : {
+                    "bottom" : {
+                      "units" : "px",
+                      "value" : 60
+                    },
+                    "left" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "right" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "top" : {
+                      "units" : "px",
+                      "value" : 30
+                    }
+                  }
+                }
+              }
+            }
+          %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column
+        offset=4,
+        width=4,
+        padding={
+          "default" : {
+            "bottom" : "0px",
+            "left" : "0px",
+            "right" : "0px",
+            "top" : "0px"
+          }
+        }
+      %}
+        {% dnd_row %}
+          {% dnd_module
+            path="../modules/content-block",
+            offset=0,
+            width=12,
+            card={
+              "content" : {
+                "button_text" : "",
+                "content" : "Lorem ipsum dolor sit amet.",
+                "link" : {
+                  "no_follow" : false,
+                  "open_in_new_tab" : false,
+                  "rel" : "",
+                  "sponsored" : false,
+                  "url" : {
+                    "href" : "",
+                    "type" : "EXTERNAL"
+                  },
+                  "user_generated_content" : false
+                },
+                "title" : "Title of This Icon Card",
+                "title_tag" : "h3"
+              },
+              "icon" : {
+                "add_accent" : true,
+                "background_color" : {
+                  "opacity" : 0
+                },
+                "image" : {
+                  "alt" : "Business Handshake",
+                  "height" : 30,
+                  "loading" : "lazy",
+                  "max_height" : 46,
+                  "max_width" : 46,
+                  "size_type" : "exact",
+                  "src" : "https://40232251.fs1.hubspotusercontent-na1.net/hubfs/40232251/briefcase-light.svg",
+                  "width" : 30
+                },
+                "modify_icon" : false,
+                "select_accent" : "shape_3",
+                "select_filter" : ""
+              }
+            },
+            card_style="icon",
+            style={
+              "accent" : {
+                "background_color" : {
+                  "color" : "#ff8552",
+                  "opacity" : 100
+                }
+              },
+              "default" : {
+                "background_color" : {
+                  "color" : "#FFFFFF",
+                  "opacity" : 10
+                }
+              },
+              "fonts" : {
+                "content_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                },
+                "title_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                }
+              },
+              "general" : {
+                "border_radius" : 24,
+                "spacing" : {
+                  "css" : "padding: 30px;",
+                  "padding" : {
+                    "bottom" : {
+                      "units" : "px",
+                      "value" : 60
+                    },
+                    "left" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "right" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "top" : {
+                      "units" : "px",
+                      "value" : 30
+                    }
+                  }
+                }
+              }
+            }
+          %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+      {% dnd_column
+        offset=8,
+        width=4,
+        padding={
+          "default" : {
+            "bottom" : "0px",
+            "left" : "0px",
+            "right" : "0px",
+            "top" : "0px"
+          }
+        }
+      %}
+        {% dnd_row %}
+          {% dnd_module
+            path="../modules/content-block",
+            offset=0,
+            width=12,
+            card={
+              "content" : {
+                "button_text" : "",
+                "content" : "Lorem ipsum dolor sit amet.",
+                "link" : {
+                  "no_follow" : false,
+                  "open_in_new_tab" : false,
+                  "rel" : "",
+                  "sponsored" : false,
+                  "url" : {
+                    "href" : "",
+                    "type" : "EXTERNAL"
+                  },
+                  "user_generated_content" : false
+                },
+                "title" : "Title of This Icon Card",
+                "title_tag" : "h3"
+              },
+              "icon" : {
+                "add_accent" : true,
+                "background_color" : {
+                  "opacity" : 0
+                },
+                "image" : {
+                  "alt" : "Business Handshake",
+                  "height" : 30,
+                  "loading" : "lazy",
+                  "max_height" : 46,
+                  "max_width" : 46,
+                  "size_type" : "exact",
+                  "src" : "https://40232251.fs1.hubspotusercontent-na1.net/hubfs/40232251/briefcase-light.svg",
+                  "width" : 30
+                },
+                "modify_icon" : false,
+                "select_accent" : "shape_3",
+                "select_filter" : ""
+              }
+            },
+            card_style="icon",
+            style={
+              "accent" : {
+                "background_color" : {
+                  "color" : "#ff8552",
+                  "opacity" : 100
+                }
+              },
+              "default" : {
+                "background_color" : {
+                  "color" : "#FFFFFF",
+                  "opacity" : 10
+                }
+              },
+              "fonts" : {
+                "content_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                },
+                "title_font" : {
+                  "color" : "#FFFFFF",
+                  "css" : "color: #FFFFFF;",
+                  "font_set" : "DEFAULT"
+                }
+              },
+              "general" : {
+                "border_radius" : 24,
+                "spacing" : {
+                  "css" : "padding: 30px;",
+                  "padding" : {
+                    "bottom" : {
+                      "units" : "px",
+                      "value" : 60
+                    },
+                    "left" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "right" : {
+                      "units" : "px",
+                      "value" : 30
+                    },
+                    "top" : {
+                      "units" : "px",
+                      "value" : 30
+                    }
+                  }
+                }
+              }
+            }
+          %}
+          {% end_dnd_module %}
+        {% end_dnd_row %}
+      {% end_dnd_column %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}

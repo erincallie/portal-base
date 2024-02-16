@@ -1,0 +1,90 @@
+{% set module_name = "progress-bar" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__wrap">
+    {% if module.calculate == "true" %}
+      <div class="{{ module_name }}__labels">
+        <div class="{{ module_name }}__raised">
+          <span>{{ module.display_number_type == "money" ? '$' : '' }}{{ module.raised_amount }}{{ module.display_number_type == "money" ? '.00' : '' }}</span><span>{{ module.raised_label }}</span>
+        </div>
+        <div class="{{ module_name }}__goal">
+          <span>{{ module.display_number_type == "money" ? '$' : '' }}{{ module.goal_amount }}{{ module.display_number_type == "money" ? '.00' : '' }}</span><span>{{ module.goal_label }}</span>
+        </div>
+      </div>
+    {% endif %}
+    <div class="{{ module_name }}__bar">
+      <span class="{{ module_name }}__progress"></span>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+  {% set border_radius = module.style.border_radius + "px" %}
+   
+  #{{ name }} .{{ module_name}}__bar {
+    {{ module.style.spacing.css }}
+    {{ module.style.border.css }}
+    {{ borderRadius(border_radius) }}
+    overflow: hidden; 
+  }
+  
+  #{{ name }} .{{ module_name }}__bar {
+    position: relative;
+    width: 100%;
+    background: {{ module.style.bar_color.css }};
+    z-index: 1;
+    height: 2rem;
+  }
+  
+  {% if module.calculate == "true" %}
+    {% set progress_percent = ((1-(module.goal_amount - module.raised_amount)/(module.goal_amount))*100)|round|int %}
+  {% else %}
+    {% set progress_percent = module.progress_percent %}
+  {% endif %}
+  
+  #{{ name }} .{{ module_name }}__progress {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: {{ progress_percent }}%;
+    background: {{ module.style.progress_color.css }};
+    z-index: 9;
+    {{ borderRadius(border_radius) }}
+  }
+  
+  #{{ name }} .{{ module_name }}__raised span:first-child {
+    {{ module.style.raised_amount_font.css }}
+  }
+  
+  #{{ name }} .{{ module_name }}__goal span:first-child {
+    {{ module.style.goal_amount_font.css }}
+  }
+  
+  #{{ name }} .{{ module_name }}__raised span:last-child,
+  #{{ name }} .{{ module_name }}__goal span:last-child {
+    {{ module.style.label_font.css }}
+  }
+
+</style>
+{% end_require_css %}
+
+{% require_js %}
+<script>
+$(function() {
+  
+});
+</script>
+{% end_require_js %}

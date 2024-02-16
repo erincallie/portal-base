@@ -1,0 +1,44 @@
+.owl-carousel {
+  position: unset; 
+}
+
+.owl-carousel .owl-dots {
+  display: flex;
+}
+
+.owl-carousel button.owl-dot {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  padding: 0!important;
+  width: 100%;
+  height: .5rem;
+  background-color: #f0c25e;
+  opacity: .5;
+}
+
+.owl-carousel button.owl-dot.active {
+  opacity: 1;
+  background-color: var(--primary-color);
+}
+
+.owl-nav button span {
+  font-size: 2rem;
+  color: white;
+  background: hsla(41, 83%, 65%, 1);
+  background: linear-gradient(225deg, hsla(41, 83%, 65%, 1) 0%, hsla(21, 75%, 56%, 1) 64%);
+  background: -moz-linear-gradient(225deg, hsla(41, 83%, 65%, 1) 0%, hsla(21, 75%, 56%, 1) 64%);
+  background: -webkit-linear-gradient(225deg, hsla(41, 83%, 65%, 1) 0%, hsla(21, 75%, 56%, 1) 64%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#F0C25E", endColorstr="#E37539", GradientType=1 );
+  height: 3rem;
+  width: 3rem;
+  display: block;
+}
+
+.owl-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%
+}

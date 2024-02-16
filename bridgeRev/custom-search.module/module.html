@@ -1,0 +1,85 @@
+{% set module_name = "custom-search" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set all_items = [] %}
+{% for object in all_data %}
+  {% set search_props = widget_data.global_data.crm_objects|selectattr("object_id", "string_containing", object.id)|first|attr("functions")|selectattr("action", "==", "search")|first|attr("properties") %}
+  {% for item in object.data %}
+    {% set this_item = { "id": item.id, "values": [] } %}
+    {% for prop in search_props %}
+      {% set this_value = item[prop] %}
+      {% do this_item.values.append(this_value) %}
+    {% endfor %}
+    {% do all_items.append(this_item) %}
+  {% endfor %}
+{% endfor %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row">
+      {{ render_search(module.placeholder_text) }}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+  
+  $(function() {
+    
+    let typeahead_options = {
+      minLength: 1,
+      highlight: true
+    };
+    let all_data = {{ all_data|tojson }};
+    let all_sources = [];
+    for (let i=0; i<all_data.length; i++) {
+      let this_source = {
+        "name": `${all_data[i].id}`,
+        "source": all_data[i].data
+      };
+    }
+    let name_array = all_data.map(item => {
+      for (let i=0; i<item.data.length; i++) {
+        for (let key in item.data[i]) {
+          if (key.toLowerCase().indexOf('name') > -1) {
+            console.log(key);
+            return item.data[i][key];
+          }
+        }
+      }
+    });
+    console.log(name_array);
+    var source = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.whitespace,
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      local: name_array
+    });
+    $('.custom-search input').typeahead(typeahead_options, {
+      name: "all-data",
+      source: source
+    });
+
+    });
+
+</script>
+{% end_require_js %}

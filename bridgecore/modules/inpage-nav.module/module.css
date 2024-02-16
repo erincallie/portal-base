@@ -1,0 +1,23 @@
+.inpage-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.inpage-nav ul > * + * {
+  margin-left: 0;
+  margin-top: 1rem;
+}
+
+.inpage-nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inpage-nav ul > * + * {
+  margin-left: 1rem;
+  margin-top: 0;
+}

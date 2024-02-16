@@ -1,0 +1,146 @@
+{% set module_name = "timeline" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  render_card,
+  render_blog,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% macro render_block(item) %}
+<div class="{{ module_name }}__item">
+  <div class="{{ module_name }}__item-inner">
+    <div class="{{ module_name }}__item-year">
+      <span>{{ item.year }}</span>
+    </div>
+    <div class="{{ module_name }}__item-title">
+      {{ item.content }}
+    </div>
+    <div class="{{ module_name }}__item-content">
+      {{ item.content }}
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row">
+      {% for item in module.items %}
+        {{ render_block(item) }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+
+<style>
+  
+  #{{ name }} .{{ module_name }}__item-number span {
+    {{ module.style.year_font.css }}
+  }
+  
+  #{{ name }} .{{ module_name }}__item-year h3 {
+    {{ module.style.heading_font.css }}
+  }
+  
+  #{{ name }} .{{ module_name }}__item-content {
+    {{ module.style.content_font.css }}
+  }
+  
+  #{{ name }} .{{ module_name }}__item ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #{{ name }} .{{ module_name }}__item + * {
+    margin-top: 40px;
+  }
+
+  @media screen and (min-width: 768px) {
+    
+    #{{ name }} .{{ module_name }}__item-year {
+      position: relative;
+      width: 100%;
+    }
+    
+    #{{ name }} .{{ module_name }}__row {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    
+    #{{ name }} .{{ module_name }}__item {
+      width: calc(50% - 40px);
+      display: inline-block;
+    }
+    
+    #{{ name }} .{{ module_name }}__row:before {
+      position: absolute;
+      content: '';
+      top: 20px;
+      left: calc(50% - 1px);
+      width: 2px;
+      background-color: var(--dark-color);
+      height: calc(100% - 40px);
+      opacity: .5;
+    }
+    
+    #{{ name }} .{{ module_name }}__item-year:before {
+      position: absolute;
+      content: '';
+      top: 20px;
+      width: 15px;
+      background-color: var(--dark-color);
+      height: 2px;
+      opacity: .5;
+    }
+      
+    #{{ name }} .{{ module_name }}__item {
+      display: inline-block;
+      max-width: 50%;
+    }
+
+    #{{ name }} .{{ module_name }}__item ul li + * {
+      margin-top: 1rem;
+    }
+
+    #{{ name }} .{{ module_name }}__item:nth-child(odd) .{{ module_name }}__item-year {
+      text-align: right;
+    }
+
+    #{{ name }} .{{ module_name }}__item:nth-child(odd) .{{ module_name }}__item-year:before {
+      right: -40px;
+    }
+
+    #{{ name }} .{{ module_name }}__item:nth-child(even) .{{ module_name }}__item-year:before {
+      left: -40px;
+    }
+
+    #{{ name }} .{{ module_name }}__item:nth-child(odd) + * {
+      margin-top: 20%;
+    }
+    
+  }
+	
+</style>
+
+{% end_require_css %}
+
+{% require_js position="footer" defer=true %}
+<script>
+$(function() {
+  
+});
+</script>
+{% end_require_js %}

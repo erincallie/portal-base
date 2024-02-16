@@ -1,0 +1,76 @@
+{% set all_cards = module.cards %}
+
+{% macro slugify(string) %}
+  {{ string|lower|replace(" ", "_")|replace("&", "and")|trim }}
+{% endmacro %}
+
+{% macro pricing_card(card) %}
+<div class="pricing-cards__card pricing-card {{ slugify(card.title) }}" data-index="{{ loop.index }}">
+  <div class="pricing-card__inner">
+    <div class="pricing-card__header">
+      <h3>{{ card.title }}</h3>
+    </div>
+    <div class="pricing-card__price">
+      <h3>{{ card.price }}</h3>
+    </div>
+    <div class="pricing-card__content">
+      {{ card.description }}
+    </div>
+    <div class="pricing-card__features">
+      <ul>
+        {% for feature in card.features %}
+          <li>{{ feature }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="pricing-card__cta">
+      <a class="hs-button button--primary">{{ card.cta_text if card.waitlist != "true" else "Join the Waitlist" }}</a>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+
+<div id="{{ name }}" class="pricing-cards">
+  <div class="pricing-cards__container">
+    <div class="pricing-cards__main">
+      <div class="pricing-cards__section pricing-cards__hourly">
+        <div class="pricing-cards__row">
+          {% for card in all_cards %}
+            {{ pricing_card(card) }}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+{% macro flex_grid(obj, break, col_num, vert_spacing, horiz_spacing) %}
+  {% set width =  1 / col_num * 100 %}
+  {% set row_two = col_num + 1 %}
+  {% set next = break + 1 %}
+  {% set margin_adjust = horiz_spacing * ((col_num - 1) / col_num) %}
+  @media screen and (max-width: {{ break }}px) { {{ obj }} > *:not(:last-child) { margin-bottom: {{ vert_spacing }}px; } }
+  @media screen and (min-width: {{ next }}px) { 
+    {{ obj }} { display: flex; flex-wrap: wrap; align-items: flex-start; }
+    {{ obj }} > * { display: inline-block; width: calc({{ width }}% - {{ margin_adjust }}px); margin-right: {{ horiz_spacing }}px !important; margin-bottom: 0; }
+    {{ obj }} > *:nth-child({{ col_num }}n) { margin-right: 0 !important; }
+    {{ obj }} > *:nth-child(1n+{{ row_two }}) { margin-top:  {{ vert_spacing }}px; }
+  }		
+{% endmacro %}
+  
+  {% set columns = module.style.columns or 3 %}
+  {% set horizontal_spacing = module.style.horizontal_spacing or 30 %}
+  {% set vertical_spacing = module.style.vertical_spacing or 30 %}
+  {{ flex_grid(".pricing-cards__row", 768, columns, horizontal_spacing, vertical_spacing) }}
+  
+  #{{ name }} .pricing-card {
+    background-color: {{ module.styles.card_background_color.css or "#f8f8f8" }};
+    padding: 30px;
+    text-align: center;
+  }
+
+</style>
+{% end_require_css %}

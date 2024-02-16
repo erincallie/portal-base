@@ -1,0 +1,26 @@
+@media screen and (max-width:767px) {
+  .button {
+    width: 100%;
+    margin: 0;
+  }
+  .button + .button {
+    margin-top: 1rem;
+    margin-left: 0 !important;
+  }
+}
+
+@media screen and (min-width:768px) {
+  .button + .button {
+    margin-left: 1rem;
+  }
+}
+
+.custom-button__inner {
+  flex-wrap: wrap;
+}
+
+.button {
+  text-align: center;
+  white-space: nowrap;
+  margin-top: 1rem;
+}

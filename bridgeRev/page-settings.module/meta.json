@@ -1,0 +1,8 @@
+{
+  "global" : false,
+  "icon" : "fontawesome-5.14.0:Lightning%20Bolt:SOLID",
+  "host_template_types" : [ "PAGE", "BLOG_POST", "BLOG_LISTING" ],
+  "module_id" : 154621462968,
+  "label" : "Page Settings",
+  "is_available_for_new_content" : false
+}

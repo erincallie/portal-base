@@ -1,0 +1,82 @@
+<!--
+  templateType: section
+  label: Accordions
+  isAvailableForNewContent: true
+  screenshotPath: ../images/template-previews/sections/accordions.png
+  description: "2 columns with accordions"
+-->
+{% dnd_section
+  padding={
+    "default" : {
+      "bottom" : "80px",
+      "left" : "30px",
+      "right" : "30px",
+      "top" : "80px"
+    }
+  },
+  full_width=false,
+  max_width=1240
+%}
+  {% dnd_column
+    offset=0,
+    width=6,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/accordion",
+        offset=0,
+        width=12,
+        items=[ {
+          "content" : "Lorem ipsum dolor sit.",
+          "title" : "Title Lorem Ipsum"
+        }, {
+          "content" : "Lorem ipsum dolor sit.",
+          "title" : "Title Lorem Ipsum"
+        }, {
+          "content" : "Lorem ipsum dolor sit.",
+          "title" : "Title Lorem Ipsum"
+        } ]
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+  {% dnd_column
+    offset=6,
+    width=6,
+    padding={
+      "default" : {
+        "bottom" : "0px",
+        "left" : "0px",
+        "right" : "0px",
+        "top" : "0px"
+      }
+    }
+  %}
+    {% dnd_row %}
+      {% dnd_module
+        path="../modules/accordion",
+        offset=0,
+        width=12,
+        items=[ {
+          "content" : "Lorem ipsum dolor sit.",
+          "title" : "Title Lorem Ipsum"
+        }, {
+          "content" : "Lorem ipsum dolor sit.",
+          "title" : "Title Lorem Ipsum"
+        }, {
+          "content" : "Lorem ipsum dolor sit.",
+          "title" : "Title Lorem Ipsum"
+        } ]
+      %}
+      {% end_dnd_module %}
+    {% end_dnd_row %}
+  {% end_dnd_column %}
+{% end_dnd_section %}

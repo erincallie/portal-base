@@ -1,0 +1,98 @@
+[ {
+  "id" : "688a1d2d-0981-12f7-caa4-a78eb5df56ca",
+  "name" : "object_id",
+  "display_width" : null,
+  "label" : "Object ID",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text"
+}, {
+  "id" : "45c439f6-f2d9-7dc0-595e-242fb9f8fd6b",
+  "name" : "cards",
+  "display_width" : null,
+  "label" : "Cards",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "10a2442b-38f4-dcf7-ff90-3e5feab9cbb9",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "10a2442b-38f4-dcf7-ff90-3e5feab9cbb9",
+    "name" : "card_title",
+    "display_width" : null,
+    "label" : "Card Title",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "af88e3d4-8d9c-5020-16ed-5a582e76c324",
+    "name" : "card_logic_property",
+    "display_width" : null,
+    "label" : "Card Logic Property",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "c4289402-c35b-34ed-a3e9-6ac1918da347",
+    "name" : "card_values",
+    "display_width" : null,
+    "label" : "Card Values",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : null,
+      "default" : null
+    },
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "bbd13392-d495-4b0a-ca03-4a09344c2058",
+    "name" : "icon",
+    "display_width" : null,
+    "label" : "Icon",
+    "required" : false,
+    "locked" : false,
+    "responsive" : true,
+    "resizable" : true,
+    "show_loading" : false,
+    "type" : "image",
+    "default" : {
+      "size_type" : "auto",
+      "src" : "",
+      "alt" : null,
+      "loading" : "lazy"
+    }
+  }, {
+    "id" : "2de83474-fa8f-a096-7e87-3ce876e560d6",
+    "name" : "background_color",
+    "display_width" : null,
+    "label" : "Background Color",
+    "required" : false,
+    "locked" : false,
+    "type" : "color",
+    "default" : {
+      "color" : null,
+      "opacity" : null
+    }
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

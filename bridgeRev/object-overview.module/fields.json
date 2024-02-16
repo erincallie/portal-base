@@ -1,0 +1,98 @@
+[ {
+  "id" : "f36ee3e1-5497-5e51-9b10-02a017aec9f8",
+  "name" : "object_id",
+  "display_width" : null,
+  "label" : "Object ID",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text"
+}, {
+  "id" : "b1c1f140-6f85-c1a1-13cd-48bae6339a14",
+  "name" : "sections",
+  "display_width" : null,
+  "label" : "Sections",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "2027aec0-a14b-c2d6-5026-49cc85ab6faf",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "2027aec0-a14b-c2d6-5026-49cc85ab6faf",
+    "name" : "title",
+    "display_width" : null,
+    "label" : "Title",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "824e7639-ee59-ffa1-5cba-bb2df8dd31d9",
+    "name" : "rows",
+    "display_width" : null,
+    "label" : "Rows",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : "914f2ce7-38ef-00c7-8b27-340b45140fb4",
+      "default" : null
+    },
+    "children" : [ {
+      "id" : "3b5b3dbe-4165-2af7-f716-5a8137470754",
+      "name" : "properties",
+      "display_width" : null,
+      "label" : "Properties",
+      "required" : false,
+      "locked" : false,
+      "occurrence" : {
+        "min" : null,
+        "max" : null,
+        "sorting_label_field" : "914f2ce7-38ef-00c7-8b27-340b45140fb4",
+        "default" : null
+      },
+      "children" : [ {
+        "id" : "914f2ce7-38ef-00c7-8b27-340b45140fb4",
+        "name" : "property",
+        "display_width" : null,
+        "label" : "Property",
+        "required" : false,
+        "locked" : false,
+        "validation_regex" : "",
+        "allow_new_line" : false,
+        "show_emoji_picker" : false,
+        "type" : "text"
+      }, {
+        "id" : "37ed3e70-7575-9459-716d-af89e7530f47",
+        "name" : "allow_edit",
+        "display_width" : null,
+        "label" : "Allow Edit",
+        "required" : false,
+        "locked" : false,
+        "display" : "toggle",
+        "type" : "boolean",
+        "default" : false
+      } ],
+      "tab" : "CONTENT",
+      "expanded" : false,
+      "type" : "group",
+      "default" : [ ]
+    } ],
+    "tab" : "CONTENT",
+    "expanded" : false,
+    "type" : "group",
+    "default" : [ ]
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

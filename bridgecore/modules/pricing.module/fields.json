@@ -1,0 +1,77 @@
+[ {
+  "id" : "20d7ea17-4f10-8ebd-96e3-b9795caa3d74",
+  "name" : "cards",
+  "display_width" : null,
+  "label" : "Cards",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "7f6ff4d2-6a5e-c8dc-4f45-940462ba0c59",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "7f6ff4d2-6a5e-c8dc-4f45-940462ba0c59",
+    "name" : "title",
+    "display_width" : null,
+    "label" : "Title",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "a35a5a47-b2c2-9a2b-75d1-0721bbd39948",
+    "name" : "description",
+    "display_width" : null,
+    "label" : "Description",
+    "required" : false,
+    "locked" : false,
+    "type" : "richtext"
+  }, {
+    "id" : "ea346a1c-5636-5da6-8adc-80fb8f81227a",
+    "name" : "price",
+    "display_width" : null,
+    "label" : "Price",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "2dc86782-577b-490f-72ad-4d9c3226e71e",
+    "name" : "features",
+    "display_width" : null,
+    "label" : "Features",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : null,
+      "default" : null
+    },
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "d10e6966-7859-1b9f-a24a-5d88333f65cc",
+    "name" : "cta_text",
+    "display_width" : null,
+    "label" : "CTA Text",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

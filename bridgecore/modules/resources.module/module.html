@@ -1,0 +1,178 @@
+{% set module_name = "hubdb-resources" %}
+{% import "../../templates/partials/utils/config.html" as config %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_card,
+  render_search,
+  render_filter_group,
+  render_filter,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set this_table = module.hubdb_table %}
+{% set all_resources = hubdb_table_rows(module.hubdb_table) %}
+
+{% call config.global_config(widget_data.data, this_table, all_resources) %}
+
+{% if module.source == "select" %}
+  {% set these_resources = module.resources %}
+{% elif module.source == "filter" %}
+  {% set filter_query = [] %}
+  {% for this_filter in module.filters %}
+    {% set this_filter_query = this_filter.column_name + "__" + this_filter.operator + "=" + this_filter.value|urlencode %}
+    {% do filter_query.append(this_filter_query) %}
+  {% endfor %}
+  {% set final_query = filter_query|join("&") %}
+  {% set these_resources = hubdb_table_rows(module.hubdb_table, final_query, module.limit) %}
+{% else %}
+  {% set these_resources = hubdb_table_rows(module.hubdb_table) %}
+{% endif %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}_container">
+    {% if module.listing_options.allow_filter == "true" or module.listing_options.allow_search == "true" %}
+      <div class="listing__filters">
+          {% if module.listing_options.allow_filter == "true" %}
+            {% for this_filter in all_filters %}
+              {% set filter_column = this_filter|attr("column_name") %}
+              <div class="listing__filter-groups">
+                {% call render_filter_group("") %}
+                  {% set these_options = this_filter|attr("options") %}
+                  {% for option in these_options %}
+                    {% set slug = slugify(option) %}
+                    {{ render_filter(slug, option) }}
+                  {% endfor %}
+                {% endcall %}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% if module.listing_options.allow_search %}
+          <div class="listing__search">
+            {% set placeholder = module.search_options.placeholder_text %}
+            {% set button_text = module.search_options.button_text %}
+            {% set search_id = name + "__search" %}
+            {{ render_search(placeholder, button_text, search_id) }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="{{ module_name }}__wrap">
+      {% if module.source != "select" %}
+        <div class="{{ module_name }}__row {{ " isotope-container" if module.listing_options.allow_search == "true" or module.listing_options.allow_filter == "true" }}{{ " equal-height" if module.listing_options.equal_height_blocks == "true" }}{{ " no-page" if module.listing_options.pagination != "true" }}">
+          {% for resource in these_resources|sort(False, False, "hs_name") %}
+            {% if loop.index <= module.limit %}
+              {{ render_card("resource", resource, filter_props, search_props) }} 
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% else %}
+        {% for resource in these_resources %}
+          {% if resource %}
+            {{ render_card("resource", resource) }}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+    {% if module.show_view_all_link == "true" and module.view_all_link.link.url.href != "" %}
+      <div class="view-all">
+        <a href="{{ module.view_all_link.link.url.href }}"><span>{{ module.view_all_link.link_text }}</span><span>{{ icons("skinny-arrow") }}</span></a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% require_css %}
+<style>
+   
+  {% set columns = module.style.columns or 3 %}
+  {% set vertical_spacing = module.style.vertical_spacing or 30 %}
+  {% set horizontal_spacing = module.style.horizontal_spacing or 30 %}
+  {% set object = "#" + name + " ." + module_name + "__row:not(.isotope-container)" %}
+  {{ flex_grid(object, 767, columns, vertical_spacing, horizontal_spacing) }}
+  
+  @media screen and (min-width: 768px) {
+    #{{ name }} .isotope-container > * {
+      width: calc({{ (1/columns*100)|int }}% - {{ horizontal_spacing/(columns-1) + 3 }}px);
+    }
+  }
+  
+  #{{ name }} .isotope-container > * {
+    margin-bottom: {{ vertical_spacing }}px;
+  }
+  
+  {% set search_button_object = "#" + name + " .listing-search button" %}
+  {% set search_button_style = module.search_options.button_style + "_outline" if module.search_options.ghost_button == "true" else module.search_options.button_style %}
+  {{ build_button(search_button_object, search_button_style) }}
+  
+  {% set card_button_object = "#" + name + " .resource-card__content-link a" %}
+  {% set card_button_style = module.style.button_style + "_outline" if module.style.ghost_button == "true" else module.style.button_style %}
+  {{ build_button(card_button_object, card_button_style) }}
+  
+  #{{ name }} .{{ module_name }}__row > * {
+    {{ transition("all .5s ease-in-out") }}
+  }
+  
+  #{{ name }} .{{ module_name }}__row > *:hover {
+    {{ transform("scale(1.008)") }}
+    {{ boxShadow("var(--light-shadow)") }}
+  }
+  
+  #{{ name }} .view-all a {
+    {{ module.style.view_all_link_font.css }}
+  }
+  
+  #{{ name }} .view-all a svg path {
+    fill: {{ module.style.view_all_link_font.color }};
+  }
+  
+  #{{ name }} .view-all a:hover {
+    color: {{ module.style.view_all_link_hover_color.css }};
+  }
+  
+  #{{ name }} .view-all a:hover svg path {
+    fill: {{ module.style.view_all_link_hover_color.css }};
+  }
+  
+  .listing__filters-wrap {
+    {{ transition("all 1s ease-in-out") }}
+  }
+
+  .listing__filters-trigger a {
+    {{ borderRadius("24px") }}
+  }
+  
+  .resource-card {
+    {{ borderRadius("24px") }}
+  }
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+  $(function() {
+
+    var filters = {},
+        container = $(`#{{ name }} .isotope-container`),
+        containerTop = $(`#{{ name }}`).offset().top,
+        filterDisplay = $('#filter-display'),
+        grid_gap = {{ module.style.horizontal_spacing }};
+    
+    var responsiveIsotope = [ [480, 4] , [720, {{ module.listing_options.per_page_limit || 9 }}] ];
+    var itemsPerPageDefault = {{ module.listing_options.per_page_limit || 9 }};
+
+    {{ isotope_js() }}
+    
+  });
+</script>
+{% end_require_js %}
+
+{% endcall %}

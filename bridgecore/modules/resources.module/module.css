@@ -1,0 +1,21 @@
+.resource-card__image {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  height: auto;
+}
+
+.resource-card__content a {
+  display: block;
+}
+
+.resource-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resource-card h3 {
+  font-size: 1.5rem;
+  margin: 0 0 5px 0; 
+}

@@ -1,0 +1,149 @@
+[ {
+  "id" : "cc380111-b1f1-ef18-badf-243bc8805a01",
+  "name" : "steps",
+  "display_width" : null,
+  "label" : "Steps",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "75b805d1-a347-c70b-422c-546d1fcf9e4d",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "75b805d1-a347-c70b-422c-546d1fcf9e4d",
+    "name" : "title",
+    "display_width" : null,
+    "label" : "Title",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "ca823e47-80d0-d88a-8bc5-6b6d7e6b1df8",
+    "name" : "nav_label",
+    "display_width" : null,
+    "label" : "Nav Label",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "38462565-f108-ad6e-85c0-70a86d41a6d1",
+    "name" : "content",
+    "display_width" : null,
+    "label" : "Content",
+    "required" : false,
+    "locked" : false,
+    "type" : "richtext"
+  }, {
+    "id" : "c726741a-c07c-f653-d529-229791fca1b6",
+    "name" : "questions",
+    "display_width" : null,
+    "label" : "Questions",
+    "required" : false,
+    "locked" : false,
+    "occurrence" : {
+      "min" : null,
+      "max" : null,
+      "sorting_label_field" : "5a8f21af-3414-e3ce-f994-49592e81df08",
+      "default" : null
+    },
+    "children" : [ {
+      "id" : "5a8f21af-3414-e3ce-f994-49592e81df08",
+      "name" : "question",
+      "display_width" : null,
+      "label" : "Question",
+      "required" : false,
+      "locked" : false,
+      "table_name_or_id" : "questions",
+      "columns_to_fetch" : [ "name", "answers", "description", "help_text" ],
+      "display_columns" : [ "name" ],
+      "type" : "hubdbrow",
+      "default" : {
+        "id" : null
+      }
+    }, {
+      "id" : "595cb944-5184-0bdf-27cd-d5e1d2716ab1",
+      "name" : "dependencies",
+      "display_width" : null,
+      "label" : "Dependencies",
+      "required" : false,
+      "locked" : false,
+      "occurrence" : {
+        "min" : null,
+        "max" : null,
+        "sorting_label_field" : "7b1a477e-d460-6c3b-0803-cd0eaeb66a33",
+        "default" : null
+      },
+      "children" : [ {
+        "id" : "7b1a477e-d460-6c3b-0803-cd0eaeb66a33",
+        "name" : "question",
+        "display_width" : null,
+        "label" : "Question",
+        "required" : false,
+        "locked" : false,
+        "table_name_or_id" : "questions",
+        "columns_to_fetch" : [ "name" ],
+        "type" : "hubdbrow",
+        "default" : {
+          "id" : null
+        }
+      }, {
+        "id" : "63b94390-63ff-6a8e-9dd5-e85edb38df4b",
+        "name" : "operator",
+        "display_width" : null,
+        "label" : "Operator",
+        "required" : false,
+        "locked" : false,
+        "display" : "select",
+        "choices" : [ [ "eq", "Equals" ], [ "neq", "Not Equal" ], [ "string_containing", "String Containing" ], [ "in", "In" ], [ "not_in", "Not In" ] ],
+        "multiple" : false,
+        "reordering_enabled" : true,
+        "preset" : null,
+        "type" : "choice"
+      }, {
+        "id" : "f1e67586-f939-7182-8a49-f4bc77c7f901",
+        "name" : "answer",
+        "display_width" : null,
+        "label" : "Answer",
+        "required" : false,
+        "locked" : false,
+        "table_name_or_id" : "answers",
+        "columns_to_fetch" : [ "name" ],
+        "type" : "hubdbrow",
+        "default" : {
+          "id" : null
+        }
+      } ],
+      "tab" : "CONTENT",
+      "expanded" : false,
+      "type" : "group",
+      "default" : [ ]
+    } ],
+    "tab" : "CONTENT",
+    "expanded" : false,
+    "type" : "group",
+    "default" : [ ]
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+}, {
+  "id" : "feba3e7c-262d-70d8-d2a5-289ce72ef7be",
+  "name" : "custom_id",
+  "display_width" : null,
+  "label" : "Custom ID",
+  "required" : false,
+  "locked" : false,
+  "validation_regex" : "",
+  "allow_new_line" : false,
+  "show_emoji_picker" : false,
+  "type" : "text"
+} ]

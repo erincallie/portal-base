@@ -1,0 +1,61 @@
+{% set module_name = "sidebar-navigation" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set this_object = module.object_id %}
+{% set this_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data") %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row">
+      <ul>
+        {% for item in module.nav_links %}
+          <li>
+            {% set href = item.link.url.href %}
+            {% if item.link.url.type is equalto "EMAIL_ADDRESS" %}
+              {% set href = "mailto:" + href %}
+            {% endif %}
+            <a href="{{ href }}"
+              {% if item.link.open_in_new_tab %}target="_blank"{% endif %}
+              {% if item.link.rel %}rel="{{ item.link.rel }}"{% endif %}
+              >
+              <span>
+              	{% if item.icon.src %}
+                  {% set sizeAttrs = 'width="{{ item.icon.width }}" height="{{ item.icon.height }}"' %}
+                  {% if item.icon.size_type == 'auto' %}
+                    {% set sizeAttrs = 'width="{{ item.icon.width }}" height="{{ item.icon.height }}" style="max-width: 100%; height: auto;"' %}
+                  {% elif item.icon.size_type == 'auto_custom_max' %}
+                    {% set sizeAttrs = 'width="{{ item.icon.max_width }}" height="{{ item.icon.max_height }}" style="max-width: 100%; height: auto;"' %}
+                  {% endif %}
+                   {% set loadingAttr = item.icon.loading != 'disabled' ? 'loading="{{ item.icon.loading }}"' : '' %}
+                  <img src="{{ item.icon.src }}" alt="{{ item.icon.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+                {% endif %}
+              </span>
+              <span>{{ item.link_label }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  
+</style>
+{% end_require_css %}

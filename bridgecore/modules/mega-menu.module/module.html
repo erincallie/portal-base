@@ -1,0 +1,236 @@
+{% set menu_id = module.menu %}
+{% set custom_classes = module.advanced.custom_classes %}
+{% set section_id = module.advanced.section_id if module.advanced.section_id else name %}
+{% set flyouts = true if module.flyouts == true else false %}
+
+{% macro icons(name) %}
+{% if name == "search" %}
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs></defs>
+  <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <path d="M15.9067219,17.3190193 C14.5518633,18.3725857 12.8492019,19 11,19 C6.581722,19 3,15.418278 3,11 C3,6.581722 6.581722,3 11,3 C15.418278,3 19,6.581722 19,11 C19,12.8492019 18.3725857,14.5518633 17.3190193,15.9067219 C17.3319514,15.9183818 17.3446525,15.9304389 17.3571068,15.9428932 L21.7071068,20.2928932 C22.0976311,20.6834175 22.0976311,21.3165825 21.7071068,21.7071068 C21.3165825,22.0976311 20.6834175,22.0976311 20.2928932,21.7071068 L15.9428932,17.3571068 C15.9304389,17.3446525 15.9183818,17.3319514 15.9067219,17.3190193 Z M11,17 C14.3137085,17 17,14.3137085 17,11 C17,7.6862915 14.3137085,5 11,5 C7.6862915,5 5,7.6862915 5,11 C5,14.3137085 7.6862915,17 11,17 Z" fill="#000000" fill-rule="nonzero"></path>
+  </g>
+</svg>
+{% endif %}
+{% endmacro %}
+
+<div class="mega-menu--toggle toggle--open mega-mobile-only">
+  {% if module.toggle_icons.open.src %}
+  {% set sizeAttrs = 'width="{{ module.toggle_icons.open.width }}" height="{{ module.toggle_icons.open.height }}"' %}
+  {% if module.toggle_icons.open.size_type == 'auto' %}
+  {% set sizeAttrs = 'width="{{ module.toggle_icons.open.width }}" height="{{ module.toggle_icons.open.height }}" style="max-width: 100%; height: auto;"' %}
+  {% elif module.toggle_icons.open.size_type == 'auto_custom_max' %}
+  {% set sizeAttrs = 'width="{{ module.toggle_icons.open.max_width }}" height="{{ module.toggle_icons.open.max_height }}" style="max-width: 100%; height: auto;"' %}
+  {% endif %}
+  {% set loadingAttr = module.toggle_icons.open.loading != 'disabled' ? 'loading="{{ module.toggle_icons.open.loading }}"' : '' %}
+  <img src="{{ module.toggle_icons.open.src }}" alt="{{ module.toggle_icons.open.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+  {% endif %}
+</div>
+<div id="{{ section_id }}" class="mega-menu">
+  <div class="mega-menu__inner">
+    <div class="mega-menu--toggle toggle--close mega-mobile-only">
+      {% if module.toggle_icons.close.src %}
+      {% set sizeAttrs = 'width="{{ module.toggle_icons.close.width }}" height="{{ module.toggle_icons.close.height }}"' %}
+      {% if module.toggle_icons.close.size_type == 'auto' %}
+      {% set sizeAttrs = 'width="{{ module.toggle_icons.close.width }}" height="{{ module.toggle_icons.close.height }}" style="max-width: 100%; height: auto;"' %}
+      {% elif module.toggle_icons.close.size_type == 'auto_custom_max' %}
+      {% set sizeAttrs = 'width="{{ module.toggle_icons.close.max_width }}" height="{{ module.toggle_icons.close.max_height }}" style="max-width: 100%; height: auto;"' %}
+      {% endif %}
+      {% set loadingAttr = module.toggle_icons.close.loading != 'disabled' ? 'loading="{{ module.toggle_icons.close.loading }}"' : '' %}
+      <img src="{{ module.toggle_icons.close.src }}" alt="{{ module.toggle_icons.close.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+      {% endif %}
+    </div>
+    {% menu 
+      id="{{ menu_id }}", 
+      root_type="{{ module.root_type }}", 
+      flyouts="{{ flyouts }}", 
+      max_levels="{{ module.max_levels }}", 
+      flow="{{ module.flow }}"
+    %}
+    <div class="mega-menu__cta">
+      {% if module.cta_options.type == "cta" %}
+        {% cta guid="{{ module.cta_options.cta_field }}" %}
+      {% elif module.cta_options.type == "link" %}
+        {% set href = module.cta_options.cta_link.url.href %}
+        {% if module.cta_options.cta_link.url.type is equalto "EMAIL_ADDRESS" %}
+          {% set href = "mailto:" + href %}
+        {% endif %}
+        <a href="{{ href }}" class="button button--{{ module.cta_options.button_style }}"
+          {% if module.cta_options.cta_link.open_in_new_tab %}target="_blank"{% endif %}
+          {% if module.cta_options.cta_link.rel %}rel="{{ module.cta_options.cta_link.rel }}"{% endif %}
+          >
+          {{ module.cta_options.cta_button_text }}
+        </a>
+      {% endif %}
+    </div>
+    {#<div class="mega-menu__search mega-search">
+      <a class="mega-search__trigger">{{ icons("search") }}</a>
+      <div class="mega-search__overlay">
+        <div class="mega-search__container">
+          <div class="mega-search__search">
+            <input type="text" name="search" placeholder="{{ module.search_options.placeholder_text }}" />
+            <button class="search-submit no-button">
+              {{ icons("search") }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>#}
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  {% if module.styles.menu_level_1.link_font %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > a {
+      {{ module.styles.menu_level_1.link_font.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_1.link_hover_color %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1:hover > a {
+      color: {{ module.styles.menu_level_1.link_hover_color.css }};
+    }
+  {% endif %}
+  {% if module.styles.menu_level_1.link_spacing %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > a {
+      {{ module.styles.menu_level_1.link_spacing.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_1.text_alignment %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 {
+      {{ module.styles.menu_level_1.text_alignment.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_1.alignment %} 
+    @media screen and (min-width: 1101px) {
+      #{{ section_id }} .hs-menu-wrapper > ul {
+        display: flex;
+        {% if module.styles.menu_level_1.alignment.horizontal_align == "LEFT" %}
+          justify-content: flex-start;
+        {% elif module.styles.menu_level_1.alignment.horizontal_align == "RIGHT" %}
+          justify-content: flex-end;
+        {% elif module.styles.menu_level_1.alignment.horizontal_align == "CENTER" %}
+          justify-content: center;
+        {% endif %}
+        {% if module.styles.menu_level_1.alignment.vertical_align == "TOP" %}
+          align-items: flex-start;
+        {% elif module.styles.menu_level_1.alignment.vertical_align == "BOTTOM" %}
+          align-items: flex-end;
+        {% elif module.styles.menu_level_1.alignment.vertical_align == "MIDDLE" %}
+          align-items: center;
+        {% endif %}
+      }
+    }
+  {% endif %}
+  {% if module.styles.menu_level_2.link_font %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > .hs-menu-children-wrapper > li > a {
+      {{ module.styles.menu_level_2.link_font.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_2.link_hover_color %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > .hs-menu-children-wrapper > li:hover > a {
+      color: {{ module.styles.menu_level_2.link_hover_color.css }};
+    }
+  {% endif %}
+  {% if module.styles.menu_level_2.link_spacing %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > .hs-menu-children-wrapper > li > a {
+      {{ module.styles.menu_level_2.link_spacing.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_2.text_alignment %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > .hs-menu-children-wrapper > li {
+      {{ module.styles.menu_level_2.text_alignment.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_2.alignment %} 
+    @media screen and (min-width: 1101px) {
+      #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > .hs-menu-children-wrapper {
+        display: flex;
+        {% if module.styles.menu_level_2.alignment.horizontal_align == "LEFT" %}
+          justify-content: flex-start;
+        {% elif module.styles.menu_level_2.alignment.horizontal_align == "RIGHT" %}
+          justify-content: flex-end;
+        {% elif module.styles.menu_level_2.alignment.horizontal_align == "CENTER" %}
+          justify-content: center;
+        {% endif %}
+        {% if module.styles.menu_level_2.alignment.vertical_align == "TOP" %}
+          align-items: flex-start;
+        {% elif module.styles.menu_level_2.alignment.vertical_align == "BOTTOM" %}
+          align-items: flex-end;
+        {% elif module.styles.menu_level_2.alignment.vertical_align == "MIDDLE" %}
+          align-items: center;
+        {% endif %}
+      }
+    }
+  {% endif %}
+  {% if module.styles.menu_level_2.container_styles.background_color %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > .hs-menu-children-wrapper {
+      background: {{ module.styles.menu_level_2.container_styles.background_color.css }};
+    }
+  {% endif %}
+  {% if module.styles.menu_level_2.container_styles.container_spacing %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1.item--mega > .hs-menu-children-wrapper {
+      {{ module.styles.menu_level_2.container_styles.container_spacing.css }}
+    }
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1.item--dropdown > .hs-menu-children-wrapper {
+      padding: calc({{ module.styles.menu_level_2.container_styles.container_spacing.padding.top.value }}{{ module.styles.menu_level_2.container_styles.container_spacing.padding.top.units }} / 2);
+    }
+  {% endif %}
+  {% if module.styles.menu_level_3.link_font %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > ul > li > ul > li > a {
+      {{ module.styles.menu_level_3.link_font.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_3.link_hover_color %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > ul > li > ul > li:hover > a {
+      color: {{ module.styles.menu_level_3.link_hover_color.css }};
+    }
+  {% endif %}
+  {% if module.styles.menu_level_3.link_spacing %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > ul > li > ul > li > a {
+      {{ module.styles.menu_level_3.link_spacing.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_3.text_alignment %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > ul > li > ul > li {
+      {{ module.styles.menu_level_3.text_alignment.css }}
+    }
+  {% endif %}
+  {% if module.styles.menu_level_3.alignment %} 
+    @media screen and (min-width: 1101px) {
+      #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > ul > li > ul {
+        display: flex;
+        {% if module.styles.menu_level_3.alignment.horizontal_align == "LEFT" %}
+          justify-content: flex-start;
+        {% elif module.styles.menu_level_3.alignment.horizontal_align == "RIGHT" %}
+          justify-content: flex-end;
+        {% elif module.styles.menu_level_3.alignment.horizontal_align == "CENTER" %}
+          justify-content: center;
+        {% endif %}
+        {% if module.styles.menu_level_3.alignment.vertical_align == "TOP" %}
+          align-items: flex-start;
+        {% elif module.styles.menu_level_3.alignment.vertical_align == "BOTTOM" %}
+          align-items: flex-end;
+        {% elif module.styles.menu_level_3.alignment.vertical_align == "MIDDLE" %}
+          align-items: center;
+        {% endif %}
+      }
+    }
+  {% endif %}
+  {% if module.styles.menu_level_3.container_styles.background_color %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > ul > li > ul {
+      background: {{ module.styles.menu_level_3.container_styles.background_color.css }};
+    }
+  {% endif %}
+  {% if module.styles.menu_level_3.container_styles.container_spacing %} 
+    #{{ section_id }} .hs-menu-wrapper > ul li.hs-menu-depth-1 > ul > li > ul {
+      {{ module.styles.menu_level_3.container_styles.container_spacing.css }}
+    }
+  {% endif %}
+  {% if module.styles.cta.spacing %}
+    #{{ section_id }} .button {
+      {{ module.styles.cta.spacing.css }};
+    }
+  {% endif %}
+</style>
+{% end_require_css %}

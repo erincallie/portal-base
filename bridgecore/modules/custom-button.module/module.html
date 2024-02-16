@@ -1,0 +1,47 @@
+<div id="{{ name }}" class="custom-button">
+  <div class="custom-button__inner">
+    {% for item in module.buttons %}
+      {% if item.cta_type == "funraise" %}
+        <script>
+          window.funraise.push('create', { form: {{ item.funraise_form_id }} });
+        </script>
+        <button class="funraise-button button button--{{ item.style }}{{ " button--ghost" if item.ghost_button == "true" }}" type="button" aria-label="Donate" data-formId="{{ item.funraise_form_id }}" style="padding: 12px 35px; font-size: 18px; border-radius: 3px; margin: 10px auto; background-color: #0385bc; color: #ffffff; border: none; outline: none; cursor: pointer; display: block"> {{ item.button_text }}</button>
+      {% else %}
+        {% set href = item.link.url.href %}
+        {% if item.link.url.type is equalto "EMAIL_ADDRESS" %}
+        {% set href = "mailto:" + href %}
+        {% endif %}
+        <a href="{{ href }}" class="button button--{{ item.style }}{{ " button--ghost" if item.ghost_button == "true" }}"
+           {% if item.link.open_in_new_tab %}target="_blank"{% endif %}
+           {% if item.link.rel %}rel="{{ item.link.rel }}"{% endif %}
+           >
+          {{ item.button_text }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+{% require_css %}
+<style>
+  #{{ name }} .custom-button__inner {
+    {% if module.styles.alignment %}
+      display: flex;
+      {% if module.styles.alignment.vertical_align == "TOP" %}
+        align-items: flex-start;
+      {% elif module.styles.alignment.vertical_align == "MIDDLE" %}
+        align-items: center;
+      {% elif module.styles.alignment.vertical_align == "BOTTOM" %}
+        align-items: flex-end;
+      {% endif %}
+      {% if module.styles.alignment.horizontal_align == "LEFT" %}
+        justify-content: flex-start;
+      {% elif module.styles.alignment.horizontal_align == "CENTER" %}
+        justify-content: center;
+      {% elif module.styles.alignment.horizontal_align == "RIGHT" %}
+        justify-content: flex-end;
+      {% endif %}
+    {% endif %}
+  }
+</style>
+{% end_require_css %}

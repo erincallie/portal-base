@@ -1,0 +1,168 @@
+{% set module_name = "fancy-image" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="{{ name }}" class="{{ module_name }}{{ " image--mask" if module.image_options.add_mask == "true" }}">
+  {% if module.image_options.add_overlay == "true" %}
+    <div class="{{ module_name }}__overlay"></div>
+  {% endif %}
+  {% if module.image_style == "default" %}
+    <div class="{{ module_name }}__wrap">
+      {% if module.image.src %}
+        {% set sizeAttrs = 'width="{{ module.image.width }}" height="{{ module.image.height }}"' %}
+        {% if module.image.size_type == 'auto' %}
+          {% set sizeAttrs = 'width="{{ module.image.width }}" height="{{ module.image.height }}" style="max-width: 100%; height: auto;"' %}
+        {% elif module.image.size_type == 'auto_custom_max' %}
+          {% set sizeAttrs = 'width="{{ module.image.max_width }}" height="{{ module.image.max_height }}" style="max-width: 100%; height: auto;"' %}
+        {% endif %}
+         {% set loadingAttr = module.image.loading != 'disabled' ? 'loading="{{ module.image.loading }}"' : '' %}
+        <img src="{{ module.image.src }}" alt="{{ module.image.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="{{ module_name }}__slider owl-carousel owl-theme" data-nav="{{ module.slider_options.nav or "false" }}" data-dots="{{ module.slider_options.dots or "false" }}" data-ah="{{ module.slider_options.auto_height or "false" }}">
+      {% for item in module.images %}
+        <div class="{{ module_name }}__slider-slide">
+          {% if item.image.src %}
+            {% set sizeAttrs = 'width="{{ item.image.width }}" height="{{ item.image.height }}"' %}
+            {% if item.image.size_type == 'auto' %}
+              {% set sizeAttrs = 'width="{{ item.image.width }}" height="{{ item.image.height }}" style="max-width: 100%; height: auto;"' %}
+            {% elif item.image.size_type == 'auto_custom_max' %}
+              {% set sizeAttrs = 'width="{{ item.image.max_width }}" height="{{ item.image.max_height }}" style="max-width: 100%; height: auto;"' %}
+            {% endif %}
+             {% set loadingAttr = item.image.loading != 'disabled' ? 'loading="{{ item.image.loading }}"' : '' %}
+            <img src="{{ item.image.src }}" alt="{{ item.image.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+{% require_css %}
+<style>
+   
+  #{{ name }} {
+    {{ module.style.spacing.css }}
+    position:relative;
+    z-index: 99;
+  }
+  
+  #{{ name }} .{{ module_name }}__wrap {
+    display: flex;
+    position: relative;
+  }
+  
+  {% if module.image_style == "default" %}
+    #{{ name }} {
+      {{ module.style.general.border.css }}
+      {% set border_radius = module.style.general.border_radius + "px" %}
+      {{ borderRadius(border_radius) }}
+      overflow: hidden; 
+    }
+  {% else %}
+    #{{ name }} .{{ module_name }}__slider-slide {
+      {{ module.style.general.border.css }}
+      {% set border_radius = module.style.general.border_radius + "px" %}
+      {{ borderRadius(border_radius) }}
+      overflow: hidden; 
+    }
+  {% endif %}
+  
+  {% if module.style.aspect_ratio.aspect_ratio_width and module.style.aspect_ratio.aspect_ratio_height %}
+    #{{ name }} .{{ module_name }}__wrap,
+    #{{ name }} .{{ module_name }}__slider-slide {
+      aspect-ratio: {{ module.style.aspect_ratio.aspect_ratio_width }} / {{ module.style.aspect_ratio.aspect_ratio_height }};
+    }
+    #{{ name }} .{{ module_name }}__wrap > img,
+    #{{ name }} .{{ module_name }}__slider-slide > img {
+      width: 100%;
+      height: 100% !important;
+      object-fit: cover;
+    }
+  {% endif %}
+  
+  #{{ name }} .owl-theme .owl-dots .owl-dot span {
+    background-color: var(--primary-color);
+    opacity: .5;
+  }
+  
+  #{{ name }} .owl-theme .owl-dots .owl-dot.active span {
+    background-color: var(--primary-color);
+    opacity: 1;
+  }
+  
+  #{{ name }}.image--mask .{{ module_name }}__wrap {
+    -webkit-mask-image: url({{ module.image_options.mask_image.src }});
+    mask-image: url({{ module.image_options.mask_image.src }});
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    mask-position: center center;
+    -webkit-mask-position: center center;
+  }
+  
+  {% set image_filter = [] %}
+  {% for image_filter_object in module.advanced_options.image_filters %}
+    {% set this_filter = image_filter_object.image_filter %}
+    {% set this_filter_string = this_filter|replace("_", "-") %}
+    {% set percent_value = image_filter_object.percent + "%" if image_filter_object.percent %}
+    {% set rotation_value = image_filter_object.rotation + "deg" if image_filter_object.rotation %}
+    {% set brightness_value = image_filter_object.brightness if this_filter == "brightness" %}
+    {% set blur_value = image_filter_object.blur + "px" if this_filter == "blur" %}
+    {% set this_value = percent_value or rotation_value or blur_value or brightness_value %}
+    {% set filter_value = this_filter_string + "(" + this_value + ")" %}
+    {% do image_filter.append(filter_value) %}
+  {% endfor %}
+  {% if image_filter != [] %}
+    #{{ name }} .{{ module_name }}__wrap img {
+      filter: {{ image_filter|join("") }};
+      mix-blend-mode: {{ module.advanced_options.blend_mode|replace("_", "-") }};
+    }
+  {% endif %}
+  
+  #{{ name }} .{{ module_name }}__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: {{ module.style.overlay.background_color.css }};
+    background: {{ module.style.overlay.gradient.css }};
+    z-index: 9;
+    mix-blend-mode: {{ module.advanced_options.blend_mode|replace("_", "-") }};
+  }
+
+</style>
+{% end_require_css %}
+
+{% require_js %}
+<script>
+(function() {
+  const init_slider = function() {
+    let slider = $(`#{{ name }} .owl-carousel`),
+        nav = slider.attr('data-nav') == "true" ? true : false,
+        dots = slider.attr('data-dots') == "true" ? true : false,
+        autoHeight = slider.attr('data-ah') == "true" ? true : false;
+    slider.owlCarousel({
+      loop:true,
+      margin:0,
+      items:1,
+      nav:nav,
+      dots:dots,
+      autoHeight:autoHeight
+    });
+  };
+  init_slider();
+})();
+</script>
+{% end_require_js %}

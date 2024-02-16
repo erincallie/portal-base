@@ -1,0 +1,154 @@
+[ {
+  "id" : "fb40179d-826b-6225-1ce4-5e83ffe703a0",
+  "name" : "styles",
+  "display_width" : null,
+  "label" : "Style",
+  "required" : false,
+  "locked" : false,
+  "children" : [ {
+    "id" : "66a80c4f-8677-775f-1617-d3c152eecfac",
+    "name" : "alignment",
+    "display_width" : null,
+    "label" : "Alignment",
+    "required" : false,
+    "locked" : false,
+    "alignment_direction" : "BOTH",
+    "type" : "alignment",
+    "default" : { }
+  } ],
+  "tab" : "STYLE",
+  "expanded" : false,
+  "type" : "group",
+  "default" : {
+    "alignment" : { }
+  }
+}, {
+  "id" : "19db8c12-b43c-a07a-9857-eee569ecfdc3",
+  "name" : "buttons",
+  "display_width" : null,
+  "label" : "Buttons",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : 2,
+    "sorting_label_field" : "81ff6190-541a-670e-c608-ca32ded2fe32",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "81ff6190-541a-670e-c608-ca32ded2fe32",
+    "name" : "button_text",
+    "display_width" : null,
+    "label" : "Button Text",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  }, {
+    "id" : "a8435e61-a3b3-6a7c-fe3b-c71c9b6387bb",
+    "name" : "style",
+    "display_width" : null,
+    "label" : "Style",
+    "required" : false,
+    "locked" : false,
+    "display" : "select",
+    "choices" : [ [ "primary", "Primary" ], [ "secondary", "Secondary" ], [ "tertiary", "Tertiary" ], [ "light", "Light" ], [ "dark", "Dark" ] ],
+    "multiple" : false,
+    "reordering_enabled" : true,
+    "preset" : null,
+    "type" : "choice",
+    "default" : "primary"
+  }, {
+    "id" : "db5f96b1-fcdc-045f-e371-d2da7610c450",
+    "name" : "cta_type",
+    "display_width" : null,
+    "label" : "CTA Type",
+    "required" : false,
+    "locked" : false,
+    "display" : "select",
+    "choices" : [ [ "link", "Link" ], [ "cta", "CTA" ], [ "funraise", "Funraise Form" ] ],
+    "multiple" : false,
+    "reordering_enabled" : true,
+    "preset" : null,
+    "type" : "choice",
+    "default" : "link"
+  }, {
+    "id" : "d34a5abc-9dc5-4fb9-c96e-e11397eab16b",
+    "name" : "ghost_button",
+    "display_width" : null,
+    "label" : "Ghost Button",
+    "required" : false,
+    "locked" : false,
+    "display" : "toggle",
+    "type" : "boolean",
+    "default" : false
+  }, {
+    "id" : "dc4c1b4d-ea8e-4158-fd29-fee2fd96ffa0",
+    "name" : "link",
+    "display_width" : null,
+    "label" : "Link",
+    "required" : false,
+    "locked" : false,
+    "visibility" : {
+      "controlling_field" : null,
+      "controlling_field_path" : "buttons.cta_type",
+      "controlling_value_regex" : "link",
+      "property" : null,
+      "operator" : "EQUAL",
+      "access" : null
+    },
+    "supported_types" : [ "EXTERNAL", "CONTENT", "FILE", "EMAIL_ADDRESS", "BLOG", "CALL_TO_ACTION", "PHONE_NUMBER", "WHATSAPP_NUMBER", "PAYMENT" ],
+    "show_advanced_rel_options" : false,
+    "type" : "link",
+    "default" : {
+      "url" : {
+        "content_id" : null,
+        "type" : "EXTERNAL",
+        "href" : ""
+      },
+      "open_in_new_tab" : false,
+      "no_follow" : false
+    }
+  }, {
+    "id" : "02e60aad-9c53-0301-16dc-e175101d3a83",
+    "name" : "cta_object",
+    "display_width" : null,
+    "label" : "CTA",
+    "required" : false,
+    "locked" : false,
+    "visibility" : {
+      "controlling_field" : null,
+      "controlling_field_path" : "buttons.cta_type",
+      "controlling_value_regex" : "cta",
+      "property" : null,
+      "operator" : "EQUAL",
+      "access" : null
+    },
+    "type" : "cta"
+  }, {
+    "id" : "d24e1771-50e7-f7a0-e124-e7c0c0de6a23",
+    "name" : "funraise_form_id",
+    "display_width" : null,
+    "label" : "Funraise Form ID",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "visibility" : {
+      "controlling_field" : null,
+      "controlling_field_path" : "buttons.cta_type",
+      "controlling_value_regex" : "funraise",
+      "property" : null,
+      "operator" : "EQUAL",
+      "access" : null
+    },
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : [ ]
+} ]

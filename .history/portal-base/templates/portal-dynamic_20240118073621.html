@@ -1,0 +1,79 @@
+<!--
+  templateType: page
+  isAvailableForNewContent: true
+  label: Portal Dynamic
+  screenshotPath: ../images/template-previews/home.png
+-->
+{#% extends "./layouts/portal-base.html" %}
+
+{% block body %}
+<main class="body-container-wrapper">
+  
+  {% module "global_data" path="/MyHomeQB/modules/bridgeRev/data", label="Global Data" export_to_template_context=True %}
+  {% set all_crm_objects = widget_data.global_data.crm_objects %}
+  {% set all_hubdb_tables = widget_data.global_data.hubdb_tables %}
+  {% set all_data = [] %}
+  
+  {% for object in all_crm_objects %}
+    {% if table_count|sum < 11 %}
+      {% set crm_object_id = object.object_id if object != [] %}
+      {% set crm_object_props = object.properties if object != [] %}
+      {% set crm_objects = crm_objects(crm_object_id, "limit=200", crm_object_props).results if crm_object_id %}
+      {% set append_this = { "id": crm_object_id, "data": crm_objects } %}
+      {% do all_data.append(append_this) if crm_objects|length > 0 %}
+    {% else %}
+      <script>
+        console.log("Too many CRM objects");
+      </script>
+    {% endif %}
+  {% endfor %}
+  {% set table_count = [] %}
+  {% for table in all_hubdb_tables %}
+    {% if table_count|sum < 11 %}
+      {% set table_rows = hubdb_table_rows(table) %}
+      {% set append_this = { "id": crm_object_id, "data": crm_objects } %}
+      {% do all_data.append(append_this) if crm_objects|length > 0 %}
+    {% else %}
+      <script>
+        console.log("Too many HubDB tables");
+      </script>
+    {% endif %}
+  {% endfor %}
+  
+  {% if Query.debug %}
+    <script>
+      console.log({{ all_data|tojson }});
+    </script>
+  {% endif %}
+  
+  
+  {% if is_dynamic_row %}
+  
+    {% dnd_area 'dnd_area_details' class='body-container dynamic--details', label='Main section' %}
+
+
+    {% end_dnd_area %}
+  
+  {% else %}
+  
+    {% dnd_area 'dnd_area_listing' class='body-container dynamic--listing', label='Main section' %}
+
+      {% include_dnd_partial path='../sections/dynamic-listing.html' %}
+  
+    {% end_dnd_area %}
+  
+  {% endif %}
+  
+</main>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+  {{ require_css(get_asset_url("/MyHomeQB/css/vendor/lity.css")) }}
+  {{ require_css(get_asset_url("/MyHomeQB/css/vendor/owl-carousel.css")) }}
+  {{ require_css(get_asset_url('/MyHomeQB/css/templates/portal.css')) }}
+  {{ require_js(get_asset_url("/MyHomeQB/js/vendor/isotope.js"), {defer: "true", async: "true"}) }}
+  {{ require_js(get_asset_url("/MyHomeQB/js/vendor/lity.js"), {defer: "true", async: "true"}) }}
+  {{ require_js(get_asset_url("/MyHomeQB/js/vendor/owl-carousel.js"), {defer: "true", async: "true"}) }}
+  {{ require_js(get_asset_url("../child.js"), {defer: "true", async: "true"}) }}
+
+{% endblock body %#}

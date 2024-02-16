@@ -1,0 +1,67 @@
+{% set module_name = "logo-slider" %}
+{% from '../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+<div id="{{ name }}" class="{{ module_name }} style--{{ module.style.image_style }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row owl-carousel owl-theme">
+      {% for item in module.logos %}
+        <div class="{{ module_name }}__logo">
+          {% if item.src %}
+            {% set sizeAttrs = 'width="{{ item.width }}" height="{{ item.height }}"' %}
+            {% if item.size_type == 'auto' %}
+              {% set sizeAttrs = 'width="{{ item.width }}" height="{{ item.height }}" style="max-width: 100%; height: auto;"' %}
+            {% elif item.size_type == 'auto_custom_max' %}
+              {% set sizeAttrs = 'width="{{ item.max_width }}" height="{{ item.max_height }}" style="max-width: 100%; height: auto;"' %}
+            {% endif %}
+             {% set loadingAttr = item.loading != 'disabled' ? 'loading="{{ item.loading }}"' : '' %}
+            <img src="{{ item.src }}" alt="{{ item.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% require_css %}
+<style>
+
+</style>
+{% end_require_css %}
+
+{% require_js position="footer" defer="true" %}
+<script>
+(function() {
+  const init_slider = function() {
+    $(`#{{ name }} .owl-carousel`).owlCarousel({
+      loop:{{ true if module.slider_options.loop == "true" else false }},
+      margin:100,
+      responsiveClass:true,
+      responsive:{
+        0:{
+          items:{{ module.responsive_settings.mobile_items or 1 }}
+        },
+        400:{
+          items:{{ module.responsive_settings.tablet_items or 3 }}
+        },
+        1000:{
+          items:{{ module.responsive_settings.desktop_items or 5 }}
+        }
+      },
+      nav:{{ true if module.slider_options.show_nav == "true" else false }},
+      dots:{{ true if module.slider_options.show_dots == "true" else false }},
+      autoplay:{{ true if module.slider_options.autoplay == "true" else false }}
+    });
+  };
+  init_slider();
+})();
+</script>
+{% end_require_js %}

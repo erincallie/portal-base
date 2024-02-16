@@ -1,0 +1,98 @@
+{% set module_name = "overview-cards" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set this_object = module.object_id %}
+{% set this_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data") %}
+{% set all_profiles = all_data|selectattr("id", "==", "myhomeprofiles")|first|attr("data") %}
+{% set all_todo_ids = [] %}
+{% for profile in all_profiles %}
+  {% set associated_todos = profile.associated_todos|split(",") %}
+  {% for todo in associated_todos %}
+    {% do all_todo_ids.append(todo) %}
+  {% endfor %}
+{% endfor %}
+
+{% set todo_props_to_get = widget_data.global_data.crm_objects|selectattr("object_id", "string_containing", "myhometodos")|first|attr("functions")|selectattr("action", "==", "data")|first|attr("properties") %}
+{% set all_todo_objects = crm_objects("myhometodos", all_todo_ids, todo_props_to_get).results %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    <div class="{{ module_name }}__row">
+      {% for card in module.cards %}
+        {% set card_logic_property = card.card_logic_property %}
+        {% set card_values = card.card_values %}
+        {% set these_matches = all_todo_objects|selectattr(card_logic_property, "in", card_values) if card_logic_property %}
+        {% set this_count = these_matches|length %}
+        <a data-lity href="#{{ slugify(card.card_title)|trim }}" class="{{ module_name }}__card overview-card card__{{ loop.index }}">
+          <div class="overview-card__inner">
+            <div class="overview-card__title">
+              <h3>{{ card.card_title }}</h3>
+              {% if card.icon.src %}
+                {% set sizeAttrs = 'width="{{ card.icon.width }}" height="{{ card.icon.height }}"' %}
+                {% if card.icon.size_type == 'auto' %}
+                  {% set sizeAttrs = 'width="{{ card.icon.width }}" height="{{ card.icon.height }}" style="max-width: 100%; height: auto;"' %}
+                {% elif card.icon.size_type == 'auto_custom_max' %}
+                  {% set sizeAttrs = 'width="{{ card.icon.max_width }}" height="{{ card.icon.max_height }}" style="max-width: 100%; height: auto;"' %}
+                {% endif %}
+                 {% set loadingAttr = card.icon.loading != 'disabled' ? 'loading="{{ card.icon.loading }}"' : '' %}
+                <img src="{{ card.icon.src }}" alt="{{ card.icon.alt }}" {{ loadingAttr }} {{ sizeAttrs }}>
+              {% endif %}
+            </div>
+            <div class="overview-card__property">
+              <h3>{{ this_count }}</h3>
+            </div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<div id="{{ name }}__popups" class="{{ module_name }}">
+  {% for card in module.cards %}
+    {% set card_logic_property = card.card_logic_property %}
+    {% set card_values = card.card_values %}
+    {% set these_matches = all_todo_objects|selectattr(card_logic_property, "in", card_values) if card_logic_property %}
+    <div id="{{ slugify(card.card_title)|trim }}" class="lity-hide {{ module_name }}__popup">
+      <div class="popup__inner">
+        <div class="popup__list">
+          <ul>
+            {% for item in these_matches %}
+              <li>{{ item.myhometodoitem }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% require_css %}
+<style>
+
+  {% set columns = 3 %}
+  {% set flex_object = "#" + name + " ." + module_name + "__row" %}
+  {{ flex_grid(flex_object, 767, columns, 0, 60) }}
+  
+  {% for card in module.cards %}
+    .card__{{ loop.index }} {
+      background-color: {{ card.background_color.css }};
+    }
+  {% endfor %}
+  
+</style>
+{% end_require_css %}

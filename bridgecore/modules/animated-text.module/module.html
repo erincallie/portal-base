@@ -1,0 +1,40 @@
+<div class="animated-text-container">
+  {{ module.static_text }}
+  <span class="{{ name }} animated-text{% if module.selected_animation %} animate {{ module.selected_animation }}{% endif %}">
+    {{ module.animated_text }}
+  </span>
+</div>
+
+{% require_css %}
+  <style>
+    {% scope_css %}
+      .animated-text-container {
+        {{ module.style.font.css }}
+        {{ module.style.text_alignment.css }};
+        {{ module.style.spacing.css }}
+      }
+    {% end_scope_css %}
+  </style>
+{% end_require_css %}
+
+{% require_js %}
+  <script>
+    //Animations
+    function isScrolledIntoView(elem) {
+      const docViewTop = $(window).scrollTop()
+      const docViewBottom = docViewTop + $(window).height()
+      const elemTop = $(elem).offset().top
+      const elemBottom = elemTop + $(elem).height()
+      return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop))
+    }
+
+    $(window).on("scroll", function() {
+      const element = $(".{{ name }}.animate")
+      if (isScrolledIntoView(element)) {
+        setTimeout(() => {
+          element.addClass("visible")
+        }, {{ module.delay }})
+      }
+    })
+  </script>
+{% end_require_js %}

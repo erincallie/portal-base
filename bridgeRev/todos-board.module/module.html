@@ -1,0 +1,474 @@
+{% set module_name = "todos-list" %}
+{% from '../../../templates/partials/utils/config.html' import global_config %}
+{% from '../../../templates/partials/utils/macros.html' import
+  slugify,
+  icons,
+  build_button,
+  render_event,
+  render_search,
+  render_calendar,
+  isotope_js,
+  flex_grid,
+  transition,
+  transform,
+  borderRadius,
+  boxShadow,
+  textShadow
+%}
+
+{% set property_names = [] %}
+{% for section in module.sections %}
+  {% for row in section.rows %}
+    {% for property in row.properties %}
+      {% do property_names.append(property) %}
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
+
+{% set this_object = module.object_id %}
+{% set props_to_get = property_names|join(",") %}
+{% set all_property_defs = crm_property_definitions(this_object, props_to_get) if this_object %}
+{% set all_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data") %}
+{% set all_associations = data_query.data.CRM.p_myhomeprofiles.associations %}
+{% set all_association_props = data_query.data.CRM.p_myhomeprofiles %}
+{% set associated_objects = [] %}
+{% for key, value in all_associations.items() %}
+  {% if key is string_containing this_object %}
+    {% do associated_objects.append(value.items) %}
+  {% endif %}
+{% endfor %}
+{% set associated_object_ids = [] %}
+{% for key, value in all_association_props.items() %}
+  {% if key is string_containing this_object or (this_object == "contact" and key is string_containing "associated_users")%}
+    {% set item_array = value|split(",") if value is string_containing "," else [value] %}
+    {% for item in item_array %}
+      {% do associated_object_ids.append(item) %}
+    {% endfor %}
+  {% endif %}
+{% endfor %}
+{% for object in associated_objects|first %}
+  {% do associated_object_ids.append(object.hs_object_id) %}
+{% endfor %}
+{% set unique_ids = associated_object_ids|unique %}
+{% set associated_object_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "in", unique_ids) %}
+
+{% set global_data = widget_data.global_data %}
+{% set all_objects = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("hs_object_id", "in", unique_ids) %}
+
+{# Allow for toggling between views #}
+{% if request.query_dict.boardview %}
+
+{% call global_config(global_data, this_object, all_objects, all_data) %}
+
+<div id="{{ name }}" class="{{ module_name }}">
+  <div class="{{ module_name }}__container">
+    {% if module.options.allow_filter or module.options.allow_search %}
+      <div class="{{ module_name }}__section">
+        {% if module.options.allow_filter %}
+          <div class="listing__filters-wrap">
+            <ul class="listing__filters-items">
+              {% call render_filter_group("group") %}
+                {% for this_filter in all_filters %}
+                  {% set slug = slugify(this_filter) %}
+                  {{ render_filter(slug, this_filter, loop.first) }}
+                {% endfor %}
+              {% endcall %}
+            </ul>
+          </div>
+        {% endif %}
+        {% if module.options.allow_search %}
+          <div class="listing__search">
+            {% set placeholder = module.search_options.placeholder %}
+            {% set search_id = name + "__search" %}
+            {{ render_search(placeholder, "", search_id) }}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+    
+    
+    <div class="{{ module_name }}__section">
+      <div class="{{ module_name }}__seasons">
+        
+        <label class="season">
+          <span>Spring</span>
+          <input type="radio" name="season" value="spring" data-filter=".spring">
+        </label>
+        <label class="season">
+          <span>Summer</span>
+          <input type="radio" name="season" value="summer" data-filter=".summer">
+        </label>
+        <label class="season">
+          <span>Fall</span>
+          <input type="radio" name="season" value="fall" data-filter=".fall">
+        </label>
+        <label class="season">
+          <span>Winter</span>
+          <input type="radio" name="season" value="winter" data-filter=".winter">
+        </label>
+        
+      </div>
+    </div>
+
+    
+    <div class="{{ module_name }}__section">
+      <div class="{{ module_name }}__row isotope-container">
+        
+        {% set month_defs = {
+          January: "Winter",
+          February: "Winter",
+          March: "Spring",
+          April: "Spring",
+          May: "Spring",
+          June: "Summer",
+          July: "Summer",
+          August: "Summer",
+          September: "Fall",
+          October: "Fall",
+          November: "Fall",
+          December: "Winter"
+        } %}
+        
+        {% for id in unique_ids %}
+        {% set this_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "==", id)|first %}
+        {% set has_value = { "value": true } %}
+        {% for section in module.sections %}
+          {% for row in section.rows %}
+            {% for property in row.properties %}
+              {% set this_def = all_property_defs|selectattr("name", "==", property)|first %}
+              {% set this_label = this_def.label %}
+              {% set this_value = this_data[property] %}
+              {% do has_value.update({"value": true }) if this_value %}
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+        
+        {% if has_value.value and this_data.to_do_date %}
+        
+        {% set todo_date_raw = this_data.to_do_date|split('/') %}
+        {% set todo_day = ( todo_date_raw[1]|int > 9 ?  todo_date_raw[1] : '0' ~ todo_date_raw[1] ) %}
+        {% set todo_month = ( todo_date_raw|first|int > 9 ?  todo_date_raw|first : '0' ~ todo_date_raw|first ) %}
+        {% set todo_year = '20' ~ todo_date_raw|last %}
+        {% set todo_date = (todo_year ~ '-' ~ todo_month ~ '-' ~ todo_day ~ 'T12:00:00+0000')|strtotime("yyyy-MM-dd'T'HH:mm:ssZ")|unixtimestamp %}
+        
+        {% set season = month_defs[todo_date|format_date('MMMM')] %}
+        
+        <div id="{{ id }}" class="{{ module_name }}__item todo isotope-item {{ season|lower }}" data-id="{{ id }}" data-object="{{ module.object_id }}" data-search="{{ this_data.service_category }} {{ this_data.myhometodoitem }} {{ this_data.to_do_notes }}">
+          
+          <div>
+            <span>{{ todo_date|format_date('MM/dd/yyyy') }}</span>
+          </div>
+          
+          <a class="todo__card" href="#{{ id }}__details" data-lity>
+            <span>{{ this_data.myhometodoitem or this_data.service_category }}</span>
+          </a>
+
+        </div>
+        {% endif %}
+        {% endfor %}
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+{# Create card modals #}
+{% for id in unique_ids %}
+  {% set this_data = all_data|selectattr("id", "==", this_object)|first|attr("data")|selectattr("id", "==", id)|first %}
+  {% set has_value = { "value": true } %}
+  {% for section in module.sections %}
+    {% for row in section.rows %}
+      {% for property in row.properties %}
+        {% set this_def = all_property_defs|selectattr("name", "==", property)|first %}
+        {% set this_label = this_def.label %}
+        {% set this_value = this_data[property] %}
+        {% do has_value.update({"value": true }) if this_value %}
+      {% endfor %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if has_value.value and this_data.to_do_date %}
+
+  <div id="{{ id }}__details" class="{{ module_name }}__item modal lity-hide" data-id="{{ id }}" data-object="{{ module.object_id }}">
+    <div class="todo__inner">
+      {% if this_object != "subscription" and (module.options.allow_editing or module.options.allow_deleting) %}
+      <div class="item__actions">
+        <span class="toggle-active">{{ icons("dots") }}</span>
+        <ul>
+          {% if module.options.allow_deleting %}
+          <li>
+            <a data-action="remove">{{ icons("plus") }} Remove</a>
+          </li>
+          {% endif %}
+          <li>
+            <a data-action="complete" data-stage="145791801">{{ icons("plus") }} DIY/Mark Complete</a>
+          </li>
+        </ul>
+      </div>
+      {% endif %}
+      <div class="todo__top">
+        <div>
+          {% if this_data.service_category or true %}
+          <span class="todo--category">{{ this_data.service_category }}</span>
+          {% endif %}
+        </div>
+        <div class="todo--timeframe">Recommended Timeframe: <span>{{ card.recommended_timeframe or 'Fall 2023' }}</span></div>
+      </div>
+      <div class="todo__details">
+        <span><strong>{{ this_data.myhometodoitem or this_data.service_category }}</strong></span>
+        <div>{{ this_data.to_do_notes }}</div>
+      </div>
+      <div class="todo__ticket">
+        {% if MyHomeService or true %}
+        <div>Last Service Provider (if exists on Ticket/MyHomeService)</div>
+        <a href="#">Last Completed Date: 2/15/23</a>
+        {% endif %}
+      </div>
+      <div class="todo__buttons">
+        <div>
+          <a class="button button--success" data-action="punt" href="#">Book</a>
+          <a class="button button--success" data-action="complete" data-stage="145791801">DIY/Mark Complete</a>
+          <a class="button button--warning" data-action="punt" href="#">Punt</a>
+          {% if module.options.allow_deleting %}<a class="button button--error" href="#" data-action="remove">Delete</a>{% endif %}
+        </div>
+        <a class="button button--warning" href="#">Upload</a>
+      </div>
+    </div>
+  </div>
+          
+
+
+  {% endif %}
+{% endfor %}
+
+
+{# Put this in the right place once we are done #}
+<section style="display: grid; grid-template-columns: 3fr 1fr; gap: 2rem;">
+
+  <div>
+    <a class="button button--primary" href="#add__myhometodos" data-lity>Add a To Do</a>
+  </div>
+
+
+</section>
+
+
+{% require_js position="footer" defer="true" %}
+<script>
+
+  $(function() {
+    
+    var fieldset_triggers = $("fieldset > label");
+    fieldset_triggers.on("click", function() {
+      if ($(this).parent().is(".active")) {
+        $(this).parent().removeClass("active");
+      } else {
+        $(this).parent().addClass("active");
+      }
+    });
+
+    var filters = {},
+        container = $(`#{{ name }} .isotope-container`),
+        containerTop = $(`#{{ name }}`).offset().top,
+        filterDisplay = $('#filter-display');
+    
+    var responsiveIsotope = [ [480, 6] , [720, {{ module.options.limit_per_page || 6 }}] ];
+    var itemsPerPageDefault = {{ module.options.limit_per_page || 100 }};
+
+    {{ isotope_js() }}
+    
+  });
+
+</script>
+{% end_require_js %}
+
+{% require_css %}
+<style>
+
+  :root {
+    --dark-blue: #0c2340;
+    --light-blue: #425b76;
+    --teal: #04a38e;
+    --brown: #bf5700;
+    --dark: #333333;
+    --light: #abacac;
+    --white: #f8f8f8;
+    --red: #e31414
+  }
+  
+  .{{ module_name }}__item {
+    margin-top: 2rem;
+  }
+  
+  .{{ module_name }}__property-label {
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+  }
+  
+  .button.button--success{
+    background-color: var(--teal);
+  }
+  
+  .button.button--warning{
+    background-color: var(--dark-blue);
+  }
+  
+  .button.button--error{
+    background-color: var(--red);
+  }
+  
+  .todo{
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+    width:100%;
+  }
+  
+  .todo input[type=checkbox]{
+    width: 20px;
+  }
+  
+  .todo__card{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    background-color: #fff;
+    border-radius: 1rem;
+    width: 100%;
+  }
+  
+  .todo__status{
+    position: relative;
+    width: 4rem;
+    border-radius: 1rem 0 0 1rem;
+  }
+  
+  .todo__status--status{
+    rotate: 90deg;
+    width: 300%;
+    position: absolute;
+    bottom: 50%;
+    transform: translate(5%, 250%);
+    z-index: 99999;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .todo__inner{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.25rem;
+  }
+  
+  .todo__top{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .todo__top .todo--category{
+    padding: 0.5rem 1rem;
+    background-color: #f7f7f7;
+    border-radius: 1rem;
+  }
+  
+  .todo__top .todo--category,
+  .todo__top .todo--timeframe{
+    font-size: 1.25rem;
+  }
+  
+  .todo__ticket{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .todo__buttons{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .item__image {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 30px;
+    margin-right: 40px;
+    display: flex;
+  }
+  
+  .item__image:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 50px;
+    transform: translate(-50%,-50%);
+    background-color: #f7f7f7;
+    z-index: 0;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  
+  .item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 9;
+  }
+  
+  .item__actions > span {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+  }
+  
+  .item__actions ul {
+    list-style: none;
+    margin: 0;
+    padding: 1rem;
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 1px 1px 10px rgba(0,0,0,.12);
+    display: none;
+    position: absolute;
+    top: 20px;
+    left: calc(100% - 20px);
+    z-index: 999;
+  }
+  
+  .item__actions ul li {
+    white-space:nowrap;
+    display: block;
+  }
+  
+  .item__actions ul li a {
+    padding: .5rem;
+    display: block;
+  }
+  
+  .item__actions span.active + ul {
+    display: block;
+  }
+
+</style>
+{% end_require_css %}
+
+{% endcall %}
+
+{% endif %}

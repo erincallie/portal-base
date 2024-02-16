@@ -1,0 +1,21 @@
+{
+  "content_tags" : [ {
+    "name" : "NONPROFIT",
+    "source" : "MARKETPLACE"
+  }, {
+    "name" : "COMPATIBLE_BLOG",
+    "source" : "MARKETPLACE"
+  }, {
+    "name" : "COMPATIBLE_PAGE",
+    "source" : "MARKETPLACE"
+  } ],
+  "extra_classes" : "widget-type-menu",
+  "global" : false,
+  "content_types" : [ "LANDING_PAGE", "SITE_PAGE", "BLOG_LISTING", "BLOG_POST" ],
+  "master_language" : "en",
+  "icon" : "fontawesome-5.14.0:Megaport",
+  "host_template_types" : [ "PAGE", "BLOG_POST", "BLOG_LISTING" ],
+  "module_id" : 142849459811,
+  "label" : "Mega Menu",
+  "is_available_for_new_content" : true
+}
